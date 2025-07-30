@@ -7,7 +7,7 @@ const securityMiddleware = require('./middlewares/security.middleware');
 const router = require('./routes/index.route');
 const cors = require('cors');
 
-require('./config/passport');
+require('./config/passport.config');
 
 app.use(express.json());
 
@@ -35,8 +35,8 @@ app.use('/api', router);
 
 app.use('/health', async (req, res) => {
   try {
-    const db = require('./config/database');
-    await db.from('users').select('count').limit(1);
+    const { supabase } = require('./config/supabase.config');
+    await supabase.from('users').select('count').limit(1);
 
     return res.status(200).json({
       success: true,
