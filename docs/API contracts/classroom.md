@@ -3,7 +3,7 @@
 <aside>
 🔗
 
-- Base URL: `http://localhost:3000/apic`
+- Base URL: `http://localhost:3000/api/classroom`
 - Authentication Headers (Cho tất cả các endpoint): `Authorization: Bearer <jwt_token>`
 </aside>
 
@@ -28,16 +28,17 @@ POST /create-classroom
 
 ### Validation Rules
 
-- **email**: Required, valid email format
-- **password**: Required, min 8 chars, must contain uppercase, lowercase and number
-- **role**: Optional, default “learner”
+- **name**: Required, string
+- **description**: Optional, max 1000 chars
+- **classroom_status**: Required, enum ("private" or "public")
+- **capacity_limit**: Required, integer 1-100, default 50
 
-| Field              | Type            | Required  | Notes                 |
-| ------------------ | --------------- | --------- | --------------------- | --- |
-| `name`             | string          | ✅        |                       |
-| `description`      | string          | ❌        | max 1000 chars        |
-| `classroom_status` | enum (`private` | `public`) | ✅                    |     |
-| `capacity_limit`   | integer         | ✅        | 1 - 100, default = 50 |
+| Field              | Type                         | Required | Notes                 |
+| ------------------ | ---------------------------- | -------- | --------------------- |
+| `name`             | string                       | ✅       |                       |
+| `description`      | string                       | ❌       | max 1000 chars        |
+| `classroom_status` | enum (`private` \| `public`) | ✅       |                       |
+| `capacity_limit`   | integer                      | ✅       | 1 - 100, default = 50 |
 
 ### Response Success (201)
 
@@ -360,8 +361,8 @@ POST /:classroomId/reject-request
 
 ```json
 {
-  "success": false,
-  "message": "You do not have access to this classroom."
+  "success": true,
+  "message": "Join request rejected."
 }
 ```
 
@@ -1219,9 +1220,9 @@ POST /:classroomId/leave
 
 ```json
 {
-    "success": true,
-    "message": "You have left the classroom."
-
+  "success": true,
+  "message": "You have left the classroom."
+}
 ```
 
 ### Response Error (400)
