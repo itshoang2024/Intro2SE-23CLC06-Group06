@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Header, SideBar, Footer } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { RightMoreIcon, TotalWordIcon, CategoryIcon, TimeIcon, LearnerIcon } from "../../assets/Vocabulary";
@@ -13,8 +13,8 @@ export default function OverviewList() {
   const [listInfo, setListInfo] = useState(null);
   const [words, setWords] = useState([]);
   const toast = useToast(); 
+  const navigate = useNavigate();
 
-  const currentUserId = localStorage.getItem("userId"); // hoặc lấy từ context
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
@@ -114,7 +114,7 @@ export default function OverviewList() {
                       </div>
                     </>
                   )}
-                <button className="sample-view-button" onClick={() => window.location.href = `/vocabulary/view/${listInfo.id}`}>
+                <button className="sample-view-button" onClick={() => navigate(`/vocabulary/view/${listInfo.id}`)}>
                     View list to see more
                     <img src={RightMoreIcon} alt="arrow-icon" className="sapmple-view-button__icon"/>
                 </button>
@@ -148,7 +148,7 @@ export default function OverviewList() {
                   {isOwner ? (
                     <button
                       className="overview-list__button outline"
-                      onClick={() => window.location.href = `/vocabulary/edit/${listInfo.id}`}
+                      onClick={() => navigate(`/vocabulary/edit/${listInfo.id}`)}
                     >
                       Edit List
                     </button>
@@ -160,7 +160,7 @@ export default function OverviewList() {
                       Add to my list
                     </button>
                   )}
-                  <button className="overview-list__button filled">Review now</button>
+                  <button className="overview-list__button filled" onClick={() => navigate(`/review/${listInfo.id}`)}>Review now</button>
                 </div>
               </section>
             </>

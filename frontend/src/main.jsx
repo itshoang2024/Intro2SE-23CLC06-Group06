@@ -10,12 +10,14 @@ import authRoutes from "./routes/AuthRoutes";
 import vocabularyRoutes from "./routes/VocabularyRoutes.jsx";
 // import classroomRoutes from "./routes/ClassroomRoutes.jsx";
 import classroomRoutes from "./routes/ClassroomRoutes.jsx";
+import reviewRoutes from "./routes/ReviewRoutes.jsx";
 
 
 const router = createBrowserRouter([
   ...authRoutes,
   ...vocabularyRoutes,
   ...classroomRoutes,
+  ...reviewRoutes
 ]);
 
 createRoot(document.getElementById("root")).render(

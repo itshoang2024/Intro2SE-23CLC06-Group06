@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Header, SideBar, Footer } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { UploadImage, MoreIcon, ShareIcon, DropdownIcon } from "../../assets/Vocabulary";
@@ -18,6 +18,7 @@ export default function ViewList() {
 
   const confirm = useConfirm();
   const toast = useToast();
+  const navigate = useNavigate();
 
 
   const handleCopy = async (text) => {
@@ -80,7 +81,7 @@ export default function ViewList() {
                             <div className="view-list__more-popup">
                               <div
                                 className="more-option edit"
-                                onClick={() => window.location.href = `/vocabulary/edit/${listInfo.id}`}
+                                onClick={() => navigate(`/vocabulary/edit/${listInfo.id}`)}
                               >
                                 Edit List
                               </div>
@@ -91,7 +92,7 @@ export default function ViewList() {
                                     if (!confirmed) return;
                                     try {
                                       vocabularyService.deleteList(listInfo.id);
-                                      window.location.href = "/dashboard";
+                                      navigate("/dashboard");
                                     } catch (err) {
                                       console.error("Failed to delete:", err);
                                       toast("Failed to delete list.", "error");
@@ -156,7 +157,7 @@ export default function ViewList() {
               </div>
               <button
                   className="view-list__review-button"
-                  onClick={() => window.location.href = "/review/list-id"}
+                  onClick={() => navigate(`/review/${listInfo.id}`)}
               >
                   Review now
               </button>
