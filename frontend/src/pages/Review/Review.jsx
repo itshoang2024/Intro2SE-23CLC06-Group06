@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Footer, Header, SideBar } from "../../components/index.jsx";
 import reviewService from "../../services/Review/reviewService";
 import { DropdownIcon } from "../../assets/Vocabulary/index.jsx";
+import { useToast } from "../../components/ToastProvider.jsx";
 
 export default function Dashboard() {
     const [listInfo, setListInfo] = useState(null);
     const [selectedMethod, setSelectedMethod] = useState("Flashcards");
+    const toast = useToast();
+    const navigate = useNavigate();
+
+    // const {listId} = useParams();
 
     // useEffect(() => {
     //     async function fetchData() {
@@ -48,9 +53,20 @@ export default function Dashboard() {
         setListInfo(dummyList);
     }, []);
 
-    const handleReviewTypeChange = (value) => {
-        setSelectedMethod(value);
-        console.log("Selected review method:", value);
+    const handleStartReview = () => {
+        if (selectedMethod === "Flashcards") {
+            navigate(`/review/${listInfo.id}/flashcards`);
+        }
+
+        if (selectedMethod === "Word Association") {
+            toast("This method is not implemented yet.", "error");
+            // navigate(`/review/${listInfo.id}/word-association`);
+        }
+
+        if (selectedMethod === "Fill in Blank") {
+            // navigate(`/review/${listInfo.id}/fill-in-blank`);
+            toast("This method is not implemented yet.", "error");
+        }
     };
 
     return (
@@ -107,7 +123,7 @@ export default function Dashboard() {
                     </div>
 
                     <div className="review__start">
-                        <button className="review__start-button" onClick={() => console.log("Start review session")}>
+                        <button className="review__start-button" onClick={handleStartReview}>
                             Start Review Session    
                         </button>
                     </div>
