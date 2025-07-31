@@ -79,7 +79,8 @@ const classroomService = {
 
     //13. Accept invitation (Learner) (chua link)
     acceptInvitation: async (token) => {
-        const res = await api.post(`/classroom/accept-invitation`, token);
+        const res = await api.post(`/classroom/accept-invitation`, {token});
+        return res.data; 
     },
 
     //14. Cancel Invitation (Teacher)
