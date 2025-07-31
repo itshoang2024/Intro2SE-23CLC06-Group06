@@ -12,7 +12,7 @@ export default function JoinClassroomPage() {
 
         try {
             const res = await classroomService.joinRequest(inputCode);
-            setSubmittedCode(inputCode);
+            console.log(res.message);
             if (res.success) {
                 if (res.message.includes("joined")) {
                     setStatus("success");

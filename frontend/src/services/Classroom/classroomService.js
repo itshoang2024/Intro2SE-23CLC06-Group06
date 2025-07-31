@@ -24,6 +24,7 @@ const classroomService = {
         const res = await api.post("/classroom/join-request", {
             joinCode: data
         });
+        console.log(res.data);
         return res.data;
     },
 
