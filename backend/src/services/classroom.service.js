@@ -225,7 +225,12 @@ class ClassroomService {
       expires_at: expiresAt,
     });
 
-    await emailService.sendClassInvitation(email, token, classroom, teacher.display_name);
+    await emailService.sendClassInvitation(
+      email,
+      token,
+      classroom,
+      teacher.display_name
+    );
   }
 
   _verifyInvitationToken(token) {
@@ -406,15 +411,21 @@ class ClassroomService {
   async getLearnerToReviewAssignments(classroomId, learnerId) {
     const allAssignments =
       await classroomModel.getAssignmentsByClassroom(classroomId);
-    const assignedAssignments = allAssignments.filter(
+    console.log('allAssignments:::', allAssignments);
+
+    const assignedAssignments = (allAssignments || []).filter(
       (a) => computeAssignmentStatus(a.start_date, a.due_date) === 'assigned'
     );
+
+    console.log('assignedAssignments:::', assignedAssignments);
 
     const existingAssignmentIds =
       await classroomModel.getLearnerAssignmentsByClassroomAndLearner(
         classroomId,
         learnerId
       );
+
+    console.log('existingAssignmentIds:::', existingAssignmentIds);
 
     const missingAssignments = assignedAssignments
       .filter((assignment) => !existingAssignmentIds.includes(assignment.id))
@@ -433,7 +444,7 @@ class ClassroomService {
       ['not_started', 'in_progress']
     );
 
-    const result = raw.filter(
+    const result = (raw || []).filter(
       (item) =>
         computeAssignmentStatus(
           item.assignments.start_date,
@@ -460,7 +471,7 @@ class ClassroomService {
       ['completed']
     );
 
-    return raw.map((item) => ({
+    return (raw || []).map((item) => ({
       assignment_id: item.assignment_id,
       title: item.assignments.title,
       exercise_method: item.assignments.exercise_method,
@@ -478,7 +489,7 @@ class ClassroomService {
       ['not_started', 'in_progress', 'late', 'interrupted']
     );
 
-    return raw
+    return (raw || [])
       .filter((item) => {
         const status = computeAssignmentStatus(
           item.assignments.start_date,

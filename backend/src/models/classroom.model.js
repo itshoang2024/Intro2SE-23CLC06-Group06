@@ -63,11 +63,13 @@ class ClassroomModel {
 
     if (error) throw error;
 
-    return data.map((classroom) => ({
-      ...classroom,
-      assignment_count: classroom.assignments ? classroom.assignments.length : 0,
-      assignments: undefined,
-    }));
+    return data
+      ? data.map((classroom) => ({
+          ...classroom,
+          assignment_count: classroom.assignments ? classroom.assignments.length : 0,
+          assignments: undefined,
+        }))
+      : [];
   }
 
   async getClassroomByCode(joinCode) {
@@ -355,15 +357,17 @@ class ClassroomModel {
 
     if (error) throw error;
 
-    return data.map((entry) => ({
-      id: entry.classrooms.id,
-      teacher_id: entry.classrooms.teacher_id,
-      name: entry.classrooms.name,
-      description: entry.classrooms.description,
-      join_code: entry.classrooms.join_code,
-      learner_count: entry.classrooms.learner_count,
-      status: entry.classrooms.classroom_status,
-    }));
+    return data
+      ? data.map((entry) => ({
+          id: entry.classrooms.id,
+          teacher_id: entry.classrooms.teacher_id,
+          name: entry.classrooms.name,
+          description: entry.classrooms.description,
+          join_code: entry.classrooms.join_code,
+          learner_count: entry.classrooms.learner_count,
+          status: entry.classrooms.classroom_status,
+        }))
+      : [];
   }
 
   async getJoinedClassroomsByLearnerWithAssignmentCounts(learnerId) {
@@ -393,27 +397,29 @@ class ClassroomModel {
 
     if (error) throw error;
 
-    return data.map((entry) => {
-      const assignments = entry.classrooms.assignments || [];
-      const now = new Date();
+    return data
+      ? data.map((entry) => {
+          const assignments = entry.classrooms.assignments || [];
+          const now = new Date();
 
-      const assignedCount = assignments.filter((assignment) => {
-        const startDate = new Date(assignment.start_date);
-        const dueDate = new Date(assignment.due_date);
-        return startDate <= now && now <= dueDate;
-      }).length;
+          const assignedCount = assignments.filter((assignment) => {
+            const startDate = new Date(assignment.start_date);
+            const dueDate = new Date(assignment.due_date);
+            return startDate <= now && now <= dueDate;
+          }).length;
 
-      return {
-        id: entry.classrooms.id,
-        teacher_id: entry.classrooms.teacher_id,
-        name: entry.classrooms.name,
-        description: entry.classrooms.description,
-        join_code: entry.classrooms.join_code,
-        learner_count: entry.classrooms.learner_count,
-        status: entry.classrooms.classroom_status,
-        assignment_count: assignedCount,
-      };
-    });
+          return {
+            id: entry.classrooms.id,
+            teacher_id: entry.classrooms.teacher_id,
+            name: entry.classrooms.name,
+            description: entry.classrooms.description,
+            join_code: entry.classrooms.join_code,
+            learner_count: entry.classrooms.learner_count,
+            status: entry.classrooms.classroom_status,
+            assignment_count: assignedCount,
+          };
+        })
+      : [];
   }
 
   async getInvitationsByClassroomId(classroomId) {
@@ -427,17 +433,16 @@ class ClassroomModel {
   }
 
   async getLearnerAssignmentsByClassroomAndLearner(classroomId, learnerId) {
-    const { data, error } = await supabase
-      .from('learner_assignments')
-      .select('assignment_id')
-      .eq('learner_id', learnerId)
-      .in(
-        'assignment_id',
-        supabase.from('assignments').select('id').eq('classroom_id', classroomId)
-      );
+    const { data, error } = await supabase.rpc(
+      'get_learner_assignments_by_classroom',
+      {
+        p_classroom_id: classroomId,
+        p_learner_id: learnerId,
+      }
+    );
 
     if (error) throw error;
-    return data.map((row) => row.assignment_id);
+    return data ? data.map((row) => row.assignment_id) : [];
   }
 
   async createLearnerAssignmentsBatch(assignments) {

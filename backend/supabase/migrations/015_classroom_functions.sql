@@ -30,3 +30,23 @@ CREATE TRIGGER trg_update_learner_count
 AFTER INSERT OR UPDATE OR DELETE ON classroom_members
 FOR EACH ROW
 EXECUTE FUNCTION update_learner_count_on_members_change();
+
+-- Function to get assignments for a learner in a specific classroom
+DROP FUNCTION IF EXISTS get_learner_assignments_by_classroom;
+
+CREATE OR REPLACE FUNCTION get_learner_assignments_by_classroom(
+  p_classroom_id UUID,
+  p_learner_id UUID
+)
+RETURNS TABLE (assignment_id UUID)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT la.assignment_id
+  FROM learner_assignments la
+  INNER JOIN assignments a ON la.assignment_id = a.id
+  WHERE la.learner_id = p_learner_id
+    AND a.classroom_id = p_classroom_id;
+END;
+$$;
