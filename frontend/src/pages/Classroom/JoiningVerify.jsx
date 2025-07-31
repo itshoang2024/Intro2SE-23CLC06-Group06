@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import classroomService from "../../services/Classroom/classroomService";
 import JoinClassroomStatus from "./JoinClassroomStatus";
-
+import MyClassroom from "./MyClassroom";
 export default function JoiningVerify() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -57,7 +57,7 @@ export default function JoiningVerify() {
     if (verificationStatus.status === 'success') {
         return <JoinClassroomStatus 
                     status={"success"} 
-                    code={verificationStatus.classroomId}
+                    code={"Click the button bellow to continue!"}
                     errorMsg={verificationStatus.message} 
                 />;
     }
@@ -65,7 +65,7 @@ export default function JoiningVerify() {
     if (verificationStatus.status === 'error') {
         return <JoinClassroomStatus 
                     status={"error"} 
-                    code={verificationStatus.classroomId}
+                    code={"Click the button bellow to continue!"}
                     errorMsg={verificationStatus.message}
                 />;
     }
