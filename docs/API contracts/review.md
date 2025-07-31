@@ -1,4 +1,4 @@
-# Revision API Contract
+# Review API Contract
 
 <aside>
 🔗
@@ -22,6 +22,7 @@ GET /lists/due
 ```json
 {
   "success": true,
+  "message": "Retrieved lists with due words.",
   "data": {
     "listsWithDueWords": [
       {
@@ -62,6 +63,7 @@ GET /due
 ```json
 {
   "success": true,
+  "message": "Retrieved all due words.",
   "data": {
     "dueByList": [
       {
@@ -98,6 +100,7 @@ GET /sessions/status
 ```json
 {
   "success": true,
+  "message": "Retrieved active session status.",
   "data": {
     "activeSession": {
       "sessionId": "session-uuid-123",
@@ -142,6 +145,7 @@ POST /sessions/start
 ```json
 {
   "success": true,
+  "message": "Session started successfully.",
   "data": {
     "session": {
       "sessionId": "session-uuid-123",
@@ -177,9 +181,15 @@ POST /sessions/{sessionId}/submit
 ```json
 {
   "wordId": "word-uuid-1",
-  "result": "correct"
+  "result": "correct",
+  "responseTimeMs": 2500
 }
 ```
+
+**Field Definitions:**
+- `wordId`: Required - The ID of the word being reviewed
+- `result`: Required - The result ("correct" or "incorrect")
+- `responseTimeMs`: Optional - Response time in milliseconds
 
 ### Response Success (200)
 
