@@ -10,6 +10,7 @@ import {
     AddLearners, ApproveJoinClassroomRequest, ManageClassroomLayout, LearnersList, PendingRequest,
     AssignmentDetail,
     Statistic,
+    LearnerClassroomView,
 } from "../pages/Classroom"
 
 const classroomRoutes = [
@@ -71,6 +72,10 @@ const classroomRoutes = [
             {
                 path: "statistics",
                 element: <Statistic/>
+            },
+            {
+                path: "learner-view",
+                element: <LearnerClassroomView />
             },
         ]
     },
