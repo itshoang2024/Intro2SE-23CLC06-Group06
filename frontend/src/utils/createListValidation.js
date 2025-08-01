@@ -24,17 +24,14 @@ export const validateListTitle = (title) => {
 export const validateListDescription = (description) => {
   const errors = [];
   
+  // Description is now optional
   if (!description || description.trim().length === 0) {
-    errors.push("Description is required");
-    return errors;
+    return errors; // No errors if empty - it's optional
   }
   
   const trimmed = description.trim();
   
-  if (trimmed.length < 10) {
-    errors.push("Description must be at least 10 characters long");
-  }
-  
+  // Removed minimum length constraint - only check maximum length
   if (trimmed.length > 500) {
     errors.push("Description must be less than 500 characters");
   }

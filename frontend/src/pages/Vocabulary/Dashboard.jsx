@@ -21,28 +21,8 @@ export default function Dashboard() {
     const confirm = useConfirm();
     const toast = useToast();
 
-    const handleCreateNewList = async () => {
-        try {
-            const payload = {
-                title: "Untitled List",
-                description: "",
-                privacy_setting: "private",
-                tags: [],
-            };
-
-            const res = await vocabularyService.createList(payload);
-            const listId = res?.data?.list?.id;
-
-            if (listId) {
-                navigate(`/vocabulary/create/${listId}`); //  Navigate với ID
-            } else {
-                toast("Failed to create new list.", "error");
-                console.log("Response:", res);
-            }
-        } catch (error) {
-            console.error("Error creating list:", error);
-            toast("Something went wrong. Please try again.", "error");
-        }
+    const handleCreateNewList = () => {
+        navigate('/vocabulary/create/new');
     };
 
     useEffect(() => {

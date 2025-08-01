@@ -9,11 +9,13 @@ import { useListManagement } from "../../hooks/useListManagement.js";
 
 export default function CreateList() {
   const { listId } = useParams();
+  const isNewList = listId === 'new';
+  const actualListId = isNewList ? null : listId;
   
   // Custom hooks for separated concerns
   const validationHook = useFormValidation();
   const wordManagementHook = useWordManagement();
-  const listManagementHook = useListManagement(listId, validationHook, wordManagementHook);
+  const listManagementHook = useListManagement(actualListId, validationHook, wordManagementHook, isNewList);
   
   // Destructure hook returns for cleaner component
   const { validationErrors, clearFieldError } = validationHook;
@@ -37,6 +39,7 @@ export default function CreateList() {
     handleTitleChange,
     handleDescriptionChange,
     handleSubmit,
+    handleCancel,
     setPrivacy,
     setSelectedTags,
   } = listManagementHook;
@@ -80,6 +83,13 @@ export default function CreateList() {
           />
 
           <div className="create-list__actions">
+            <button
+              type="button"
+              className="create-list__form--cancel"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
             <input
               className="create-list__form--submit"
               type="submit"

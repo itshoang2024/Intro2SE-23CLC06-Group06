@@ -38,7 +38,7 @@ const ListMetadataForm = ({
         value={description}
         onChange={onDescriptionChange}
         placeholder="Description:..."
-        required={true}
+        required={false}
         errors={validationErrors.description}
         className="create-list__form--description"
       />
