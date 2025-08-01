@@ -15,7 +15,16 @@ class AIService {
       apiKey: process.env.GEMINI_API_KEY,
       model: this.model,
     });
-    logger.info(`Google Gemini AI initialized with model: ${this.model}`);
+    try {
+      this.genAI = new GoogleGenAI({
+        apiKey: process.env.GEMINI_API_KEY,
+        model: this.model,
+      });
+      logger.info(`Google Gemini AI initialized with model: ${this.model}`);
+    } catch (error) {
+      logger.error('Failed to initialize Google Gemini AI:', error);
+      this.genAI = null;
+    }
   }
 
   isAvailable() {

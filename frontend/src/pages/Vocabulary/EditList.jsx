@@ -23,6 +23,7 @@ export default function EditList() {
     const [originalList, setOriginalList] = useState(null);
     const [originalWords, setOriginalWords] = useState([]);
     const [selectedWordIds, setSelectedWordIds] = useState(new Set());
+    const [loadingAI, setLoadingAI] = useState(new Set()); // Track AI generation loading state
 
     const handleDeleteWord = async (index) => {
         confirm("Are you sure you want to delete this word?").then((confirmed) => {
@@ -176,6 +177,11 @@ export default function EditList() {
             translation: word.translation || "",
             synonyms: normalizeSynonyms(word.synonyms),
             ...(word.image ? { image_url: word.image } : {}),
+            // Add AI metadata for new words
+            ...(word.aiGenerated ? { 
+                aiGenerated: word.aiGenerated,
+                generationPrompt: word.generationPrompt 
+            } : {}),
         };
 
         if (word.id) {
@@ -218,6 +224,64 @@ export default function EditList() {
             setWords(updated);
         } catch (err) {
             console.error("Image upload failed", err);
+        }
+    };
+
+    const handleGenerateExample = async (index) => {
+        const word = words[index];
+        
+        // Validate that term and definition are filled
+        if (!word.term?.trim() || !word.definition?.trim()) {
+            toast("Please fill in both term and definition before generating an example.", "error");
+            return;
+        }
+
+        // Set loading state for this word
+        setLoadingAI(prev => new Set(prev).add(index));
+
+        try {
+            let response;
+            
+            // If word has an ID (existing word), use the word-specific endpoint
+            if (word.id) {
+                response = await vocabularyService.generateExample(word.id, {
+                    // Don't send context parameter if not needed (context is optional)
+                });
+            } else {
+                // If word doesn't have ID (new word), use the general endpoint
+                response = await vocabularyService.generateExample(null, {
+                    term: word.term,
+                    definition: word.definition,
+                });
+            }
+
+            if (response?.data?.example?.example) {
+                // Update the example sentence field with the generated example
+                const updated = [...words];
+                updated[index] = {
+                    ...updated[index],
+                    exampleSentence: response.data.example.example,
+                    // Store AI metadata for new words (existing words store this in backend)
+                    ...(word.id ? {} : {
+                        aiGenerated: response.data.example.aiGenerated,
+                        generationPrompt: response.data.example.generationPrompt,
+                    }),
+                };
+                setWords(updated);
+                toast("Example generated successfully!", "success");
+            } else {
+                toast("Failed to generate example. Please try again.", "error");
+            }
+        } catch (error) {
+            console.error("Error generating example:", error);
+            toast("Failed to generate example. Please try again.", "error");
+        } finally {
+            // Remove loading state for this word
+            setLoadingAI(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(index);
+                return newSet;
+            });
         }
     };
 
@@ -402,7 +466,14 @@ export default function EditList() {
                                         />
                                         <small className="input-title">An example in context</small>
                                     </div>
-                                    <button type="button" className="create-list__ai-btn">AI</button>
+                                    <button 
+                                        type="button" 
+                                        className="create-list__ai-btn"
+                                        onClick={() => handleGenerateExample(index)}
+                                        disabled={loadingAI.has(index)}
+                                    >
+                                        {loadingAI.has(index) ? "Generating..." : "AI"}
+                                    </button>
                                 </div>
 
 
