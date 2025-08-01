@@ -153,6 +153,18 @@ const vocabularyValidator = {
       .withMessage('Synonyms cannot be empty strings.'),
     handleValidationErrors,
   ],
+
+  generateExample: [
+    param('wordId')
+      .isUUID()
+      .withMessage('URL parameter wordId must be a valid UUID.'),
+    body('context')
+      .optional()
+      .trim()
+      .isLength({ min: 2, max: 500 })
+      .withMessage('Context must be between 2 and 500 characters.'),
+    handleValidationErrors,
+  ],
 };
 
 module.exports = vocabularyValidator;

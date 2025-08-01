@@ -501,7 +501,7 @@ The request's Content-Type header **must be** multipart/form-data. The body 
 
 ### Example
 
-![image.png](image.png)
+![image.png](images/vocabulary_upload-image.png)
 
 ### Response Success (201)
 
@@ -670,6 +670,41 @@ GET /words/:wordId
         "incorrectCount": 1,
         "lastReviewedAt": "2025-07-29T10:00:00.000Z"
       }
+    }
+  }
+}
+```
+
+# 16. Generate Example for Word
+
+Generate a single example sentence for a vocabulary word.
+
+**Endpoint:** `POST /words/:wordId/generate-example`
+
+**Parameters:**
+
+- `wordId` (UUID, required): The ID of the word
+
+**Request Body:**
+
+```json
+{
+  "includeTranslation": true, // Optional: Include translation
+  "context": "business" // Optional: Context for the example
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Example generated successfully.",
+  "data": {
+    "example": {
+      "wordId": "30000000-0000-0000-0000-000000000002",
+      "term": "analyze",
+      "example": "We need to analyze sales data to understand why profits are down this quarter.\n"
     }
   }
 }

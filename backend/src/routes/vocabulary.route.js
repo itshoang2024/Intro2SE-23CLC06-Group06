@@ -68,6 +68,12 @@ vocabularyRouter.put(
 
 vocabularyRouter.delete('/words/:wordId', vocabularyController.deleteWord);
 
+vocabularyRouter.post(
+  '/words/:wordId/generate-example',
+  ...vocabularyValidator.generateExample,
+  vocabularyController.generateExample
+);
+
 // =================================================================
 //  TAGS & UPLOADS
 // =================================================================

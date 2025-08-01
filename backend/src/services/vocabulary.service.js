@@ -1,7 +1,7 @@
 const vocabularyModel = require('../models/vocabulary.model');
 const reviewModel = require('../models/review.model');
 const logger = require('../utils/logger');
-
+const aiService = require('./ai.service');
 class ForbiddenError extends Error {
   constructor(message = 'User does not have permission for this action.') {
     super(message);
@@ -170,7 +170,6 @@ class VocabularyService {
         word_id: newWord.id,
         synonym: s.trim(),
       }));
-      // Using .catch() here makes this step non-blocking. If synonyms fail, the word is still created.
       await vocabularyModel.createSynonyms(synonymsToInsert).catch((err) => {
         logger.error(`Failed to add synonyms for new word ${newWord.id}:`, err);
       });
@@ -337,6 +336,39 @@ class VocabularyService {
     } = await vocabularyModel.searchInList(listId, { q, sortBy, from, to });
     if (error) throw error;
     return { words, pagination: this._formatPagination(page, limit, count) };
+  }
+
+  async generateExample(wordId, userId, context = null) {
+    await this._verifyWordPermission(wordId, userId, 'write');
+
+    const { data: word, error } = await vocabularyModel.findById(wordId);
+    if (error || !word) throw new Error('Word not found');
+
+    if (!aiService.isAvailable()) {
+      throw new Error('AI service is temporarily unavailable');
+    }
+
+    try {
+      const example = await aiService.generateExample(
+        word.term,
+        word.definition,
+        context
+      );
+
+      await vocabularyModel.upsertExample(wordId, {
+        exampleSentence: example,
+        aiGenerated: true,
+      });
+
+      return {
+        wordId,
+        term: word.term,
+        example,
+      };
+    } catch (error) {
+      logger.error(`Failed to generate example for word ${wordId}:`, error);
+      throw new Error('Failed to generate example sentence. Please try again.');
+    }
   }
 
   // =================================================================
