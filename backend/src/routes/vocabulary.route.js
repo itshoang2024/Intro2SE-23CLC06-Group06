@@ -74,6 +74,12 @@ vocabularyRouter.post(
   vocabularyController.generateExample
 );
 
+vocabularyRouter.post(
+  '/generate-example',
+  ...vocabularyValidator.generateExampleForNewWord,
+  vocabularyController.generateExampleForNewWord
+);
+
 // =================================================================
 //  TAGS & UPLOADS
 // =================================================================

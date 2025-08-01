@@ -489,6 +489,30 @@ class VocabularyController {
       );
     }
   }
+
+  async generateExampleForNewWord(req, res) {
+    try {
+      const { term, definition, context } = req.body;
+
+      const result = await vocabularyService.generateExampleForNewWord(
+        term,
+        definition,
+        context
+      );
+
+      return ResponseUtils.success(res, 'Example generated successfully.', {
+        example: result,
+      });
+    } catch (error) {
+      return ErrorHandler.handleError(
+        res,
+        error,
+        'generateExampleForNewWord',
+        'Internal server error',
+        500
+      );
+    }
+  }
 }
 
 module.exports = new VocabularyController();

@@ -689,7 +689,6 @@ Generate a single example sentence for a vocabulary word.
 
 ```json
 {
-  "includeTranslation": true, // Optional: Include translation
   "context": "business" // Optional: Context for the example
 }
 ```
@@ -707,6 +706,57 @@ Generate a single example sentence for a vocabulary word.
       "example": "We need to analyze sales data to understand why profits are down this quarter.\n"
     }
   }
+}
+```
+
+# 17. Generate Example for New Word
+
+Generate a single example sentence for a new vocabulary word that hasn't been saved yet (used during vocabulary list creation).
+
+**Endpoint:** `POST /generate-example`
+
+**Request Body:**
+
+```json
+{
+  "term": "analyze",
+  "definition": "To examine in detail for purposes of explanation and interpretation",
+  "context": "business" // Optional: Context for the example
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Example generated successfully.",
+  "data": {
+    "example": {
+      "term": "analyze",
+      "example": "We need to analyze sales data to understand why profits are down this quarter.",
+      "aiGenerated": true,
+      "generationPrompt": "Generate example for \"analyze\" (To examine in detail for purposes of explanation and interpretation) in context: business"
+    }
+  }
+}
+```
+
+**Error Response (400) - Validation Error:**
+
+```json
+{
+  "success": false,
+  "errors": [
+    {
+      "field": "term",
+      "message": "Term is required and must be between 1 and 200 characters."
+    },
+    {
+      "field": "definition",
+      "message": "Definition is required and must be between 1 and 1000 characters."
+    }
+  ]
 }
 ```
 

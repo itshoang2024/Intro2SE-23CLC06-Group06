@@ -371,6 +371,25 @@ class VocabularyService {
     }
   }
 
+  async generateExampleForNewWord(term, definition, context = null) {
+    if (!aiService.isAvailable()) {
+      throw new Error('AI service is temporarily unavailable');
+    }
+
+    try {
+      const example = await aiService.generateExample(term, definition, context);
+
+      return {
+        term: term,
+        example,
+        aiGenerated: true,
+      };
+    } catch (error) {
+      logger.error(`Failed to generate example for new word ${term}:`, error);
+      throw new Error('Failed to generate example sentence. Please try again.');
+    }
+  }
+
   // =================================================================
   //  SYNONYMS
   // =================================================================
@@ -488,7 +507,8 @@ class VocabularyService {
         itemsToInsert.push({
           vocabulary_id: newWord.id,
           example_sentence: originalWord.exampleSentence,
-          translation: originalWord.translation,
+          ai_generated: originalWord.aiGenerated || false,
+          generation_prompt: originalWord.generationPrompt || null,
         });
       }
       if (itemType === 'synonym' && originalWord.synonyms) {
