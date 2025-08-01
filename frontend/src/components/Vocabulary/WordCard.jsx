@@ -1,5 +1,5 @@
 import React from 'react';
-import WordInput from './WordInput.jsx';
+import WordInput from '../Forms/WordInput.jsx';
 
 const WordCard = ({
   word,

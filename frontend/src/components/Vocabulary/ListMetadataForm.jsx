@@ -1,7 +1,7 @@
-import React from 'react';
-import Select from 'react-select';
-import CreateListInput from './CreateListInput.jsx';
-import { PRIVACY_OPTIONS } from '../constants/vocabulary.js';
+import React from "react";
+import Select from "react-select";
+import CreateListInput from "../Forms/CreateListInput.jsx";
+import { PRIVACY_OPTIONS } from "../../constants/vocabulary.js";
 
 const ListMetadataForm = ({
   title,
