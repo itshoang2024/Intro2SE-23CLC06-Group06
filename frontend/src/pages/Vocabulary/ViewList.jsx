@@ -4,8 +4,8 @@ import { Header, SideBar, Footer } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { UploadImage, MoreIcon, ShareIcon, DropdownIcon } from "../../assets/Vocabulary";
 import { SearchBarPattern } from "../../assets/icons/index"
-import { useConfirm } from "../../components/ConfirmProvider.jsx";
-import { useToast } from "../../components/ToastProvider.jsx";
+import { useConfirm } from "../../components/Providers/ConfirmProvider.jsx";
+import { useToast } from "../../components/Providers/ToastProvider.jsx";
 
 
 export default function ViewList() {

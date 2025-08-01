@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import VocabularyListCard from './Classroom/VocabularyListCard'; 
+import VocabularyListCard from '../Classroom/VocabularyListCard'; 
 import { LeftArrow, RightArrow } from '../assets/User';
 
 export default function CarouselVocabSection({ title, children, vocabLists = [] }) {

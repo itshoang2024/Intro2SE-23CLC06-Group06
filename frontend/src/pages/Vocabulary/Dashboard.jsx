@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Footer, Header, SideBar, LearnerSubMenu, ReportTrigger } from "../../components/index.jsx";
 import { DropdownIcon, MoreIcon, PlusIcon } from "../../assets/Vocabulary/index.jsx";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
-import { useConfirm } from "../../components/ConfirmProvider.jsx";
-import { useToast } from "../../components/ToastProvider.jsx";
+import { useConfirm } from "../../components/Providers/ConfirmProvider.jsx";
+import { useToast } from "../../components/Providers/ToastProvider.jsx";
 
 export default function Dashboard() {
     const [lists, setLists] = useState([]);

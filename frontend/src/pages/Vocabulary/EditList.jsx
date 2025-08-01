@@ -5,8 +5,8 @@ import { UploadImage } from "../../assets/Vocabulary";
 // import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
-import { useConfirm } from "../../components/ConfirmProvider.jsx";
-import { useToast } from "../../components/ToastProvider.jsx";
+import { useConfirm } from "../../components/Providers/ConfirmProvider.jsx";
+import { useToast } from "../../components/Providers/ToastProvider.jsx";
 
 export default function EditList() {
     const { listId } = useParams();
