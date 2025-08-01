@@ -127,12 +127,6 @@ export const useWordManagement = () => {
       generationPrompt: w.generationPrompt || null,
     }));
     
-    // Debug logging to track example data
-    const wordsWithExamples = preparedWords.filter(w => w.exampleSentence);
-    if (wordsWithExamples.length > 0) {
-      console.log('Words with examples being submitted:', wordsWithExamples);
-    }
-    
     return preparedWords;
   }, [getValidWords, normalizeSynonyms]);
 

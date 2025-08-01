@@ -37,13 +37,6 @@ export default function ViewList() {
         setListInfo(info);
 
         const wordData = await vocabularyService.getWordsByListId(listId);
-        
-        // Debug: Check the word data structure
-        console.log('Raw word data from API:', wordData);
-        if (wordData.length > 0) {
-          console.log('First word structure:', wordData[0]);
-          console.log('Example data for first word:', wordData[0].vocabulary_examples);
-        }
 
         // Map example data and add dummy statistics
         const wordsWithStatistic = wordData.map((word) => ({

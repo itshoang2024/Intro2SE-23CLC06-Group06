@@ -11,10 +11,6 @@ class AIService {
 
   initializeAI() {
     this.model = process.env.GEMINI_MODEL || 'gemini-2.0-flash-001';
-    this.genAI = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      model: this.model,
-    });
     try {
       this.genAI = new GoogleGenAI({
         apiKey: process.env.GEMINI_API_KEY,

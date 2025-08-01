@@ -145,6 +145,8 @@ class VocabularyService {
       image_url,
       exampleSentence,
       synonyms,
+      aiGenerated,
+      generationPrompt,
     } = wordData;
 
     // 1. Create the core word
@@ -161,7 +163,11 @@ class VocabularyService {
 
     // 2. Add the optional example
     if (exampleSentence) {
-      await vocabularyModel.upsertExample(newWord.id, { exampleSentence });
+      await vocabularyModel.upsertExample(newWord.id, {
+        exampleSentence,
+        aiGenerated: aiGenerated || false,
+        generationPrompt: generationPrompt || null,
+      });
     }
 
     // 3. Add the optional synonyms
@@ -242,6 +248,8 @@ class VocabularyService {
       image_url,
       exampleSentence,
       synonyms,
+      aiGenerated,
+      generationPrompt,
     } = updateData;
 
     // 1. Update core word fields
@@ -262,7 +270,11 @@ class VocabularyService {
     // 2. Update the example (if provided)
     if (exampleSentence !== undefined) {
       if (exampleSentence) {
-        await vocabularyModel.upsertExample(wordId, { exampleSentence });
+        await vocabularyModel.upsertExample(wordId, {
+          exampleSentence,
+          aiGenerated: aiGenerated || false,
+          generationPrompt: generationPrompt || null,
+        });
       } else {
         await vocabularyModel.deleteExample(wordId);
       }
@@ -378,11 +390,13 @@ class VocabularyService {
 
     try {
       const example = await aiService.generateExample(term, definition, context);
+      const generationPrompt = `Generate example for "${term}" (${definition})${context ? ` in context: ${context}` : ''}`;
 
       return {
         term: term,
         example,
         aiGenerated: true,
+        generationPrompt: generationPrompt,
       };
     } catch (error) {
       logger.error(`Failed to generate example for new word ${term}:`, error);
@@ -504,12 +518,17 @@ class VocabularyService {
       if (!newWord) return;
 
       if (itemType === 'example' && originalWord.exampleSentence) {
-        itemsToInsert.push({
+        const exampleData = {
           vocabulary_id: newWord.id,
           example_sentence: originalWord.exampleSentence,
           ai_generated: originalWord.aiGenerated || false,
           generation_prompt: originalWord.generationPrompt || null,
-        });
+        };
+        console.log(
+          `Creating example for word "${originalWord.term}":`,
+          exampleData
+        );
+        itemsToInsert.push(exampleData);
       }
       if (itemType === 'synonym' && originalWord.synonyms) {
         originalWord.synonyms.forEach((synonym) => {
