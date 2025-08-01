@@ -116,7 +116,7 @@ export const useWordManagement = () => {
 
   const prepareWordsForSubmission = useCallback(() => {
     const validWords = getValidWords();
-    return validWords.map(w => ({
+    const preparedWords = validWords.map(w => ({
       term: w.term,
       definition: w.definition,
       phonetics: w.phonetics || "",
@@ -126,6 +126,14 @@ export const useWordManagement = () => {
       aiGenerated: w.aiGenerated || false,
       generationPrompt: w.generationPrompt || null,
     }));
+    
+    // Debug logging to track example data
+    const wordsWithExamples = preparedWords.filter(w => w.exampleSentence);
+    if (wordsWithExamples.length > 0) {
+      console.log('Words with examples being submitted:', wordsWithExamples);
+    }
+    
+    return preparedWords;
   }, [getValidWords, normalizeSynonyms]);
 
   return {
