@@ -84,27 +84,56 @@ class ReviewService {
     };
   }
 
-  async startSession(userId, listId, sessionType) {
+  async startSession(userId, listId, sessionType, practiceMode = false) {
     const existingSession = await reviewModel.findActiveSession(userId);
     if (existingSession) {
-      throw new Error(
-        'User already has an active session. Please end or resume it first.'
-      );
+      // Auto-end the existing session if it's been active for more than 30 minutes
+      // or if it's for a different list
+      const sessionStartTime = new Date(existingSession.started_at);
+      const now = new Date();
+      const timeDiff = now - sessionStartTime;
+      const thirtyMinutes = 30 * 60 * 1000; // 30 minutes in milliseconds
+      
+      if (timeDiff > thirtyMinutes || existingSession.vocab_list_id !== listId) {
+        // Auto-end the abandoned session
+        try {
+          await reviewModel.updateSessionStatus(existingSession.id, 'interrupted');
+          logger.info(`Auto-ended abandoned session ${existingSession.id} for user ${userId}`);
+        } catch (error) {
+          logger.warn(`Failed to auto-end session ${existingSession.id}:`, error);
+        }
+      } else {
+        // Session is recent and for the same list, throw error to let user decide
+        throw new Error(
+          'User already has an active session. Please end or resume it first.'
+        );
+      }
     }
 
-    const dueWords = await reviewModel.findDueWordsByListId(userId, listId, 20);
-
-    if (!dueWords || dueWords.length === 0) {
-      throw new Error('No words are currently due for review in this list.');
+    let words;
+    if (practiceMode) {
+      // Practice mode: get all words from the list regardless of due status
+      words = await reviewModel.findAllWordsByListId(listId, 20);
+    } else {
+      // Normal mode: only get due words
+      words = await reviewModel.findDueWordsByListId(userId, listId, 20);
     }
 
-    const dueWordIds = dueWords.map((word) => word.id);
+    if (!words || words.length === 0) {
+      if (practiceMode) {
+        throw new Error('This list has no words to practice.');
+      } else {
+        throw new Error('No words are currently due for review in this list.');
+      }
+    }
+
+    const wordIds = words.map((word) => word.id);
 
     const sessionResponse = await reviewModel.createSession(
       userId,
       listId,
       sessionType,
-      dueWordIds
+      wordIds
     );
     if (sessionResponse.error) throw sessionResponse.error;
     const session = sessionResponse.data;
@@ -112,8 +141,8 @@ class ReviewService {
     return {
       sessionId: session.id,
       sessionType: sessionType,
-      totalWords: dueWords.length,
-      words: shuffleArray(dueWords),
+      totalWords: words.length,
+      words: shuffleArray(words),
     };
   }
 

@@ -17,7 +17,7 @@ reviewRouter.get('/sessions/status', reviewController.getActiveSessionStatus);
 
 reviewRouter.post(
   '/sessions/start',
-  rateLimiter,
+  // rateLimiter
   ...reviewValidator.startSession,
   reviewController.startSession
 );

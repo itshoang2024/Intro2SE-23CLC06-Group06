@@ -160,7 +160,12 @@ export default function OverviewList() {
                       Add to my list
                     </button>
                   )}
-                  <button className="overview-list__button filled">Review now</button>
+                  <button 
+                    className="overview-list__button filled"
+                    onClick={() => window.location.href = `/review/${listInfo.id}`}
+                  >
+                    Review now
+                  </button>
                 </div>
               </section>
             </>

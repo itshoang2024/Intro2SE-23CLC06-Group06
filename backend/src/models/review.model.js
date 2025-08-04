@@ -29,76 +29,202 @@ class ReviewModel {
 
   async findDueWordsByListId(userId, listId, limit = 20) {
     try {
-      // Step 1: Fetch the basic progress records for due words in the specified list.
-      // This gets us the word IDs we need to work with.
-      const { data: progressRecords, error: progressError } = await supabase
-        .from('user_word_progress')
-        .select('word_id:vocabulary!inner(id, list_id)') // Use an inner join to filter by listId
-        .eq('user_id', userId)
-        .lte('next_review_date', new Date().toISOString())
-        .eq('vocabulary.list_id', listId)
-        .limit(limit);
-
-      if (progressError) throw progressError;
-      if (!progressRecords || progressRecords.length === 0) {
-        return []; // No words are due, return an empty array
-      }
-
-      // Step 2: Extract the unique IDs of the due words.
-      const dueWordIds = progressRecords.map((p) => p.word_id.id);
-
-      // Step 3: Fetch the full details for only those due words.
-      const { data: words, error: wordsError } = await supabase
+      // Step 1: Get all words from the list
+      const { data: allWords, error: wordsError } = await supabase
         .from('vocabulary')
-        .select('*')
-        .in('id', dueWordIds);
+        .select(`
+          id,
+          term,
+          definition,
+          phonetics,
+          image_url
+        `)
+        .eq('list_id', listId);
 
       if (wordsError) throw wordsError;
+      if (!allWords || allWords.length === 0) {
+        return [];
+      }
 
-      // Step 4: Fetch all examples for those specific words in a single query.
+      const wordIds = allWords.map(word => word.id);
+
+      // Step 2: Get existing progress records for these words
+      const { data: existingProgress, error: progressError } = await supabase
+        .from('user_word_progress')
+        .select('word_id, next_review_date')
+        .eq('user_id', userId)
+        .in('word_id', wordIds);
+
+      if (progressError) throw progressError;
+
+      // Step 3: Create progress records for words that don't have any
+      const existingWordIds = new Set((existingProgress || []).map(p => p.word_id));
+      const wordsNeedingProgress = allWords.filter(word => !existingWordIds.has(word.id));
+
+      if (wordsNeedingProgress.length > 0) {
+        const newProgressRecords = wordsNeedingProgress.map(word => ({
+          user_id: userId,
+          word_id: word.id,
+          next_review_date: new Date().toISOString(), // Due immediately for new words
+          interval_days: 1,
+          ease_factor: 2.5,
+          repetitions: 0
+        }));
+
+        const { error: insertError } = await supabase
+          .from('user_word_progress')
+          .upsert(newProgressRecords, { 
+            onConflict: 'user_id,word_id',
+            ignoreDuplicates: true 
+          });
+
+        if (insertError) {
+          logger.warn(`Failed to create progress records: ${insertError.message}`);
+        }
+      }
+
+      // Step 4: Get words that are due for review
+      const now = new Date().toISOString();
+      const allProgress = [
+        ...(existingProgress || []),
+        ...wordsNeedingProgress.map(word => ({
+          word_id: word.id,
+          next_review_date: now
+        }))
+      ];
+
+      const dueWordIds = allProgress
+        .filter(p => p.next_review_date <= now)
+        .map(p => p.word_id)
+        .slice(0, limit);
+
+      // Step 5: Return the due words with all their details
+      const dueWords = allWords.filter(word => dueWordIds.includes(word.id));
+
+      // Step 6: Get examples for the due words
       const { data: examples, error: examplesError } = await supabase
         .from('vocabulary_examples')
         .select('vocabulary_id, example_sentence')
         .in('vocabulary_id', dueWordIds);
 
-      if (examplesError) throw examplesError;
+      if (examplesError) {
+        logger.warn(`Failed to fetch examples: ${examplesError.message}`);
+      }
 
-      // Step 5: Fetch all synonyms for those specific words in a single query.
+      // Step 7: Get synonyms for the due words  
       const { data: synonyms, error: synonymsError } = await supabase
         .from('word_synonyms')
         .select('word_id, synonym')
         .in('word_id', dueWordIds);
 
-      if (synonymsError) throw synonymsError;
+      if (synonymsError) {
+        logger.warn(`Failed to fetch synonyms: ${synonymsError.message}`);
+      }
 
-      // Step 6: Map the examples and synonyms to their parent words for efficient lookup.
+      // Step 8: Combine everything
       const examplesByWordId = new Map();
-      examples.forEach((ex) => {
+      (examples || []).forEach(ex => {
         if (!examplesByWordId.has(ex.vocabulary_id)) {
           examplesByWordId.set(ex.vocabulary_id, []);
         }
-        examplesByWordId.get(ex.vocabulary_id).push(ex);
+        examplesByWordId.get(ex.vocabulary_id).push({ example_sentence: ex.example_sentence });
       });
 
       const synonymsByWordId = new Map();
-      synonyms.forEach((s) => {
+      (synonyms || []).forEach(s => {
         if (!synonymsByWordId.has(s.word_id)) {
           synonymsByWordId.set(s.word_id, []);
         }
         synonymsByWordId.get(s.word_id).push(s.synonym);
       });
 
-      // Step 7: Assemble the final, complete word objects.
-      const enrichedWords = words.map((word) => ({
+      const enrichedWords = dueWords.map(word => ({
         ...word,
         examples: examplesByWordId.get(word.id) || [],
-        synonyms: synonymsByWordId.get(word.id) || [],
+        synonyms: synonymsByWordId.get(word.id) || []
       }));
 
       return enrichedWords;
+
     } catch (error) {
       logger.error(
         `Error in findDueWordsByListId for user ${userId} and list ${listId}:`,
+        error
+      );
+      throw error;
+    }
+  }
+
+  async findAllWordsByListId(listId, limit = 20) {
+    try {
+      // Get all words from the list for practice mode
+      const { data: allWords, error: wordsError } = await supabase
+        .from('vocabulary')
+        .select(`
+          id,
+          term,
+          definition,
+          phonetics,
+          image_url
+        `)
+        .eq('list_id', listId)
+        .limit(limit);
+
+      if (wordsError) throw wordsError;
+      if (!allWords || allWords.length === 0) {
+        return [];
+      }
+
+      const wordIds = allWords.map(word => word.id);
+
+      // Get examples for the words
+      const { data: examples, error: examplesError } = await supabase
+        .from('vocabulary_examples')
+        .select('vocabulary_id, example_sentence')
+        .in('vocabulary_id', wordIds);
+
+      if (examplesError) {
+        logger.warn(`Failed to fetch examples: ${examplesError.message}`);
+      }
+
+      // Get synonyms for the words  
+      const { data: synonyms, error: synonymsError } = await supabase
+        .from('word_synonyms')
+        .select('word_id, synonym')
+        .in('word_id', wordIds);
+
+      if (synonymsError) {
+        logger.warn(`Failed to fetch synonyms: ${synonymsError.message}`);
+      }
+
+      // Combine everything
+      const examplesByWordId = new Map();
+      (examples || []).forEach(ex => {
+        if (!examplesByWordId.has(ex.vocabulary_id)) {
+          examplesByWordId.set(ex.vocabulary_id, []);
+        }
+        examplesByWordId.get(ex.vocabulary_id).push({ example_sentence: ex.example_sentence });
+      });
+
+      const synonymsByWordId = new Map();
+      (synonyms || []).forEach(s => {
+        if (!synonymsByWordId.has(s.word_id)) {
+          synonymsByWordId.set(s.word_id, []);
+        }
+        synonymsByWordId.get(s.word_id).push(s.synonym);
+      });
+
+      const enrichedWords = allWords.map(word => ({
+        ...word,
+        examples: examplesByWordId.get(word.id) || [],
+        synonyms: synonymsByWordId.get(word.id) || []
+      }));
+
+      return enrichedWords;
+
+    } catch (error) {
+      logger.error(
+        `Error in findAllWordsByListId for list ${listId}:`,
         error
       );
       throw error;
@@ -112,7 +238,7 @@ class ReviewModel {
   async findActiveSession(userId) {
     const { data, error } = await supabase
       .from('revision_sessions')
-      .select('id, session_type, total_words, vocab_list_id, word_ids')
+      .select('id, session_type, total_words, vocab_list_id, word_ids, started_at')
       .eq('user_id', userId)
       .in('status', ['in_progress', 'interrupted'])
       .maybeSingle();

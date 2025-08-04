@@ -77,6 +77,16 @@ api.interceptors.response.use(
       console.error("Server error:", error.response.data);
     }
 
+    // Don't log expected 404 errors for review endpoints (no due words)
+    if (
+      error.response?.status === 404 &&
+      error.config?.url?.includes('/review/') &&
+      error.response?.data?.message?.includes('No words are currently due for review')
+    ) {
+      // This is an expected behavior, not an error to log
+      return Promise.reject(error);
+    }
+
     // Handle network errors silently in production
     if (
       (error.code === "NETWORK_ERROR" || error.message === "Network Error") &&

@@ -64,9 +64,9 @@ class ReviewController {
   async startSession(req, res) {
     try {
       const userId = req.user.userId;
-      const { listId, sessionType } = req.body;
+      const { listId, sessionType, practiceMode } = req.body;
 
-      const session = await reviewService.startSession(userId, listId, sessionType);
+      const session = await reviewService.startSession(userId, listId, sessionType, practiceMode);
 
       return ResponseUtils.success(
         res,
@@ -76,7 +76,7 @@ class ReviewController {
       );
     } catch (error) {
       // Handle specific known errors
-      if (error.message.includes('No words due for review in this list')) {
+      if (error.message.includes('No words are currently due for review in this list')) {
         return ResponseUtils.error(res, error.message, 404);
       }
       if (error.message.includes('has an active session')) {
