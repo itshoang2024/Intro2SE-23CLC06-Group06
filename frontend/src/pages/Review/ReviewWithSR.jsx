@@ -4,6 +4,7 @@ import { Header, SideBar, Footer } from "../../components";
 import reviewService from "../../services/Review/reviewService";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
+import { DropdownIcon } from "../../assets/Vocabulary/index.jsx";
 
 export default function ReviewWithSR() {
   const { listId } = useParams();
@@ -11,11 +12,11 @@ export default function ReviewWithSR() {
   const toast = useToast();
 
   const [listInfo, setListInfo] = useState(null);
-  const [reviewMethod, setReviewMethod] = useState("Flashcards");
+  const [reviewMethod, setReviewMethod] = useState("Flashcard");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const reviewMethods = ["Flashcards", "Fill in the blanks", "Word Association"];
+  const reviewMethods = ["Flashcard", "Fill in the blank", "Word Association"];
 
   useEffect(() => {
     async function fetchListInfo() {
@@ -40,7 +41,7 @@ export default function ReviewWithSR() {
   const handleStartReview = async () => {
     try {
       // For flashcards method, navigate directly to flashcard study
-      if (reviewMethod === "Flashcards") {
+      if (reviewMethod === "Flashcard") {
         navigate(`/review/${listId}/flashcard`, {
           state: { method: reviewMethod, listInfo }
         });
@@ -51,7 +52,7 @@ export default function ReviewWithSR() {
       // Map frontend method names to backend sessionType values
       let sessionType;
       switch (reviewMethod) {
-        case "Fill in the blanks":
+        case "Fill in the blank":
           sessionType = "fill_blank";
           break;
         case "Word Association":
@@ -101,13 +102,14 @@ export default function ReviewWithSR() {
 
   if (loading) {
     return (
-      <div className="review-sr">
+      <div className="review">
         <Header />
-        <div className="review-sr__content">
-          <SideBar />
-          <main className="review-sr__main">
-            <div className="loading">Loading...</div>
-          </main>
+        <h1 className="review__title">Review with Spaced Repetition</h1>
+        <SideBar />
+        <div className="review__content">
+          <div className="review__main">
+            <p>Loading list information...</p>
+          </div>
         </div>
         <Footer />
       </div>
@@ -116,15 +118,16 @@ export default function ReviewWithSR() {
 
   if (error || !listInfo) {
     return (
-      <div className="review-sr">
+      <div className="review">
         <Header />
-        <div className="review-sr__content">
-          <SideBar />
-          <main className="review-sr__main">
-            <div className="error">
+        <h1 className="review__title">Review with Spaced Repetition</h1>
+        <SideBar />
+        <div className="review__content">
+          <div className="review__main">
+            <p className="error">
               {error || "Vocabulary list not found"}
-            </div>
-          </main>
+            </p>
+          </div>
         </div>
         <Footer />
       </div>
@@ -132,69 +135,61 @@ export default function ReviewWithSR() {
   }
 
   return (
-    <div className="review-sr">
+    <div className="review">
       <Header />
-      <div className="review-sr__content">
-        <SideBar />
-        <main className="review-sr__main">
-          <div className="review-sr__container">
-            <h1 className="review-sr__title">Review with Spaced Repetition</h1>
-            
-            <div className="review-sr__card">
-              <h2 className="review-sr__list-title">{listInfo.title}</h2>
-              
-              <div className="review-sr__list-meta">
-                <p className="review-sr__difficulty">
-                  {listInfo.difficulty} - {listInfo.category}
-                </p>
-                <p className="review-sr__creator">
-                  Created by: {listInfo.created_by?.full_name || "Unknown"}
-                </p>
-              </div>
+      <h1 className="review__title">Review with Spaced Repetition</h1>
+      <SideBar />
+      <div className="review__content">
+        <div className="review__main">
+          <div className="review__header">
+            <div className="review__list-title">{listInfo.title}</div>
 
-              <div className="review-sr__description">
-                <h3>Description</h3>
-                <p>{listInfo.description || "No description available"}</p>
+            {listInfo.tags && listInfo.tags.length > 0 && (
+              <div className="review__tags">
+                {listInfo.tags.map((tag, index) => (
+                  <span key={index} className="review__tag">{tag}</span>
+                ))}
               </div>
-
-              <div className="review-sr__stats">
-                <div className="review-sr__stat">
-                  <span className="review-sr__stat-label">Total words:</span>
-                  <span className="review-sr__stat-value">{listInfo.word_count || 0} words</span>
-                </div>
-              </div>
-
-              <div className="review-sr__method">
-                <label className="review-sr__method-label">Method:</label>
-                <div className="review-sr__method-select">
-                  <select 
-                    value={reviewMethod} 
-                    onChange={(e) => setReviewMethod(e.target.value)}
-                    className="review-sr__select"
-                  >
-                    {reviewMethods.map((method) => (
-                      <option key={method} value={method}>
-                        {method}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="review-sr__status">
-                <div className="review-sr__status-icon">⏱</div>
-                <span className="review-sr__status-text">Ready to review</span>
-              </div>
-
-              <button
-                className="review-sr__start-button"
-                onClick={handleStartReview}
-              >
-                Start review
-              </button>
+            )}
+            <div className="review__creator">
+              <div>Created by: {listInfo.created_by?.full_name || "Unknown"}</div>
             </div>
           </div>
-        </main>
+
+          <div className="review__information">
+            <div className='sub-title'>Description</div> 
+            <div className='sub-content'>{listInfo.description || "No description available"}</div>
+            <div className='stats'>
+              <div className='sub-title'>Total words:</div> 
+              <div className='sub-content'>{listInfo.word_count || 0} words</div>
+            </div>
+          </div>
+
+          <div className="review__methods">
+            <div className="review__information">
+              <div className='sub-title'>Method:</div>
+            </div>
+            <div className="review__dropdownWrapper">
+              <select 
+                value={reviewMethod} 
+                onChange={(e) => setReviewMethod(e.target.value)}
+              >
+                {reviewMethods.map((method) => (
+                  <option key={method} value={method}>
+                    {method}
+                  </option>
+                ))}
+              </select>
+              <img src={DropdownIcon} alt="DropdownIcon" className="dropdown__icon"/>
+            </div>
+          </div>
+
+          <div className="review__start">
+            <button className="review__start-button" onClick={handleStartReview}>
+              Start Review Session    
+            </button>
+          </div>
+        </div>
       </div>
       <Footer />
     </div>

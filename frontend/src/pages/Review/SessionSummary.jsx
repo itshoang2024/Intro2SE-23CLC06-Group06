@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { Header, SideBar, Footer } from "../../components";
+import { SideBar, Footer } from "../../components";
 import reviewService from "../../services/Review/reviewService";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
+import MainPageLogo from "../../assets/Logo.svg";
+import { SummaryBackground } from "../../assets/Review/index.jsx";
 
 export default function SessionSummary() {
   const { sessionId, listId } = useParams();
@@ -101,19 +103,24 @@ export default function SessionSummary() {
     const correct = parseInt(summary.correctAnswers) || 0;
     if (total === 0) return 0;
     return Math.round((correct / total) * 100);
-  };
+  };  
 
   const getAccuracyColor = () => {
     const percentage = calculateAccuracyPercentage();
-    if (percentage >= 80) return "#28a745"; // Green
-    if (percentage >= 60) return "#ffc107"; // Yellow
-    return "#dc3545"; // Red
+    if (percentage >= 80) return "#30B237"; // Green
+    if (percentage >= 60) return "#ffc310ff"; // Yellow
+    return "#db1e31ff"; // Red
   };
 
   if (loading) {
     return (
-      <div className="session-summary">
-        <Header />
+      <div className="session-summary"
+        style={{
+        backgroundImage: `url(${SummaryBackground})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}>
         <div className="session-summary__content">
           <SideBar />
           <main className="session-summary__main">
@@ -127,9 +134,14 @@ export default function SessionSummary() {
 
   if (error || !summary) {
     return (
-      <div className="session-summary">
-        <Header />
-        <div className="session-summary__content">
+      <div className="session-summary"
+        style={{
+        backgroundImage: `url(${SummaryBackground})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}>
+          <div className="session-summary__content">
           <SideBar />
           <main className="session-summary__main">
             <div className="session-summary__container">
@@ -153,12 +165,18 @@ export default function SessionSummary() {
   const accuracyPercentage = calculateAccuracyPercentage();
 
   return (
-    <div className="session-summary">
-      <Header />
-      <div className="session-summary__content">
+      <div className="session-summary"
+        style={{
+        backgroundImage: `url(${SummaryBackground})`,
+        backgroundSize: "100%",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}>
+        <div className="session-summary__content">
         <SideBar />
         <main className="session-summary__main">
           <div className="session-summary__container">
+            <img src={MainPageLogo} alt="Logo" className="session-summary__logo" />
             <div className="session-summary__header">
               <h1 className="session-summary__title">Session summary</h1>
               <p className="session-summary__subtitle">
@@ -183,7 +201,7 @@ export default function SessionSummary() {
                   >
                     {accuracyPercentage}%
                   </div>
-                  <div className="session-summary__stat-label">Reviewed</div>
+                  <div className="session-summary__stat-label">Reviewed words</div>
                   <div className="session-summary__stat-value session-summary__stat-value--blue">
                     {summary.totalWords || 0}
                   </div>

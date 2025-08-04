@@ -4,6 +4,7 @@ import { Header, SideBar, Footer } from "../../components";
 import reviewService from "../../services/Review/reviewService";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
+import { ArrowLeftIcon, ArrowRightIcon } from "../../assets/Review";
 
 export default function StudyWithFlashcard() {
   const { sessionId, listId } = useParams();
@@ -168,13 +169,12 @@ export default function StudyWithFlashcard() {
 
   if (loading) {
     return (
-      <div className="study-flashcard">
+      <div className="flashcard">
         <Header />
-        <div className="study-flashcard__content">
-          <SideBar />
-          <main className="study-flashcard__main">
-            <div className="loading">Loading study session...</div>
-          </main>
+        <h1 className="flashcard__title">Review with Spaced Repetition</h1>
+        <SideBar />
+        <div className="flashcard__content">
+          <div className="loading">Loading study session...</div>
         </div>
         <Footer />
       </div>
@@ -183,13 +183,12 @@ export default function StudyWithFlashcard() {
 
   if (!words.length) {
     return (
-      <div className="study-flashcard">
+      <div className="flashcard">
         <Header />
-        <div className="study-flashcard__content">
-          <SideBar />
-          <main className="study-flashcard__main">
-            <div className="error">No words found for this list</div>
-          </main>
+        <h1 className="flashcard__title">Review with Spaced Repetition</h1>
+        <SideBar />
+        <div className="flashcard__content">
+          <div className="error">No words found for this list</div>
         </div>
         <Footer />
       </div>
@@ -200,103 +199,87 @@ export default function StudyWithFlashcard() {
   const progress = ((currentWordIndex + 1) / words.length) * 100;
 
   return (
-    <div className="study-flashcard">
+    <div className="flashcard">
       <Header />
-      <div className="study-flashcard__content">
-        <SideBar />
-        <main className="study-flashcard__main">
-          <div className="study-flashcard__container">
-            <div className="study-flashcard__header">
-              <h1 className="study-flashcard__title">
-                {listInfo?.title || "Flashcard Study"}
-              </h1>
-              <div className="study-flashcard__progress">
-                <span className="study-flashcard__progress-text">
-                  {currentWordIndex + 1} of {words.length}
-                </span>
-                <button 
-                  className="study-flashcard__end-button"
-                  onClick={handleEndSession}
-                >
-                  ✕
-                </button>
+      <h1 className="flashcard__title">
+        {listInfo?.title || "Flashcard Study"} ({currentWordIndex + 1}/{words.length})
+      </h1>
+      <SideBar />
+
+      <div className="flashcard__content">
+        <div className="flashcard__card">
+          <button 
+            className="flashcard__prev" 
+            onClick={handlePrevious}
+            disabled={currentWordIndex === 0}
+          >
+            <img src={ArrowLeftIcon} alt="Previous" className="flashcard__icon" />
+          </button>
+
+          <div className="flashcard__animation" onClick={handleFlipCard}>
+            <div className={`card__inner ${isFlipped ? "is-flipped" : ""}`}>
+              <div className="card__face card__front">
+                {currentWord.term}
               </div>
-            </div>
-
-            <div className="study-flashcard__card-container">
-              <div className="study-flashcard__navigation">
-                <button 
-                  className="study-flashcard__nav-button study-flashcard__nav-button--prev"
-                  onClick={handlePrevious}
-                  disabled={currentWordIndex === 0}
-                >
-                  ←
-                </button>
-
-                <div 
-                  className={`study-flashcard__card ${isFlipped ? 'flipped' : ''}`}
-                  onClick={handleFlipCard}
-                >
-                  <div className="study-flashcard__card-content">
-                    {!isFlipped ? (
-                      <div className="study-flashcard__term">
-                        {currentWord.term}
-                      </div>
-                    ) : (
-                      <div className="study-flashcard__definition">
-                        <div className="study-flashcard__definition-text">
-                          {currentWord.definition}
-                        </div>
-                        {currentWord.phonetics && (
-                          <div className="study-flashcard__phonetics">
-                            {currentWord.phonetics}
-                          </div>
-                        )}
-                        {currentWord.examples && currentWord.examples.length > 0 && (
-                          <div className="study-flashcard__example">
-                            <em>"{currentWord.examples[0].example_sentence}"</em>
-                          </div>
-                        )}
-                      </div>
-                    )}
+              <div className="card__face card__back">
+                <div>
+                  <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
+                    {currentWord.definition}
                   </div>
+                  {currentWord.phonetics && (
+                    <div style={{ fontSize: '1rem', color: '#007bff', fontStyle: 'italic', marginBottom: '1rem' }}>
+                      {currentWord.phonetics}
+                    </div>
+                  )}
+                  {currentWord.examples && currentWord.examples.length > 0 && (
+                    <div style={{ fontSize: '0.9rem', color: '#6c757d', fontStyle: 'italic' }}>
+                      "{currentWord.examples[0].example_sentence}"
+                    </div>
+                  )}
                 </div>
-
-                <button 
-                  className="study-flashcard__nav-button study-flashcard__nav-button--next"
-                  onClick={handleNext}
-                  disabled={currentWordIndex === words.length - 1}
-                >
-                  →
-                </button>
               </div>
-
-              {isFlipped && (
-                <div className="study-flashcard__response-buttons">
-                  <button 
-                    className="study-flashcard__response-button study-flashcard__response-button--unknown"
-                    onClick={() => handleResponse(false)}
-                  >
-                    Unknown
-                  </button>
-                  <button 
-                    className="study-flashcard__response-button study-flashcard__response-button--know"
-                    onClick={() => handleResponse(true)}
-                  >
-                    Know
-                  </button>
-                </div>
-              )}
             </div>
-
-            {!isFlipped && (
-              <div className="study-flashcard__instruction">
-                Click the card to see the definition
-              </div>
-            )}
           </div>
-        </main>
+
+          <button 
+            className="flashcard__next" 
+            onClick={handleNext}
+            disabled={currentWordIndex === words.length - 1}
+          >
+            <img src={ArrowRightIcon} alt="Next" className="flashcard__icon" />
+          </button>
+        </div>
+
+        {isFlipped && (
+          <div className="flashcard__controls">
+            <button 
+              className='know'
+              onClick={() => handleResponse(false)}
+            >
+              Unknown
+            </button>
+            <button 
+              className='unknow'
+              onClick={() => handleResponse(true)}
+            >
+              Know
+            </button>
+          </div>
+        )}
+
+        {!isFlipped && (
+          <div style={{ textAlign: 'center', color: '#6c757d', fontSize: '1rem', marginTop: '1rem' }}>
+            Click the card to see the definition
+          </div>
+        )}
       </div>
+
+      <div className="flashcard__submit">
+        <button className="flashcard__submit-button" onClick={handleEndSession}>
+          End Session
+        </button>
+      </div>
+
       <Footer />
     </div>
   );

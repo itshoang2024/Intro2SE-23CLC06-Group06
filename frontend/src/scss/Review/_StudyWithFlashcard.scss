@@ -1,310 +1,169 @@
-.study-flashcard {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #f8f9fa;
+@use '../Fonts' as *;
 
-  &__content {
-    display: flex;
-    flex: 1;
-  }
 
-  &__main {
-    flex: 1;
-    padding: 2rem;
-    margin-left: 250px; // Adjust based on sidebar width
-  }
-
-  &__container {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-
-  &__title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
-  }
-
-  &__progress {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  &__progress-text {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: #6c757d;
-  }
-
-  &__end-button {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background-color: #dc3545;
-    color: white;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #c82333;
-    }
-  }
-
-  &__card-container {
+.flashcard {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  &__navigation {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    width: 100%;
-    max-width: 800px;
-  }
-
-  &__nav-button {
-    width: 60px;
-    height: 60px;
-    border: 2px solid #e9ecef;
-    background-color: white;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    color: #6c757d;
-
-    &:hover:not(:disabled) {
-      border-color: #007bff;
-      color: #007bff;
-      background-color: #f8f9fa;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    &--prev {
-      margin-right: auto;
-    }
-
-    &--next {
-      margin-left: auto;
-    }
-  }
-
-  &__card {
-    width: 500px;
-    height: 300px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    perspective: 1000px;
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
-
-    &.flipped {
-      .study-flashcard__card-content {
-        transform: rotateY(180deg);
-      }
-    }
-  }
-
-  &__card-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease;
-    border-radius: 12px;
-    background: white;
-  }
-
-  &__term {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: #2c3e50;
-    backface-visibility: hidden;
-  }
-
-  &__definition {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    transform: rotateY(180deg);
-    backface-visibility: hidden;
-    background: white;
-    border-radius: 12px;
-  }
-
-  &__definition-text {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-    line-height: 1.4;
-  }
-
-  &__phonetics {
-    font-size: 1rem;
-    color: #007bff;
-    font-style: italic;
-    margin-bottom: 1rem;
-  }
-
-  &__example {
-    font-size: 0.9rem;
-    color: #6c757d;
-    margin-top: 1rem;
-    line-height: 1.3;
-  }
-
-  &__response-buttons {
-    display: flex;
-    gap: 2rem;
-    margin-top: 1rem;
-  }
-
-  &__response-button {
-    padding: 1rem 2.5rem;
-    border: none;
-    border-radius: 25px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 120px;
-
-    &--unknown {
-      background-color: #e9ecef;
-      color: #495057;
-
-      &:hover {
-        background-color: #dee2e6;
-        transform: translateY(-1px);
-      }
-    }
-
-    &--know {
-      background-color: #ffc107;
-      color: #212529;
-
-      &:hover {
-        background-color: #ffb300;
-        transform: translateY(-1px);
-      }
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
-
-  &__instruction {
-    text-align: center;
-    color: #6c757d;
-    font-size: 1rem;
-    margin-top: 1rem;
-  }
-
-  .loading, .error {
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
-    color: #6c757d;
-  }
-
-  .error {
-    color: #dc3545;
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  .study-flashcard {
-    &__main {
-      margin-left: 0;
-      padding: 1rem;
-    }
+    height: 100vh;
+    background-color: #FFFCF7; 
+    font-family: 'Inder', sans-serif;
+    color: #352D24;
 
     &__title {
-      font-size: 1.5rem;
+        font-size: 2rem;
+        font-family: 'Lalezar', 'sans-serif';
+        font-weight: normal;
+        margin-left: 5rem;
+    }
+    
+    &__content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        min-height: 40rem;
+        margin-bottom: 5rem;
     }
 
     &__card {
-      width: 100%;
-      max-width: 400px;
-      height: 250px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 95%;
+        height: 100%;
+        border-radius: 12px;
+        padding: 2rem;
     }
 
-    &__term {
-      font-size: 2rem;
+    &__prev, &__next {
+        border: none;
+        width: 6rem;
+        height: 3rem;
+        border-radius: 9999px; /* full rounded */
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
-    &__definition-text {
-      font-size: 1.2rem;
+    &__prev {
+        background-color: #F3EDDF;
+        &:hover {
+            background-color: #e6dfd3;
+        }
     }
 
-    &__navigation {
-      flex-direction: column;
-      gap: 1rem;
+    &__next {
+        background-color: #FFE1A1;
+        &:hover {
+            background-color: #f3c664;
+        }
     }
 
-    &__nav-button {
-      width: 50px;
-      height: 50px;
-      font-size: 1.2rem;
 
-      &--prev,
-      &--next {
-        margin: 0;
-      }
+    &__icon {
+        width: 2rem;
+        height: 2rem;
     }
 
-    &__response-buttons {
-      gap: 1rem;
+
+    &__animation {
+        width: 70%;
+        height: 100%;
+        cursor: pointer;
+        margin: 2rem;
+        
+        .card__inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+        }
+
+        .card__inner.is-flipped {
+        transform: rotateY(180deg);
+        }
+
+        .card__face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backface-visibility: hidden;
+        font-size: 2rem;
+        padding: 1rem;
+        text-align: center;
+        }
+
+        .card__front {
+        background-color: #F8F8F8;
+        }
+
+        .card__back {
+        background-color: #FFFFFF;
+        transform: rotateY(180deg);
+        }
     }
 
-    &__response-button {
-      padding: 0.8rem 2rem;
-      min-width: 100px;
+    &__controls {
+        margin-top: 1.5rem;
+        width: 70%;
+        justify-content: space-around;
+        display: flex;
+        align-items: center;
+
+        .know, .unknow {
+            width: 10rem;
+            height: 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 1.4rem;
+            cursor: pointer;
+            font-family:  $font-inriasans;
+        }
+
+        .know {
+            background-color: #F3EDDF; 
+            &:hover {
+                background-color: #e6dfd3;
+            }
+        }
+
+        .unknow {
+            background-color: #FFE1A1; 
+            &:hover {
+                background-color: #f3c664;
+            }
+        }
     }
-  }
+
+    
+    &__submit {
+        display: flex;
+        justify-content: right;
+        margin-right: 5rem;
+        margin-bottom: 2rem;
+    }
+
+    &__submit-button {
+        background-color: #3f3122;
+        color: #FFFCF7;
+        font-size: 1.2rem;
+        font-family: $font-inriasans;
+        font-weight: bold;
+        padding: 1% 3rem;
+        border: none;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background-color: #1e150f;
+        }
+    }
 }

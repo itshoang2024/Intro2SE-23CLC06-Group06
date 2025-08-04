@@ -241,9 +241,11 @@ class ReviewModel {
       .select('id, session_type, total_words, vocab_list_id, word_ids, started_at')
       .eq('user_id', userId)
       .in('status', ['in_progress', 'interrupted'])
-      .maybeSingle();
+      .order('started_at', { ascending: false })
+      .limit(1)
+      .single();
 
-    if (error) throw error;
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows found
     return data;
   }
 
