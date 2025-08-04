@@ -4,12 +4,14 @@ import { Header, SideBar, Footer } from "../../components";
 import reviewService from "../../services/Review/reviewService";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
+import { useConfirm } from "../../components/Providers/ConfirmProvider.jsx";
 import { DropdownIcon } from "../../assets/Vocabulary/index.jsx";
 
 export default function ReviewWithSR() {
   const { listId } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
+  const confirm = useConfirm();
 
   const [listInfo, setListInfo] = useState(null);
   const [reviewMethod, setReviewMethod] = useState("Flashcard");
@@ -69,10 +71,17 @@ export default function ReviewWithSR() {
           sessionType: sessionType,
         });
       } catch (error) {
+        console.log("Error starting session:", error);
         // If no due words, offer practice mode
-        if (error.message?.includes('No words are currently due for review')) {
-          const confirmed = window.confirm(
-            "No words are currently due for review based on spaced repetition. Would you like to practice all words instead?"
+        // Check multiple possible error message formats
+        const isNoDueWordsError = 
+          error.message?.includes('No words are currently due for review') ||
+          error.response?.data?.message?.includes('No words are currently due for review') ||
+          error.response?.status === 404;
+        
+        if (isNoDueWordsError) {
+          const confirmed = await confirm(
+            "There's no words to review, do you want to continue to review?"
           );
           if (confirmed) {
             sessionResponse = await reviewService.startSession({

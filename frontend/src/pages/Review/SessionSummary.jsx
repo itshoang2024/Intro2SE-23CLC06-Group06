@@ -265,12 +265,12 @@ export default function SessionSummary() {
               >
                 Back to List
               </button>
-              <button 
+              {/* <button 
                 className="session-summary__button session-summary__button--primary"
                 onClick={handleContinueReviewing}
               >
                 Continue Reviewing
-              </button>
+              </button> */}
             </div>
           </div>
         </main>

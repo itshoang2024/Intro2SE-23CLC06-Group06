@@ -4,6 +4,7 @@ import { Header, SideBar, Footer } from "../../components";
 import reviewService from "../../services/Review/reviewService";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
+import { useConfirm } from "../../components/Providers/ConfirmProvider.jsx";
 import { ArrowLeftIcon, ArrowRightIcon } from "../../assets/Review";
 
 export default function StudyWithFlashcard() {
@@ -11,6 +12,7 @@ export default function StudyWithFlashcard() {
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
+  const confirm = useConfirm();
 
   const [listInfo, setListInfo] = useState(location.state?.listInfo || null);
   const [words, setWords] = useState([]);
@@ -75,17 +77,35 @@ export default function StudyWithFlashcard() {
               sessionType: 'flashcard'
             });
           } catch (error) {
-            // If no due words, try practice mode (all words)
-            if (error.message?.includes('No words are currently due for review')) {
-              try {
-                sessionResponse = await reviewService.startSession({
-                  listId: listId || listInfo?.id,
-                  sessionType: 'flashcard',
-                  practiceMode: true
-                });
-                toast("No words due for review. Starting practice mode with all words.", "info");
-              } catch (practiceError) {
-                throw practiceError; // Re-throw if practice mode also fails
+            console.log("Error starting session:", error);
+            // If no due words, ask user if they want to continue with practice mode
+            // Check multiple possible error message formats
+            const isNoDueWordsError = 
+              error.message?.includes('No words are currently due for review') ||
+              error.response?.data?.message?.includes('No words are currently due for review') ||
+              error.response?.status === 404;
+            
+            if (isNoDueWordsError) {
+              const userConfirmed = await confirm(
+                "There's no words to review, do you want to continue to review?"
+              );
+              
+              if (userConfirmed) {
+                try {
+                  sessionResponse = await reviewService.startSession({
+                    listId: listId || listInfo?.id,
+                    sessionType: 'flashcard',
+                    practiceMode: true
+                  });
+                  toast("Starting practice mode with all words.", "success");
+                } catch (practiceError) {
+                  console.error("Error starting practice mode:", practiceError);
+                  throw practiceError; // Re-throw if practice mode also fails
+                }
+              } else {
+                // User declined, navigate back
+                navigate(`/review/${listId || listInfo?.id}`);
+                return;
               }
             } else {
               throw error; // Re-throw if it's a different error
@@ -106,7 +126,7 @@ export default function StudyWithFlashcard() {
     }
 
     initializeStudySession();
-  }, [sessionId, listId, listInfo, toast, isSessionCompleted]);
+  }, [sessionId, listId, listInfo, toast, confirm, isSessionCompleted, navigate]);
 
   const handleFlipCard = () => {
     setIsFlipped(!isFlipped);
@@ -256,7 +276,7 @@ export default function StudyWithFlashcard() {
               className='know'
               onClick={() => handleResponse(false)}
             >
-              Unknown
+              Unknow
             </button>
             <button 
               className='unknow'
