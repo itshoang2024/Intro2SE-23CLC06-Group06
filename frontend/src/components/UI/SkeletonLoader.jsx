@@ -670,3 +670,244 @@ export function OverviewListSkeleton() {
     </SkeletonTheme>
   );
 }
+
+// LearnersList Page Skeleton
+export function LearnersListSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <div className="student-list-page">
+        {/* ClassroomTitle Skeleton */}
+        <div style={{ marginBottom: '24px' }}>
+          <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
+          <Skeleton height={16} width="25%" />
+        </div>
+
+        {/* TeacherClassroomMenuTab Skeleton */}
+        <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
+          <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
+            <Skeleton height={36} width={100} />
+            <Skeleton height={36} width={120} />
+            <Skeleton height={36} width={110} />
+          </div>
+        </div>
+
+        <div className="student-list-container">
+          {/* Actions */}
+          <div className="student-actions" style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: '24px' 
+          }}>
+            <Skeleton height={40} width={150} />
+            <div className="pending-request__search-block" style={{ display: 'flex', gap: '12px' }}>
+              <Skeleton height={40} width={300} />
+              <Skeleton height={40} width={100} />
+            </div>
+          </div>
+
+          {/* Student List */}
+          <div className="student-list">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="student-row" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '16px',
+                marginBottom: '12px',
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                border: '1px solid #e0e0e0'
+              }}>
+                <Skeleton height={16} width="60%" />
+                <Skeleton height={32} width={80} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </SkeletonTheme>
+  );
+}
+
+// PendingRequest Page Skeleton
+export function PendingRequestSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <div className="pending-request__page">
+        {/* ClassroomTitle Skeleton */}
+        <div style={{ marginBottom: '24px' }}>
+          <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
+          <Skeleton height={16} width="25%" />
+        </div>
+
+        {/* TeacherClassroomMenuTab Skeleton */}
+        <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
+          <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
+            <Skeleton height={36} width={100} />
+            <Skeleton height={36} width={120} />
+            <Skeleton height={36} width={110} />
+          </div>
+        </div>
+
+        <div className="pending-request__container">
+          {/* Actions */}
+          <div className="pending-request__student-action" style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            marginBottom: '24px' 
+          }}>
+            <Skeleton height={40} width={150} />
+            <div className="pending-request__search-block" style={{ display: 'flex', gap: '12px' }}>
+              <Skeleton height={40} width={300} />
+              <Skeleton height={40} width={100} />
+            </div>
+          </div>
+
+          {/* Request List */}
+          <div className="pending-request__student-list">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="pending-request__student-row" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '16px',
+                marginBottom: '12px',
+                backgroundColor: 'white',
+                borderRadius: '8px',
+                border: '1px solid #e0e0e0'
+              }}>
+                <Skeleton height={16} width="60%" />
+                <Skeleton height={32} width={80} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </SkeletonTheme>
+  );
+}
+
+// AssignmentPage Skeleton
+export function AssignmentPageSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <div className="assignment-page">
+        <div className="assignment-page__container">
+          <div className="assignment-page__content">
+            {/* ClassroomTitle Skeleton */}
+            <div style={{ marginBottom: '24px' }}>
+              <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
+              <Skeleton height={16} width="25%" />
+            </div>
+
+            {/* TeacherClassroomMenuTab Skeleton */}
+            <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
+              <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
+                <Skeleton height={36} width={100} />
+                <Skeleton height={36} width={120} />
+                <Skeleton height={36} width={110} />
+              </div>
+            </div>
+
+            {/* Controls */}
+            <div className="controls" style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              marginBottom: '24px' 
+            }}>
+              <Skeleton height={40} width={150} />
+              <Skeleton height={32} width={100} />
+            </div>
+
+            {/* Assignment Grid */}
+            <div className="assignment-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '20px'
+            }}>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div key={index} className="assignment-card" style={{
+                  padding: '20px',
+                  backgroundColor: 'white',
+                  borderRadius: '8px',
+                  border: '1px solid #e0e0e0',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                }}>
+                  <Skeleton height={20} width="80%" style={{ marginBottom: '12px' }} />
+                  <Skeleton height={16} width="50%" style={{ marginBottom: '8px' }} />
+                  <Skeleton height={14} width="60%" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </SkeletonTheme>
+  );
+}
+
+// AssignmentDetail Page Skeleton
+export function AssignmentDetailSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <div className="assignment-detail-page">
+        <div className="content">
+          <div className="assignment-detail__container">
+            {/* Assignment Box */}
+            <div className="assignment-box" style={{
+              padding: '24px',
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              border: '1px solid #e0e0e0',
+              marginBottom: '24px'
+            }}>
+              <div className="assignment-header" style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: 'center',
+                marginBottom: '16px' 
+              }}>
+                <Skeleton height={32} width="60%" />
+                <Skeleton height={24} width={24} />
+              </div>
+              
+              <div className="assignment-meta" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <Skeleton height={16} width="80%" />
+                <Skeleton height={16} width="70%" />
+                <Skeleton height={16} width="75%" />
+                <Skeleton height={16} width="65%" />
+              </div>
+            </div>
+
+            {/* AssignSubMenu Skeleton */}
+            <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
+              <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
+                <Skeleton height={36} width={80} />
+                <Skeleton height={36} width={90} />
+                <Skeleton height={36} width={100} />
+              </div>
+            </div>
+
+            {/* Word List */}
+            <div className="word-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="word-card" style={{
+                  padding: '16px',
+                  backgroundColor: 'white',
+                  borderRadius: '8px',
+                  border: '1px solid #e0e0e0'
+                }}>
+                  <Skeleton height={18} width="30%" style={{ marginBottom: '8px' }} />
+                  <Skeleton height={16} width="90%" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </SkeletonTheme>
+  );
+}
