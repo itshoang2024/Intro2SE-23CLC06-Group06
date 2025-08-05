@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Header, Footer, SideBar, VocabularyListCard, ClassroomTitle } from "../../components";
+import { Header, Footer, SideBar, VocabularyListCard, ClassroomTitle, ViewClassroomSkeleton } from "../../components";
 import { useNavigate } from "react-router-dom";
 import classroomService from "../../services/Classroom/classroomService";
 import SeeMoreSection from "../../components/Classroom/SeeMoreSection";
@@ -71,35 +71,38 @@ export default function ManageClassroomLearner() {
                 <div className="manage-classroom__sidebar">
                     <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
                 </div>
-                <div className="manage-classroom-learner__content">
-                    {/* Title */}
-                    <ClassroomTitle />
+                {isLoading ? (
+                    <ViewClassroomSkeleton />
+                ) : (
+                    <div className="manage-classroom-learner__content">
+                        {/* Title */}
+                        <ClassroomTitle />
 
-                    {/* Menu tab */}
-                    <div className="sub-menu-tabs">
-                        <div className="tab-list">
-                            {tabs.map((tab, idx) => (
-                                <div
-                                    key={idx}
-                                    className={`tab ${(activeTab === tab.name) ? "active" : ""}`}
-                                    onClick={() => setActiveTab(tab.name)}
-                                >
-                                    {tab.name}
-                                </div>
-                            ))}
+                        {/* Menu tab */}
+                        <div className="sub-menu-tabs">
+                            <div className="tab-list">
+                                {tabs.map((tab, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`tab ${(activeTab === tab.name) ? "active" : ""}`}
+                                        onClick={() => setActiveTab(tab.name)}
+                                    >
+                                        {tab.name}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
 
 
-                    {/* Top Bar */}
-                    <div className="list-topbar">
-                        <span>All lists: {assignments.length}</span>
-                        <div className="filter">Filter by ▼</div>
-                    </div>
+                        {/* Top Bar */}
+                        <div className="list-topbar">
+                            <span>All lists: {assignments.length}</span>
+                            <div className="filter">Filter by ▼</div>
+                        </div>
 
 
-                    {/* See more */}
-                    {assignments.length > 0 ? (
+                        {/* See more */}
+                        {assignments.length > 0 ? (
                         <>
                             {/* <div className="list-grid"> */}
                                 <SeeMoreSection
@@ -130,7 +133,8 @@ export default function ManageClassroomLearner() {
                             <p>No assignments found for {activeTab.toLowerCase()}.</p>
                         </div>
                     )}
-                </div>
+                    </div>
+                )}
             </div>
             <Footer />
         </div>

@@ -459,6 +459,99 @@ export function ProfileSkeleton() {
   );
 }
 
+// ViewClassroom Page Skeleton
+export function ViewClassroomSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <div className="manage-classroom-learner__content">
+        {/* Classroom Title Skeleton */}
+        <div style={{ marginBottom: '24px' }}>
+          <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
+          <Skeleton height={16} width="25%" />
+        </div>
+
+        {/* Menu Tabs Skeleton */}
+        <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
+          <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
+            <Skeleton height={36} width={100} />
+            <Skeleton height={36} width={90} />
+            <Skeleton height={36} width={140} />
+          </div>
+        </div>
+
+        {/* Top Bar Skeleton */}
+        <div className="list-topbar" style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          marginBottom: '24px' 
+        }}>
+          <Skeleton height={18} width={120} />
+          <Skeleton height={32} width={100} />
+        </div>
+
+        {/* Assignment Cards Grid Skeleton */}
+        <div className="list-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+          gap: '20px'
+        }}>
+          {Array.from({ length: 4 }).map((_, index) => (
+            <ViewClassroomCardSkeleton key={index} />
+          ))}
+        </div>
+      </div>
+    </SkeletonTheme>
+  );
+}
+
+// ViewClassroom Assignment Card Skeleton
+export function ViewClassroomCardSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <div className="vocab-card" style={{
+        padding: '1rem',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        border: '1px solid #e0e0e0',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+      }}>
+        {/* Title */}
+        <Skeleton height={20} width="75%" style={{ marginBottom: '8px' }} />
+        
+        {/* Description/Exercise Method */}
+        <Skeleton height={16} width="90%" style={{ marginBottom: '4px' }} />
+        
+        {/* Review Progress */}
+        <Skeleton height={14} width="30%" style={{ marginBottom: '4px' }} />
+        
+        {/* Completion Date */}
+        <Skeleton height={14} width="45%" style={{ marginBottom: '4px' }} />
+        
+        {/* Result/Status */}
+        <Skeleton height={14} width="25%" style={{ marginBottom: '16px' }} />
+        
+        {/* Footer */}
+        <div className="vocab-footer" style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          marginTop: '16px'
+        }}>
+          <div className="user-block" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Skeleton circle height={32} width={32} />
+            <div>
+              <Skeleton height={14} width={100} style={{ marginBottom: '4px' }} />
+              <Skeleton height={12} width={50} />
+            </div>
+          </div>
+          <Skeleton height={32} width={80} />
+        </div>
+      </div>
+    </SkeletonTheme>
+  );
+}
+
 // OverviewList Page Skeleton (SCSS-based)
 export function OverviewListSkeleton() {
   return (
