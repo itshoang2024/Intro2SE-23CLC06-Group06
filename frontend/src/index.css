@@ -1726,12 +1726,10 @@ h2 {
 .assignment-page__container {
   display: flex;
   gap: 2em;
-  margin: 2em 0;
 }
 .assignment-page__content {
   display: flex;
   flex-direction: column;
-  gap: 2em;
   width: 100%;
 }
 .assignment-page .tabs {
@@ -1751,6 +1749,7 @@ h2 {
   font-weight: bold;
 }
 .assignment-page .controls {
+  margin: 20px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1771,7 +1770,7 @@ h2 {
 }
 .assignment-page .assignment-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 1rem;
 }
 .assignment-page .assignment-grid .assignment-card {
@@ -1840,15 +1839,14 @@ h2 {
 }
 .learners-layout__body {
   min-height: 100%;
+  width: 100vw;
   margin: 2em 0;
   display: flex;
-  gap: 2em;
+  gap: 5em;
 }
 .learners-layout__content {
   background: #FFFCF7;
-  min-width: 70%;
-  margin: 0 auto;
-  gap: 2em;
+  min-width: 90vw;
 }
 
 .student-list-page {
@@ -2000,10 +1998,10 @@ h2 {
   margin-bottom: 1.5rem;
 }
 .assignment-detail-page .content .assignment-detail__container .assignment-box {
+  padding: 20px;
+  border-radius: 20px;
   background-color: #FFFAEF;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 2rem;
+  font-family: "Inria Sans", sans-serif;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 .assignment-detail-page .content .assignment-detail__container .assignment-box .assignment-header {
@@ -2329,45 +2327,8 @@ h2 {
 .list-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-row: repeat 2, 1fr;
-  gap: 1em;
-}
-.list-grid .list-card {
-  background-color: #fff8e1;
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.3s ease;
-}
-.list-grid .list-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-.list-grid .list-card h4 {
-  margin-bottom: 0.4rem;
-  font-size: 1rem;
-}
-.list-grid .list-card p {
-  font-size: 0.85rem;
-  color: #555;
-}
-.list-grid .list-card .list-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-.list-grid .list-card .list-footer .username {
-  font-size: 0.8rem;
-  color: #333;
-}
-.list-grid .list-card .list-footer .btn.dark {
-  background-color: #2f2f2f;
-  color: white;
-  padding: 0.4rem 0.8rem;
-  border: none;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  cursor: pointer;
+  grid-template-rows: repeat 2, 1fr;
+  gap: 28px;
 }
 
 .see-more {
@@ -2841,6 +2802,18 @@ h2 {
 .sidebar.collapsed .sidebar__link {
   visibility: hidden;
 }
+.sidebar.open {
+  width: 250px;
+  padding: 1.5rem;
+}
+.sidebar.open .sidebar__logo,
+.sidebar.open .sidebar__nav,
+.sidebar.open .sidebar__section,
+.sidebar.open .sidebar__title,
+.sidebar.open .sidebar__divider,
+.sidebar.open .sidebar__link {
+  visibility: visible;
+}
 .sidebar .sidebar__logo {
   margin-bottom: 2rem;
 }
@@ -2999,8 +2972,10 @@ h2 {
 .class-header {
   padding: 20px;
   border-radius: 20px;
-  background-color: #FCF9F1;
+  background-color: #FFFAEF;
   font-family: "Inria Sans", sans-serif;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  min-height: 140px;
 }
 
 .dropdown-container {
@@ -3062,7 +3037,8 @@ h2 {
 
 .sub-menu-tabs .tab-list {
   display: flex;
-  gap: 12px;
+  justify-content: center;
+  justify-content: space-around;
   border-bottom: 2px solid #ddd;
   padding-bottom: 4px;
   font-family: "Lalezar", sans-serif;
@@ -3070,11 +3046,14 @@ h2 {
   margin-top: 2em;
 }
 .sub-menu-tabs .tab-list .tab {
+  display: flex;
+  justify-content: center;
+  min-width: 20%;
   background-color: #FFFCF7;
   border-radius: 6px 6px 0 0;
   padding: 10px 18px;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 1.5rem;
   color: #1f1f1f;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -3101,7 +3080,7 @@ h2 {
 .vocab-card .vocab-title {
   font-family: "Lalezar", sans-serif;
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: normal;
   color: #2b2b2b;
   margin: 0;
   margin-bottom: 0.5rem;
@@ -3152,12 +3131,22 @@ h2 {
 .vocab-card .vocab-footer .user-block {
   display: flex;
   align-items: center;
+  min-width: 150px;
+  gap: 5%;
 }
 .vocab-card .vocab-footer .user-block .avatar {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  margin-right: 0.5rem;
+  border: none;
+  border-radius: 50%;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 .vocab-card .vocab-footer .user-block .avatar .img {
   width: 100%;
@@ -3165,7 +3154,8 @@ h2 {
   object-fit: cover;
 }
 .vocab-card .vocab-footer .user-block .avatar .placeholder {
-  background-color: #d8cfc3;
+  background-color: #4A5568;
+  color: white;
   width: 100%;
   height: 100%;
   display: flex;
@@ -3177,8 +3167,8 @@ h2 {
   flex-direction: column;
 }
 .vocab-card .vocab-footer .user-block .user-info .username {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: bold;
   color: #222;
   max-width: 100px;
   white-space: nowrap;
@@ -3186,7 +3176,8 @@ h2 {
   text-overflow: ellipsis;
 }
 .vocab-card .vocab-footer .user-block .user-info .role-tag {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  font-weight: bold;
   background-color: #d6e5ff;
   color: #1b4da3;
   padding: 2px 6px;
@@ -3198,6 +3189,7 @@ h2 {
   background-color: #2e2a25;
   color: #fff;
   font-size: 0.85rem;
+  font-weight: bold;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 20px;
