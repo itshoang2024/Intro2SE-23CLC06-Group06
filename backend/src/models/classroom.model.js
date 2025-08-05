@@ -462,12 +462,20 @@ class ClassroomModel {
             words_per_review,
             sublist_count,
             created_at,
-            updated_at
+            updated_at,
+            vocab_lists (
+              creator:users (
+                  email,
+                  avatar_url,
+                  display_name
+              )
+            )
             `
       )
       .eq('classroom_id', classroomId)
       .order('start_date', { ascending: false });
 
+    console.log(data);
     if (error) throw error;
     return data;
   }
@@ -486,7 +494,14 @@ class ClassroomModel {
                 sublist_count,
                 due_date,
                 start_date,
-                classroom_id
+                classroom_id,
+                vocab_lists (
+                  creator:users (
+                      email,
+                      avatar_url,
+                      display_name
+                  )
+                )
             )
             `
       )
@@ -494,7 +509,6 @@ class ClassroomModel {
       .in('status', statusList);
 
     if (error) throw error;
-
     return data.filter((item) => item.assignments?.classroom_id === classroomId);
   }
 

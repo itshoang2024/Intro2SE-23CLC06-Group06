@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Header, Footer, SideBar, VocabularyListCard, ClassroomTitle } from "../../components";
 import { useNavigate } from "react-router-dom";
 import classroomService from "../../services/Classroom/classroomService";
+import SeeMoreSection from "../../components/Classroom/SeeMoreSection";
 
 const tabs = [
     { name: "To-review" },
@@ -9,19 +10,10 @@ const tabs = [
     { name: "Overdue assignment" }
 ];
 
-const dummyLists = Array(8).fill({
-    title: "IELTS Academy",
-    description: "A helpful list of commonly used English words to boost your reading and speaking skills",
-    username: "nguyenhoangphihung@gmail.com",
-    role: "Teacher",
-    reviewProgress: "2/5",
-    completionDate: "Aug, 28th, 2025",
-    result: "80%"
-});
-
 export default function ManageClassroomLearner() {
 
     const [activeTab, setActiveTab] = useState("To-review");
+    const [isOpen, setIsOpen] = useState(false);
 
     // Xử lý việc navigate
     const navigate = useNavigate();
@@ -54,6 +46,7 @@ export default function ManageClassroomLearner() {
                         break;
                     default:
                         res = await classroomService.getOverdueAssignments(classroomId);
+                        console.log(res);
                 }
 
                 if (res.success && Array.isArray(res.data)) {
@@ -76,7 +69,7 @@ export default function ManageClassroomLearner() {
             <Header />
             <div className="manage-classroom-learner__container">
                 <div className="manage-classroom__sidebar">
-                    <SideBar />
+                    <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
                 </div>
                 <div className="manage-classroom-learner__content">
                     {/* Title */}
@@ -105,38 +98,36 @@ export default function ManageClassroomLearner() {
                     </div>
 
 
-                    {/* List Grid */}
-                    {isLoading ? (
-                        <div className="loading-container">
-                            <p>Loading assignments...</p>
-                        </div>
-                    ) : assignments.length > 0 ? (
-                        <div className="list-grid">
-                            {assignments.map((assignment, index) => (
-                                <VocabularyListCard
-                                    key={assignment.assignment_id || index}
-                                    title={assignment.title}
-                                    description={`Exercise method: ${assignment.exercise_method}`}
-                                    username={`Due: ${new Date(assignment.due_date).toLocaleDateString()}`}
-                                    role="Assignment"
-                                    reviewProgress={`${assignment.completed_sublist_index || 0}/${assignment.sublist_count || 0}`}
-                                    completionDate={new Date(assignment.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                    result={assignment.learner_status || 'Pending'}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="empty-state">
-                            <p>No assignments found for {activeTab.toLowerCase()}.</p>
-                        </div>
-                    )}
-
-
-
                     {/* See more */}
-                    {assignments.length > 0 && (
-                        <div className="see-more">
-                            <button className="btn see-more-btn">See more ▼</button>
+                    {assignments.length > 0 ? (
+                        <>
+                            {/* <div className="list-grid"> */}
+                                <SeeMoreSection
+                                    items={assignments}
+                                    renderItem={(item, index) => (
+                                        <VocabularyListCard
+                                            key={item.assignment_id || index}
+                                            title={item.title}
+                                            description={`Exercise method: ${item.exercise_method}`}
+                                            username={item.creator?.email}
+                                            avatarUrl={item.creator?.avatar_url}
+                                            role="Teacher"
+                                            reviewProgress={`${item.completed_sublist_index || 0}/${item.sublist_count || 0}`}
+                                            completionDate={new Date(item.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            result={item.learner_status || 'Pending'}
+                                            buttonContent="Overview"
+                                        />
+                                    )}
+                                    initialCount={4}
+                                    step={4}
+                                    wrapperClassName="list-grid"
+                                    itemWrapperTag="div"
+                                />
+                            {/* </div> */}
+                        </>
+                    ) : (
+                        <div className="empty-list">
+                            <p>No assignments found for {activeTab.toLowerCase()}.</p>
                         </div>
                     )}
                 </div>
