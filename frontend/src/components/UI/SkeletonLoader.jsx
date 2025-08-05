@@ -671,11 +671,11 @@ export function OverviewListSkeleton() {
   );
 }
 
-// LearnersList Page Skeleton
+// LearnersList Page Skeleton (SCSS-based)
 export function LearnersListSkeleton() {
   return (
-    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
-      <div className="student-list-page">
+    <SkeletonTheme baseColor="#FFFCF7" highlightColor="#F7F1E3">
+      <div className="student-list-page" style={{ fontFamily: 'Inria Sans, sans-serif' }}>
         {/* ClassroomTitle Skeleton */}
         <div style={{ marginBottom: '24px' }}>
           <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
@@ -685,56 +685,74 @@ export function LearnersListSkeleton() {
         {/* TeacherClassroomMenuTab Skeleton */}
         <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
           <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
-            <Skeleton height={36} width={100} />
-            <Skeleton height={36} width={120} />
-            <Skeleton height={36} width={110} />
+            <Skeleton height={36} width={100} style={{ borderRadius: '6px' }} />
+            <Skeleton height={36} width={120} style={{ borderRadius: '6px' }} />
+            <Skeleton height={36} width={110} style={{ borderRadius: '6px' }} />
           </div>
         </div>
 
-        <div className="student-list-container">
-          {/* Actions */}
-          <div className="student-actions" style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+        {/* Student Actions */}
+        <div className="student-actions" style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '16px',
+          margin: '20px 0'
+        }}>
+          <Skeleton height={42} width={150} style={{ borderRadius: '6px' }} />
+          <div style={{ 
+            position: 'relative',
+            display: 'grid',
             alignItems: 'center',
-            marginBottom: '24px' 
+            gridTemplateColumns: '50% 50%',
+            width: '100%'
           }}>
-            <Skeleton height={40} width={150} />
-            <div className="pending-request__search-block" style={{ display: 'flex', gap: '12px' }}>
-              <Skeleton height={40} width={300} />
+            <Skeleton height={40} width="90%" />
+            <div style={{ justifySelf: 'end' }}>
               <Skeleton height={40} width={100} />
             </div>
           </div>
+        </div>
 
-          {/* Student List */}
-          <div className="student-list">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <div key={index} className="student-row" style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '16px',
-                marginBottom: '12px',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                border: '1px solid #e0e0e0'
-              }}>
-                <Skeleton height={16} width="60%" />
-                <Skeleton height={32} width={80} />
-              </div>
-            ))}
-          </div>
+        {/* Student List */}
+        <div className="student-list" style={{ marginTop: '10px' }}>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div key={index} className="student-row" style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '12px 0',
+              borderBottom: '0.5px solid #000000'
+            }}>
+              <Skeleton height={16} width="50%" />
+              <Skeleton height={26} width={60} style={{ 
+                borderRadius: '6px',
+                backgroundColor: '#f3eee4'
+              }} />
+            </div>
+          ))}
+        </div>
+
+        {/* See More Button */}
+        <div className="see-more" style={{ 
+          marginTop: '20px',
+          textAlign: 'center'
+        }}>
+          <Skeleton height={32} width={120} style={{ 
+            borderRadius: '20px',
+            backgroundColor: '#f5f0e3'
+          }} />
         </div>
       </div>
     </SkeletonTheme>
   );
 }
 
-// PendingRequest Page Skeleton
+// PendingRequest Page Skeleton (SCSS-based)
 export function PendingRequestSkeleton() {
   return (
-    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
-      <div className="pending-request__page">
+    <SkeletonTheme baseColor="#FFFCF7" highlightColor="#F7F1E3">
+      <div className="pending-request__page" style={{ fontFamily: 'Inria Sans, sans-serif' }}>
         {/* ClassroomTitle Skeleton */}
         <div style={{ marginBottom: '24px' }}>
           <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
@@ -744,44 +762,68 @@ export function PendingRequestSkeleton() {
         {/* TeacherClassroomMenuTab Skeleton */}
         <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
           <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
-            <Skeleton height={36} width={100} />
-            <Skeleton height={36} width={120} />
-            <Skeleton height={36} width={110} />
+            <Skeleton height={36} width={100} style={{ borderRadius: '6px' }} />
+            <Skeleton height={36} width={120} style={{ borderRadius: '6px' }} />
+            <Skeleton height={36} width={110} style={{ borderRadius: '6px' }} />
           </div>
         </div>
 
         <div className="pending-request__container">
-          {/* Actions */}
+          {/* Student Actions */}
           <div className="pending-request__student-action" style={{ 
             display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: '24px' 
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '16px',
+            margin: '20px 0'
           }}>
-            <Skeleton height={40} width={150} />
-            <div className="pending-request__search-block" style={{ display: 'flex', gap: '12px' }}>
-              <Skeleton height={40} width={300} />
-              <Skeleton height={40} width={100} />
+            <Skeleton height={42} width={150} style={{ 
+              borderRadius: '6px',
+              backgroundColor: '#1a1a1a'
+            }} />
+            
+            <div className="pending-request__search-block" style={{ 
+              position: 'relative',
+              display: 'grid',
+              alignItems: 'center',
+              gridTemplateColumns: '50% 50%',
+              width: '100%'
+            }}>
+              <Skeleton height={40} width="90%" />
+              <div className="search-block--dropdown-menu" style={{ justifySelf: 'end' }}>
+                <Skeleton height={40} width={100} />
+              </div>
             </div>
           </div>
 
           {/* Request List */}
-          <div className="pending-request__student-list">
+          <div className="pending-request__student-list" style={{ marginTop: '10px' }}>
             {Array.from({ length: 4 }).map((_, index) => (
               <div key={index} className="pending-request__student-row" style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '16px',
-                marginBottom: '12px',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                border: '1px solid #e0e0e0'
+                padding: '12px 0',
+                borderBottom: '1px solid #ddd'
               }}>
-                <Skeleton height={16} width="60%" />
-                <Skeleton height={32} width={80} />
+                <Skeleton height={16} width="50%" />
+                <Skeleton height={26} width={60} style={{ 
+                  borderRadius: '6px',
+                  backgroundColor: '#f3eee4'
+                }} />
               </div>
             ))}
+          </div>
+
+          {/* See More */}
+          <div className="pending-request__see-more" style={{ 
+            marginTop: '20px',
+            textAlign: 'center'
+          }}>
+            <Skeleton height={32} width={120} style={{ 
+              borderRadius: '20px',
+              backgroundColor: '#f5f0e3'
+            }} />
           </div>
         </div>
       </div>
@@ -789,13 +831,20 @@ export function PendingRequestSkeleton() {
   );
 }
 
-// AssignmentPage Skeleton
+// AssignmentPage Skeleton (SCSS-based)
 export function AssignmentPageSkeleton() {
   return (
-    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
-      <div className="assignment-page">
-        <div className="assignment-page__container">
-          <div className="assignment-page__content">
+    <SkeletonTheme baseColor="#FFFCF7" highlightColor="#F7F1E3">
+      <div className="assignment-page" style={{ fontFamily: 'Inria Sans, sans-serif' }}>
+        <div className="assignment-page__container" style={{ 
+          display: 'flex',
+          gap: '2em'
+        }}>
+          <div className="assignment-page__content" style={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%'
+          }}>
             {/* ClassroomTitle Skeleton */}
             <div style={{ marginBottom: '24px' }}>
               <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
@@ -803,44 +852,77 @@ export function AssignmentPageSkeleton() {
             </div>
 
             {/* TeacherClassroomMenuTab Skeleton */}
-            <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
-              <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
-                <Skeleton height={36} width={100} />
-                <Skeleton height={36} width={120} />
-                <Skeleton height={36} width={110} />
-              </div>
+            <div className="tabs" style={{ 
+              display: 'flex',
+              gap: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              <Skeleton height={36} width={100} style={{ 
+                borderRadius: '6px',
+                backgroundColor: '#f3eacc'
+              }} />
+              <Skeleton height={36} width={120} style={{ 
+                borderRadius: '6px',
+                backgroundColor: '#fff4c2'
+              }} />
+              <Skeleton height={36} width={110} style={{ 
+                borderRadius: '6px',
+                backgroundColor: '#f3eacc'
+              }} />
             </div>
 
             {/* Controls */}
             <div className="controls" style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center',
-              marginBottom: '24px' 
+              margin: '20px 0',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
             }}>
-              <Skeleton height={40} width={150} />
-              <Skeleton height={32} width={100} />
+              <Skeleton height={40} width={150} style={{ 
+                borderRadius: '5px',
+                backgroundColor: '#2e2e2e'
+              }} />
+              <Skeleton height={16} width={80} style={{ color: '#444' }} />
             </div>
 
             {/* Assignment Grid */}
             <div className="assignment-grid" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: '20px'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
+              gap: '1rem'
             }}>
               {Array.from({ length: 4 }).map((_, index) => (
                 <div key={index} className="assignment-card" style={{
-                  padding: '20px',
-                  backgroundColor: 'white',
-                  borderRadius: '8px',
-                  border: '1px solid #e0e0e0',
-                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                  backgroundColor: '#F9F3E4',
+                  border: '0.5px solid #666',
+                  borderRadius: '10px',
+                  padding: '1rem',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1em'
                 }}>
-                  <Skeleton height={20} width="80%" style={{ marginBottom: '12px' }} />
-                  <Skeleton height={16} width="50%" style={{ marginBottom: '8px' }} />
-                  <Skeleton height={14} width="60%" />
+                  <Skeleton height={20} width="80%" style={{ 
+                    marginBottom: '0.5rem',
+                    fontWeight: 'bold'
+                  }} />
+                  <div style={{ 
+                    borderBottom: '0.5px solid #666',
+                    paddingBottom: '1em'
+                  }}>
+                    <Skeleton height={14} width="60%" style={{ marginBottom: '0.2rem' }} />
+                  </div>
+                  <Skeleton height={14} width="40%" style={{ color: '#666' }} />
                 </div>
               ))}
+            </div>
+
+            {/* See More */}
+            <div className="see-more" style={{ 
+              textAlign: 'center',
+              margin: '2rem 0'
+            }}>
+              <Skeleton height={16} width={100} />
             </div>
           </div>
         </div>
@@ -849,61 +931,108 @@ export function AssignmentPageSkeleton() {
   );
 }
 
-// AssignmentDetail Page Skeleton
+// AssignmentDetail Page Skeleton (SCSS-based)
 export function AssignmentDetailSkeleton() {
   return (
-    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
-      <div className="assignment-detail-page">
-        <div className="content">
-          <div className="assignment-detail__container">
+    <SkeletonTheme baseColor="#FFFCF7" highlightColor="#F7F1E3">
+      <div className="assignment-detail-page" style={{ 
+        display: 'flex',
+        background: '#FFFCF7'
+      }}>
+        <div className="content" style={{ width: '100%' }}>
+          <div className="assignment-detail__container" style={{ 
+            background: '#FFFCF7',
+            borderRadius: '8px'
+          }}>
+            {/* Page Title */}
+            <Skeleton height={29} width="40%" style={{ 
+              marginBottom: '1.5rem',
+              fontFamily: 'Lalezar, sans-serif'
+            }} />
+
             {/* Assignment Box */}
             <div className="assignment-box" style={{
-              padding: '24px',
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              border: '1px solid #e0e0e0',
+              padding: '20px',
+              borderRadius: '20px',
+              backgroundColor: '#FFFAEF',
+              fontFamily: 'Inria Sans, sans-serif',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
               marginBottom: '24px'
             }}>
               <div className="assignment-header" style={{ 
+                fontFamily: 'Inria Sans, sans-serif',
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center',
-                marginBottom: '16px' 
+                marginBottom: '16px'
               }}>
-                <Skeleton height={32} width="60%" />
-                <Skeleton height={24} width={24} />
+                <Skeleton height={24} width="60%" />
+                <Skeleton height={24} width={30} style={{ 
+                  backgroundColor: '#ccc',
+                  borderRadius: '5px'
+                }} />
               </div>
               
-              <div className="assignment-meta" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div className="assignment-meta" style={{ 
+                fontFamily: 'Inter, sans-serif',
+                marginTop: '1rem',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gridTemplateRows: '1fr 1fr',
+                gap: '0.6rem'
+              }}>
+                <Skeleton height={16} width="90%" />
+                <Skeleton height={16} width="85%" />
+                <Skeleton height={16} width="95%" />
                 <Skeleton height={16} width="80%" />
-                <Skeleton height={16} width="70%" />
-                <Skeleton height={16} width="75%" />
-                <Skeleton height={16} width="65%" />
               </div>
             </div>
 
             {/* AssignSubMenu Skeleton */}
             <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
               <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
-                <Skeleton height={36} width={80} />
-                <Skeleton height={36} width={90} />
-                <Skeleton height={36} width={100} />
+                <Skeleton height={36} width={80} style={{ borderRadius: '6px' }} />
+                <Skeleton height={36} width={90} style={{ borderRadius: '6px' }} />
+                <Skeleton height={36} width={100} style={{ borderRadius: '6px' }} />
               </div>
             </div>
 
             {/* Word List */}
-            <div className="word-list" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="word-list" style={{ 
+              marginTop: '2em',
+              display: 'flex', 
+              flexDirection: 'column', 
+              gap: '1rem' 
+            }}>
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index} className="word-card" style={{
-                  padding: '16px',
-                  backgroundColor: 'white',
+                  backgroundColor: '#FFF7DD',
                   borderRadius: '8px',
-                  border: '1px solid #e0e0e0'
+                  padding: '1rem',
+                  fontFamily: 'Inria Sans, sans-serif'
                 }}>
-                  <Skeleton height={18} width="30%" style={{ marginBottom: '8px' }} />
-                  <Skeleton height={16} width="90%" />
+                  <Skeleton height={18} width="25%" style={{ 
+                    marginBottom: '8px',
+                    display: 'block',
+                    fontSize: '1.1rem'
+                  }} />
+                  <Skeleton height={16} width="85%" />
                 </div>
               ))}
+            </div>
+
+            {/* See More Button */}
+            <div className="see-more" style={{ 
+              marginTop: '1.5rem',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Skeleton height={32} width={140} style={{ 
+                fontFamily: 'Inria Sans, sans-serif',
+                backgroundColor: '#FBF4E7',
+                borderRadius: '20px'
+              }} />
             </div>
           </div>
         </div>
