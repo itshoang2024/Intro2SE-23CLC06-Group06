@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, SideBar, Footer } from "../../components/index.jsx";
+import { Header, SideBar, Footer, ListFormSkeleton } from "../../components/index.jsx";
 import ListMetadataForm from "../../components/Vocabulary/ListMetadataForm.jsx";
 import EditWordsSection from "../../components/Vocabulary/EditWordsSection.jsx";
 import SafeEditList from "../../components/Vocabulary/SafeEditList.jsx";
@@ -57,7 +57,7 @@ export default function EditList() {
         <Header />
         <div className="edit-list__content">
           <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-          <div className="edit-list__loading">Loading...</div>
+          <ListFormSkeleton isEditMode={true} />
         </div>
         <Footer />
       </div>

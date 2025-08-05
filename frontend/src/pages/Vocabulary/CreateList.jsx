@@ -1,6 +1,6 @@
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import { useParams } from "react-router-dom";
-import { Header, SideBar, Footer } from "../../components/index.jsx";
+import { Header, SideBar, Footer, ListFormSkeleton } from "../../components/index.jsx";
 import ListMetadataForm from "../../components/Vocabulary/ListMetadataForm.jsx";
 import WordsSection from "../../components/Vocabulary/WordsSection.jsx";
 import { useWordManagement } from "../../hooks/useWordManagement.js";
@@ -12,6 +12,7 @@ export default function CreateList() {
   const isNewList = listId === 'new';
   const actualListId = isNewList ? null : listId;
   const [isOpen, setIsOpen] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   
   // Custom hooks for separated concerns
   const validationHook = useFormValidation();
@@ -45,11 +46,30 @@ export default function CreateList() {
     setSelectedTags,
   } = listManagementHook;
 
+  // Simulate initial loading for tags/setup
+  useEffect(() => {
+    const timer = setTimeout(() => setInitialLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Enhanced word change handler with validation clearing
   const handleWordChange = (index, field, value) => {
     updateWord(index, field, value);
     clearFieldError('words', field, index);
   };
+
+  if (initialLoading) {
+    return (
+      <div className="create-list">
+        <Header />
+        <div className="create-list__content">
+          <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+          <ListFormSkeleton isEditMode={false} />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="create-list">

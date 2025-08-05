@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { Header, SideBar, Footer } from "../../components";
+import { Header, SideBar, Footer, ViewListSkeleton } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { UploadImage, MoreIcon, ShareIcon, DropdownIcon } from "../../assets/Vocabulary";
 import { SearchBarPattern } from "../../assets/icons/index"
@@ -11,6 +11,7 @@ import { useToast } from "../../components/Providers/ToastProvider.jsx";
 export default function ViewList() {
   const [listInfo, setListInfo] = useState(null);
   const [words, setWords] = useState([]);
+  const [loading, setLoading] = useState(true);
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const [showShareBox, setShowShareBox] = useState(false);
   const [showMoreBox, setShowMoreBox] = useState(false);
@@ -34,6 +35,7 @@ export default function ViewList() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
         const info = await vocabularyService.getListById(listId);
         setListInfo(info);
 
@@ -56,6 +58,8 @@ export default function ViewList() {
 
       } catch (err) {
         console.error("Error fetching list info or words:", err);
+      } finally {
+        setLoading(false);
       }
     }
     fetchData();
@@ -66,8 +70,9 @@ export default function ViewList() {
       <Header />
       <div className="view-list__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-        <main className="view-list__main">
-          {listInfo && (
+        {loading ? (
+          <ViewListSkeleton />
+        ) : listInfo && (
             <>
               <div className="view-list__header">
                 <div className="view-list__title-row">
