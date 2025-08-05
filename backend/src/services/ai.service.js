@@ -1,6 +1,5 @@
 const { GoogleGenAI } = require('@google/genai');
 const logger = require('../utils/logger');
-require('dotenv').config();
 
 class AIService {
   constructor() {

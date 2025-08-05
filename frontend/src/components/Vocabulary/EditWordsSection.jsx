@@ -35,13 +35,14 @@ const EditWordsSection = ({
             key={word.id || index}
             word={word}
             index={index}
-            isSelected={selectedWordIds.has(index)}
+            isSelected={selectedWordIds.has(word.id)}
             isGeneratingExample={loadingAI.has(index)}
             validationErrors={validationErrors}
             onWordChange={onWordChange}
             onDelete={onDeleteWord}
             onToggleSelect={onToggleWordSelection}
             onGenerateExample={onGenerateExample}
+            classPrefix="edit-list"
           />
         ))}
       </div>

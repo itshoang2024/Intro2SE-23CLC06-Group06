@@ -295,6 +295,66 @@
 
 }
 
+// Word input field styles
+.edit-list__word-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  
+  .word-input-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    
+    .required-asterisk {
+      color: #e74c3c;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+  }
+  
+  .word-input {
+    font-family: 'Inria Sans', sans-serif;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #ffc107;
+      box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.1);
+    }
+    
+    &.error {
+      border-color: #e74c3c;
+      background-color: #fef2f2;
+    }
+    
+    &::placeholder {
+      color: #6c757d;
+      opacity: 0.8;
+    }
+  }
+  
+  .word-input-errors {
+    // display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+  }
+}
+
 // Enhanced input component styles
 .edit-list-input-group {
   display: flex;
