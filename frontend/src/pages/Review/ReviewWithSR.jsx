@@ -12,6 +12,7 @@ export default function ReviewWithSR() {
   const navigate = useNavigate();
   const toast = useToast();
   const confirm = useConfirm();
+  const [isOpen, setIsOpen] = useState(false);
 
   const [listInfo, setListInfo] = useState(null);
   const [reviewMethod, setReviewMethod] = useState("Flashcard");
@@ -42,6 +43,8 @@ export default function ReviewWithSR() {
 
   const handleStartReview = async () => {
     try {
+      console.log("Starting review for listId:", listId, "method:", reviewMethod);
+      
       // For flashcards method, navigate directly to flashcard study
       if (reviewMethod === "Flashcard") {
         navigate(`/review/${listId}/flashcard`, {
@@ -64,14 +67,25 @@ export default function ReviewWithSR() {
           sessionType = "flashcard";
       }
 
+      const requestData = {
+        listId: listId,
+        sessionType: sessionType,
+      };
+      console.log("Request data:", requestData);
+
       let sessionResponse;
       try {
-        sessionResponse = await reviewService.startSession({
-          listId: listId,
-          sessionType: sessionType,
-        });
+        sessionResponse = await reviewService.startSession(requestData);
+        console.log("Session response:", sessionResponse);
       } catch (error) {
         console.log("Error starting session:", error);
+        console.log("Error details:", {
+          message: error.message,
+          response: error.response,
+          status: error.response?.status,
+          data: error.response?.data
+        });
+        
         // If no due words, offer practice mode
         // Check multiple possible error message formats
         const isNoDueWordsError = 
@@ -84,11 +98,15 @@ export default function ReviewWithSR() {
             "There's no words to review, do you want to continue to review?"
           );
           if (confirmed) {
-            sessionResponse = await reviewService.startSession({
+            const practiceRequestData = {
               listId: listId,
               sessionType: sessionType,
               practiceMode: true
-            });
+            };
+            console.log("Practice mode request data:", practiceRequestData);
+            
+            sessionResponse = await reviewService.startSession(practiceRequestData);
+            console.log("Practice mode session response:", sessionResponse);
             toast("Starting practice mode with all words.", "info");
           } else {
             toast("No review session started.", "info");
@@ -114,7 +132,7 @@ export default function ReviewWithSR() {
       <div className="review">
         <Header />
         <h1 className="review__title">Review with Spaced Repetition</h1>
-        <SideBar />
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className="review__content">
           <div className="review__main">
             <p>Loading list information...</p>
@@ -130,7 +148,7 @@ export default function ReviewWithSR() {
       <div className="review">
         <Header />
         <h1 className="review__title">Review with Spaced Repetition</h1>
-        <SideBar />
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className="review__content">
           <div className="review__main">
             <p className="error">
@@ -147,7 +165,7 @@ export default function ReviewWithSR() {
     <div className="review">
       <Header />
       <h1 className="review__title">Review with Spaced Repetition</h1>
-      <SideBar />
+      <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="review__content">
         <div className="review__main">
           <div className="review__header">

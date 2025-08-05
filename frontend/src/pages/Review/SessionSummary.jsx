@@ -11,6 +11,7 @@ export default function SessionSummary() {
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
+  const [isOpen, setIsOpen] = useState(false);
 
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -122,7 +123,7 @@ export default function SessionSummary() {
         backgroundPosition: "center",
       }}>
         <div className="session-summary__content">
-          <SideBar />
+          <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
           <main className="session-summary__main">
             <div className="loading">Loading session summary...</div>
           </main>
@@ -142,7 +143,7 @@ export default function SessionSummary() {
         backgroundPosition: "center",
       }}>
           <div className="session-summary__content">
-          <SideBar />
+          <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
           <main className="session-summary__main">
             <div className="session-summary__container">
               <div className="error">
@@ -173,7 +174,7 @@ export default function SessionSummary() {
         backgroundPosition: "center",
       }}>
         <div className="session-summary__content">
-        <SideBar />
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <main className="session-summary__main">
           <div className="session-summary__container">
             <img src={MainPageLogo} alt="Logo" className="session-summary__logo" />

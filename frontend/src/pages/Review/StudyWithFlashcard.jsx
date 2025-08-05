@@ -13,6 +13,7 @@ export default function StudyWithFlashcard() {
   const location = useLocation();
   const toast = useToast();
   const confirm = useConfirm();
+  const [isOpen, setIsOpen] = useState(false);
 
   const [listInfo, setListInfo] = useState(location.state?.listInfo || null);
   const [words, setWords] = useState([]);
@@ -192,7 +193,7 @@ export default function StudyWithFlashcard() {
       <div className="flashcard">
         <Header />
         <h1 className="flashcard__title">Review with Spaced Repetition</h1>
-        <SideBar />
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen}/>
         <div className="flashcard__content">
           <div className="loading">Loading study session...</div>
         </div>
@@ -206,7 +207,7 @@ export default function StudyWithFlashcard() {
       <div className="flashcard">
         <Header />
         <h1 className="flashcard__title">Review with Spaced Repetition</h1>
-        <SideBar />
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen}/>
         <div className="flashcard__content">
           <div className="error">No words found for this list</div>
         </div>
@@ -224,7 +225,7 @@ export default function StudyWithFlashcard() {
       <h1 className="flashcard__title">
         {listInfo?.title || "Flashcard Study"} ({currentWordIndex + 1}/{words.length})
       </h1>
-      <SideBar />
+      <SideBar isOpen={isOpen} setIsOpen={setIsOpen}/>
 
       <div className="flashcard__content">
         <div className="flashcard__card">
