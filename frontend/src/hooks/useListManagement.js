@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Providers/ToastProvider.jsx';
 import vocabularyService from '../services/Vocabulary/vocabularyService';
 import { validateCreateListForm } from '../utils/createListValidation.js';
+import { scrollToFirstError } from '../utils/scrollToError.js';
 
 export const useListManagement = (listId, validationHook, wordManagementHook, isNewList = false) => {
   const [title, setTitle] = useState("");
@@ -269,6 +270,11 @@ export const useListManagement = (listId, validationHook, wordManagementHook, is
           const errorCount = errorMessages.length;
           toast(`${errorCount} validation errors found. Please check your inputs.`, "error");
         }
+        
+        // Auto-scroll to first error
+        setTimeout(() => {
+          scrollToFirstError(validation.errors, 'create-list');
+        }, 100);
         
         // Also log all errors for debugging
         console.error('All validation errors:', errorMessages);

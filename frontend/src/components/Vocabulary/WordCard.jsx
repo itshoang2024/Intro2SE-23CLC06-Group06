@@ -37,6 +37,7 @@ const WordCard = ({
         isSelected ? `${classPrefix}__word-box--selected` : ""
       }`}
       onClick={handleCardClick}
+      data-word-index={index}
     >
       <div className={`${classPrefix}__word-box--header`}>
         <div className={`${classPrefix}__word-box--index`}>
