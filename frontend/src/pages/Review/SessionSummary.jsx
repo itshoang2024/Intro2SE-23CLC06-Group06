@@ -7,11 +7,19 @@ import MainPageLogo from "../../assets/Logo.svg";
 import { SummaryBackground } from "../../assets/Review/index.jsx";
 
 export default function SessionSummary() {
-  const { sessionId, listId } = useParams();
+  const { sessionId: sessionIdFromParams, listId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const toast = useToast();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Debug: Log current URL and params
+  console.log("SessionSummary - Current URL:", window.location.pathname);
+  console.log("SessionSummary - URL params:", { sessionIdFromParams, listId });
+  console.log("SessionSummary - Location state:", location.state);
+
+  // Get sessionId from either URL params or navigation state  
+  const sessionId = sessionIdFromParams || location.state?.sessionId;
 
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,43 +67,69 @@ export default function SessionSummary() {
         sessionType: 'flashcard'
       });
       
-      // If successful, navigate directly to the flashcard session
+      // Check if backend automatically switched to practice mode
+      if (sessionResponse.session.practiceMode) {
+        toast("No due words found. Starting practice mode with all words.", "info");
+      }
+      
+      // Navigate directly to the flashcard session
       navigate(`/review/session/${sessionResponse.session.sessionId}`, {
         state: { method: 'Flashcards', listInfo: summary?.listInfo }
       });
     } catch (error) {
-      // If no due words, offer practice mode
-      if (error.message?.includes('No words are currently due for review')) {
-        const confirmed = window.confirm(
-          "No words are currently due for review. Would you like to start practice mode instead?"
-        );
-        if (confirmed) {
-          try {
-            const practiceResponse = await reviewService.startSession({
-              listId: listId || summary?.listId,
-              sessionType: 'flashcard',
-              practiceMode: true
-            });
-            
-            navigate(`/review/session/${practiceResponse.session.sessionId}`, {
-              state: { method: 'Flashcards', listInfo: summary?.listInfo }
-            });
-            toast("Starting practice mode with all words.", "info");
-          } catch (practiceError) {
-            console.error("Error starting practice session:", practiceError);
-            toast("Failed to start practice session", "error");
-          }
-        }
+      // Handle case where list has no words at all
+      if (error.message?.includes('has no words to practice')) {
+        toast("This list has no words to practice.", "error");
       } else {
-        console.error("Error starting review session:", error);
-        toast("Failed to start review session", "error");
+        console.error("Error starting session:", error);
+        toast("Failed to start session", "error");
       }
     }
   };
 
   const handleBackToList = () => {
     // Navigate back to the vocabulary list
-    navigate(`/vocabulary/view/${listId || summary?.listId}`);
+    // Multiple sources for listId in priority order:
+    // 1. summary.listId (from backend session data)
+    // 2. location.state.listId (from navigation state)  
+    // 3. listId from URL params (could be unreliable)
+    const targetListId = summary?.listId || location.state?.listId || listId;
+    
+    console.log("SessionSummary - navigating to list with ID:", targetListId);
+    console.log("Current URL:", window.location.pathname);
+    console.log("URL params - sessionId:", sessionIdFromParams, "listId:", listId);
+    console.log("Summary listId:", summary?.listId);
+    console.log("Location state listId:", location.state?.listId);
+    console.log("Summary object:", summary);
+    console.log("Location state:", location.state);
+    console.log("SessionId:", sessionId);
+    
+    // Debug: Check if summary.listId exists and is different from sessionId
+    if (summary?.listId) {
+      console.log("Summary has listId:", summary.listId);
+      console.log("Is summary.listId same as sessionId?", summary.listId === sessionId);
+    } else {
+      console.log("Summary does not have listId, using location.state.listId:", location.state?.listId, "or URL listId:", listId);
+    }
+    
+    // Validate listId before navigation
+    if (!targetListId || typeof targetListId !== 'string') {
+      console.error("Invalid listId:", targetListId);
+      toast("Invalid list ID, returning to vocabulary", "error");
+      navigate('/vocabulary');
+      return;
+    }
+    
+    // Additional validation: check if this looks like a sessionId instead of listId
+    if (targetListId === sessionId) {
+      console.error("listId matches sessionId - this indicates a routing issue:", targetListId);
+      console.error("This means the listId is not being passed correctly from backend or routing");
+      toast("Error: Unable to determine correct list ID. Returning to vocabulary page.", "error");
+      navigate('/vocabulary');
+      return;
+    }
+    
+    navigate(`/vocabulary/view/${targetListId}`);
   };
 
   const calculateAccuracyPercentage = () => {
@@ -108,8 +142,8 @@ export default function SessionSummary() {
 
   const getAccuracyColor = () => {
     const percentage = calculateAccuracyPercentage();
-    if (percentage >= 80) return "#30B237"; // Green
-    if (percentage >= 60) return "#ffc310ff"; // Yellow
+    if (percentage >= 80) return "#23ca2bff"; // Green
+    if (percentage >= 50) return "#ffc310ff"; // Yellow
     return "#db1e31ff"; // Red
   };
 
@@ -151,9 +185,9 @@ export default function SessionSummary() {
               </div>
               <button 
                 className="session-summary__button session-summary__button--primary"
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/vocabulary')}
               >
-                Back to Dashboard
+                Back to Vocabulary
               </button>
             </div>
           </main>
@@ -249,6 +283,14 @@ export default function SessionSummary() {
                   {summary.incorrectAnswers || 0}
                 </span>
               </div>
+              {summary.totalBatches && (
+                <div className="session-summary__detail-item">
+                  <span className="session-summary__detail-label">Total Batches:</span>
+                  <span className="session-summary__detail-value">
+                    {summary.totalBatches}
+                  </span>
+                </div>
+              )}
               {summary.completedAt && (
                 <div className="session-summary__detail-item">
                   <span className="session-summary__detail-label">Completed At:</span>
@@ -258,6 +300,65 @@ export default function SessionSummary() {
                 </div>
               )}
             </div>
+
+            {/* Batch Summaries Section */}
+            {summary.batchSummaries && summary.batchSummaries.length > 0 && (
+              <div className="session-summary__batch-section">
+                <h3 className="session-summary__section-title-batch">Batch Performance</h3>
+                <div className="session-summary__batches">
+                  {summary.batchSummaries.map((batch, index) => (
+                    <div key={index} className="session-summary__batch-card">
+                      <div className="session-summary__batch-header">
+                        <span className="session-summary__batch-title">
+                          Batch {batch.batchNumber}
+                        </span>
+                        <span className={`session-summary__batch-accuracy ${
+                          batch.accuracy >= 80 ? 'high' : 
+                          batch.accuracy >= 50 ? 'medium' : 'low'
+                        }`}>
+                          {batch.accuracy}%
+                        </span>
+                      </div>
+                      <div className="session-summary__batch-stats">
+                        <span className="session-summary__batch-stat">
+                          {batch.correctAnswers}/{batch.wordsInBatch} correct
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Words Review Section */}
+            {summary.words && summary.words.length > 0 && (
+              <div className="session-summary__words-section">
+                <h3 className="session-summary__section-title-words">Words Review</h3>
+                <div className="session-summary__words-grid">
+                  {summary.words.map((word, index) => (
+                    <div 
+                      key={word.id || index} 
+                      className={`session-summary__word-item ${
+                        word.result === 'correct' ? 'correct' : 
+                        word.result === 'incorrect' ? 'incorrect' : 'not-attempted'
+                      }`}
+                    >
+                      <div className="session-summary__word-term">{word.term}</div>
+                      <div className="session-summary__word-definition">{word.definition}</div>
+                      <div className={`session-summary__word-result ${word.result}`}>
+                        {word.result === 'correct' ? '✓' : 
+                         word.result === 'incorrect' ? '✗' : '—'}
+                      </div>
+                      {word.responseTime && (
+                        <div className="session-summary__word-time">
+                          {Math.round(word.responseTime / 1000)}s
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="session-summary__actions">
               <button 

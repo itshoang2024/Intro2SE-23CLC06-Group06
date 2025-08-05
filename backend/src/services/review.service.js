@@ -8,18 +8,65 @@ class ReviewService {
   // =================================================================
   // GETTING DUE ITEMS
   // =================================================================
-  async getListsWithDueWords(userId, { page = 1, limit = 10 }) {
+  async getListsWithDueWords(userId, { page = null, limit = null }) {
     const { from, to } = this._getPagination(page, limit);
-    const { data, error } = await reviewModel.findListsWithDueWords(
-      userId,
-      from,
-      to
-    );
+    
+    const { data, error } = await reviewModel.findListsWithDueWords(userId, from, to);
     if (error) throw error;
-
+  
+    const totalItems = await reviewModel.countListsWithDueWords(userId);
+  
+    const formattedLists = (data || []).map(list => ({
+        id: list.id,
+        title: list.title,
+        wordCount: list.word_count,
+        creator: { 
+            id: list.creator.id,
+            display_name: list.creator.display_name,
+            role: list.creator.role,
+            avatar_url: list.creator.avatar_url
+        },
+        tags: list.tags.map(t => t.name) 
+    }));
+  
     return {
-      listsWithDueWords: data,
-      pagination: { currentPage: page, limit },
+      listsWithDueWords: formattedLists,
+      pagination: this._formatPagination(page, limit, totalItems),
+    };
+  }
+
+  async getUpcomingReviewLists(userId, { page = null, limit = null }) {
+    const { from, to } = this._getPagination(page, limit);
+  
+    const { data, error } = await reviewModel.findUpcomingReviewLists(userId, from, to);
+    if (error) throw error;
+  
+    const totalItems = await reviewModel.countListsWithScheduledWords(userId);
+  
+    const now = new Date();
+    const formattedLists = (data || []).map(list => {
+        const nextReviewDate = new Date(list.next_review_date);
+        const diffTime = nextReviewDate - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+        return {
+            listId: list.id,
+            title: list.title,
+            wordCount: list.word_count,
+            creator: {
+                id: list.creator.id,
+                display_name: list.creator.display_name,
+                role: list.creator.role,
+                avatar_url: list.creator.avatar_url
+            },
+            tags: (list.tags || []).map(t => t.name),
+            next_review_in_days: Math.max(1, diffDays),
+        };
+    });
+  
+    return {
+      lists: formattedLists,
+      pagination: this._formatPagination(page, limit, totalItems),
     };
   }
 
@@ -48,6 +95,43 @@ class ReviewService {
     return { dueByList: result, totalDue: rawData.length };
   }
 
+  async getDueWordsByList(userId, listId) {
+    const { data: listData, error: listError } = await vocabularyModel.findListById(listId);
+    if (listError) {
+      if (listError.code === 'PGRST116') { 
+        throw new Error('List not found.');
+      }
+      throw listError;
+    }
+  
+    if (!listData) {
+      throw new Error('List not found.');
+    }
+  
+    if (userId !== listData.creator_id) {
+      throw new ForbiddenError('User does not have permission to access this list.');
+    }
+
+    const dueWords = await reviewModel.findDueWordsByListId(userId, listId);
+    if (!dueWords || dueWords.length === 0) {
+      return [];
+    }
+
+    const dueWordIds = dueWords.map((word) => word.id);
+    const { data: progressData, error: progressError } =
+      await reviewModel.findProgressByWordIds(userId, dueWordIds);
+    if (progressError) throw progressError;
+
+    const progressMap = new Map((progressData || []).map((p) => [p.word_id, p]));
+
+    const wordsWithProgress = dueWords.map((word) => ({
+      ...word,
+      userProgress: progressMap.get(word.id) || null,
+    }));
+
+    return wordsWithProgress;
+  }
+
   // =================================================================
   // SESSION MANAGEMENT
   // =================================================================
@@ -62,25 +146,50 @@ class ReviewService {
       return null;
     }
 
+    // Step 1: Fetch the words 
     const { data: sessionWords, error: wordsError } =
       await vocabularyModel.findWordsByIds(activeSession.word_ids);
     if (wordsError) throw wordsError;
+
+    // Step 2: Fetch progress for these words
+    const { data: progressData, error: progressError } =
+      await reviewModel.findProgressByWordIds(userId, activeSession.word_ids);
+    if (progressError) throw progressError;
+
+    const progressMap = new Map((progressData || []).map((p) => [p.word_id, p]));
+
+    const wordsWithProgress = (sessionWords || []).map((word) => ({
+      ...word,
+      userProgress: progressMap.get(word.id) || null,
+    }));
 
     const { data: completedResults, error: resultsError } =
       await reviewModel.getSessionSummaryStats(activeSession.id);
     if (resultsError) throw resultsError;
 
     const completedWordIds = new Set((completedResults || []).map((r) => r.word_id));
-    const remainingWords = (sessionWords || []).filter(
+
+    const remainingWords = wordsWithProgress.filter(
       (word) => !completedWordIds.has(word.id)
     );
+
+    // Calculate current batch info
+    const totalCompleted = completedWordIds.size;
+    const wordsPerBatch = 10;
+    const currentBatch = Math.floor(totalCompleted / wordsPerBatch) + 1;
+    const wordsInCurrentBatch = totalCompleted % wordsPerBatch;
+    const needsSummary = wordsInCurrentBatch === 0 && totalCompleted > 0;
 
     return {
       sessionId: activeSession.id,
       sessionType: activeSession.session_type,
       totalWords: activeSession.total_words,
-      completedWords: completedWordIds.size,
+      completedWords: totalCompleted,
       remainingWords: shuffleArray(remainingWords),
+      currentBatch,
+      wordsInCurrentBatch,
+      needsSummary,
+      wordsPerBatch,
     };
   }
 
@@ -111,20 +220,25 @@ class ReviewService {
     }
 
     let words;
+    let actualMode = practiceMode;
+    
     if (practiceMode) {
       // Practice mode: get all words from the list regardless of due status
       words = await reviewModel.findAllWordsByListId(listId, 20);
     } else {
-      // Normal mode: only get due words
+      // Normal mode: try to get due words first
       words = await reviewModel.findDueWordsByListId(userId, listId, 20);
+      
+      // If no due words found, automatically switch to practice mode
+      if (!words || words.length === 0) {
+        words = await reviewModel.findAllWordsByListId(listId, 20);
+        actualMode = true; // Switch to practice mode
+        logger.info(`No due words found for list ${listId}, automatically switching to practice mode`);
+      }
     }
 
     if (!words || words.length === 0) {
-      if (practiceMode) {
-        throw new Error('This list has no words to practice.');
-      } else {
-        throw new Error('No words are currently due for review in this list.');
-      }
+      throw new Error('This list has no words to practice.');
     }
 
     const wordIds = words.map((word) => word.id);
@@ -143,7 +257,76 @@ class ReviewService {
       sessionType: sessionType,
       totalWords: words.length,
       words: shuffleArray(words),
+      practiceMode: actualMode,
+      message: actualMode && !practiceMode ? 'No due words found. Started practice session with all words.' : null
     };
+  }
+
+  async getBatchSummary(sessionId, userId) {
+    const session = await reviewModel.getSessionByIdAndUser(sessionId, userId);
+    if (!session)
+      throw new ForbiddenError(
+        'Session not found or you do not have permission to access it.'
+      );
+
+    const { data: results, error } =
+      await reviewModel.getSessionSummaryStats(sessionId);
+    if (error) throw error;
+
+    const totalCompleted = results.length;
+    const wordsPerBatch = 10;
+    const currentBatch = Math.floor((totalCompleted - 1) / wordsPerBatch) + 1;
+    
+    // Get results for current batch (last 10 completed words)
+    const batchStartIndex = Math.max(0, totalCompleted - wordsPerBatch);
+    const currentBatchResults = results.slice(batchStartIndex);
+    
+    const correctInBatch = currentBatchResults.filter(r => r.result === 'correct').length;
+    const totalInBatch = currentBatchResults.length;
+    
+    // Get word details for the batch
+    const wordIds = currentBatchResults.map(r => r.word_id);
+    const { data: batchWords, error: wordsError } = 
+      await vocabularyModel.findWordsByIds(wordIds);
+    if (wordsError) throw wordsError;
+
+    const wordsWithResults = (batchWords || []).map(word => {
+      const result = currentBatchResults.find(r => r.word_id === word.id);
+      return {
+        ...word,
+        result: result?.result,
+        responseTime: result?.response_time_ms
+      };
+    });
+
+    return {
+      sessionId,
+      listId: session.vocab_list_id,
+      batchNumber: currentBatch,
+      totalBatches: Math.ceil(session.total_words / wordsPerBatch),
+      wordsInBatch: totalInBatch,
+      correctAnswers: correctInBatch,
+      accuracy: totalInBatch > 0 ? Math.round((correctInBatch / totalInBatch) * 100) : 0,
+      words: wordsWithResults,
+      overallProgress: {
+        totalWords: session.total_words,
+        completedWords: totalCompleted,
+        overallAccuracy: totalCompleted > 0 ? 
+          Math.round((results.filter(r => r.result === 'correct').length / totalCompleted) * 100) : 0
+      }
+    };
+  }
+
+  async resumeSession(sessionId, userId) {
+    const session = await reviewModel.getSessionByIdAndUser(sessionId, userId);
+    if (!session)
+      throw new ForbiddenError(
+        'Session not found or you do not have permission to access it.'
+      );
+    if (session.status === 'completed')
+      throw new Error('Session is already completed.');
+
+    return this.getActiveSession(userId);
   }
 
   async endSession(sessionId, userId) {
@@ -164,14 +347,58 @@ class ReviewService {
     ).length;
     const totalWords = session.total_words;
 
+    // Get detailed word results for final summary
+    const wordIds = session.word_ids || [];
+    const { data: sessionWords, error: wordsError } = 
+      await vocabularyModel.findWordsByIds(wordIds);
+    if (wordsError) throw wordsError;
+
+    // Combine words with their results
+    const wordsWithResults = (sessionWords || []).map(word => {
+      const result = (results || []).find(r => r.word_id === word.id);
+      return {
+        ...word,
+        result: result?.result || 'not_attempted',
+        responseTime: result?.response_time_ms
+      };
+    });
+
+    // Calculate batch summaries
+    const wordsPerBatch = 10;
+    const totalBatches = Math.ceil(totalWords / wordsPerBatch);
+    const batchSummaries = [];
+
+    for (let i = 0; i < totalBatches; i++) {
+      const batchStartIndex = i * wordsPerBatch;
+      const batchEndIndex = Math.min(batchStartIndex + wordsPerBatch, totalWords);
+      const batchResults = (results || []).slice(batchStartIndex, batchEndIndex);
+      const batchCorrect = batchResults.filter(r => r.result === 'correct').length;
+      
+      batchSummaries.push({
+        batchNumber: i + 1,
+        wordsInBatch: batchResults.length,
+        correctAnswers: batchCorrect,
+        accuracy: batchResults.length > 0 ? Math.round((batchCorrect / batchResults.length) * 100) : 0
+      });
+    }
+
     await reviewModel.updateSessionStatus(
       sessionId,
       'completed',
       new Date().toISOString()
     );
 
+    // Update list access after session completion to ensure it remains accessible
+    try {
+      await vocabularyModel.updateListAccess(session.vocab_list_id, userId);
+    } catch (error) {
+      // Log but don't fail the session end if list access update fails
+      logger.warn(`Failed to update list access for list ${session.vocab_list_id}:`, error);
+    }
+
     return {
       sessionId: sessionId,
+      listId: session.vocab_list_id,
       totalWords: totalWords,
       correctAnswers: correctAnswers,
       incorrectAnswers: totalWords - correctAnswers,
@@ -180,6 +407,9 @@ class ReviewService {
           ? parseFloat(((correctAnswers / totalWords) * 100).toFixed(2))
           : 0,
       completedAt: new Date().toISOString(),
+      words: wordsWithResults,
+      batchSummaries: batchSummaries,
+      totalBatches: totalBatches
     };
   }
 
@@ -257,16 +487,29 @@ class ReviewService {
 
   // Helper for pagination
   _getPagination(page, size) {
-    const limit = size ? +size : 10;
-    const from = page ? (page - 1) * limit : 0;
-    const to = page ? from + size - 1 : size - 1;
-    return { from, to };
+    if (page == null || size == null) {
+      return { from: null, to: null, limit: null };
+    }
+
+    const limit = +size; 
+    const from = (page - 1) * limit;
+    const to = from + size - 1;
+    return { from, to, limit };
   }
 
   _formatPagination(page, limit, totalItems) {
+    if (page == null || limit == null) {
+      return { totalItems: totalItems || 0 };
+    }
+
     const currentPage = Number(page);
     const totalPages = Math.ceil(totalItems / limit);
-    return { currentPage, totalPages, totalItems, limit: Number(limit) };
+    return {
+      currentPage,
+      totalPages,
+      totalItems: totalItems || 0,
+      limit: Number(limit),
+    };
   }
 }
 

@@ -48,12 +48,28 @@ export default function StudyWithFlashcard() {
           setListInfo(info);
         }
 
+        // If we have a resumed session from batch summary, use it
+        if (location.state?.resumedSession) {
+          const resumedSession = location.state.resumedSession;
+          setSession(resumedSession);
+          setWords(resumedSession.remainingWords || []);
+          // Calculate current index based on completed words
+          const completedWords = resumedSession.completedWords || 0;
+          const wordsPerBatch = resumedSession.wordsPerBatch || 10;
+          const currentBatchStartIndex = Math.floor(completedWords / wordsPerBatch) * wordsPerBatch;
+          setCurrentWordIndex(completedWords - currentBatchStartIndex);
+        }
         // If sessionId exists, we're continuing a session
-        if (sessionId) {
+        else if (sessionId) {
           const sessionStatus = await reviewService.getActiveSessionStatus();
           if (sessionStatus?.activeSession) {
             setSession(sessionStatus.activeSession);
             setWords(sessionStatus.activeSession.remainingWords || []);
+            // Set current index based on completed progress
+            const completedWords = sessionStatus.activeSession.completedWords || 0;
+            const wordsPerBatch = sessionStatus.activeSession.wordsPerBatch || 10;
+            const currentBatchStartIndex = Math.floor(completedWords / wordsPerBatch) * wordsPerBatch;
+            setCurrentWordIndex(completedWords - currentBatchStartIndex);
           }
         } else {
           // Check for existing active session first
@@ -77,37 +93,23 @@ export default function StudyWithFlashcard() {
               listId: listId || listInfo?.id,
               sessionType: 'flashcard'
             });
+
+            // Check if backend automatically switched to practice mode
+            if (sessionResponse.session.practiceMode) {
+              toast("No due words found. Starting practice mode with all words.", "success");
+            }
           } catch (error) {
             console.log("Error starting session:", error);
-            // If no due words, ask user if they want to continue with practice mode
-            // Check multiple possible error message formats
-            const isNoDueWordsError = 
-              error.message?.includes('No words are currently due for review') ||
-              error.response?.data?.message?.includes('No words are currently due for review') ||
-              error.response?.status === 404;
             
-            if (isNoDueWordsError) {
-              const userConfirmed = await confirm(
-                "There's no words to review, do you want to continue to review?"
-              );
-              
-              if (userConfirmed) {
-                try {
-                  sessionResponse = await reviewService.startSession({
-                    listId: listId || listInfo?.id,
-                    sessionType: 'flashcard',
-                    practiceMode: true
-                  });
-                  toast("Starting practice mode with all words.", "success");
-                } catch (practiceError) {
-                  console.error("Error starting practice mode:", practiceError);
-                  throw practiceError; // Re-throw if practice mode also fails
-                }
-              } else {
-                // User declined, navigate back
-                navigate(`/review/${listId || listInfo?.id}`);
-                return;
-              }
+            // If no words in list at all
+            const isNoWordsError = 
+              error.message?.includes('has no words to practice') ||
+              error.response?.data?.message?.includes('has no words to practice');
+            
+            if (isNoWordsError) {
+              toast("This list has no words to practice.", "error");
+              navigate(`/review/${listId || listInfo?.id}`);
+              return;
             } else {
               throw error; // Re-throw if it's a different error
             }
@@ -144,6 +146,32 @@ export default function StudyWithFlashcard() {
         responseTimeMs: Date.now() - (session?.startTime || Date.now())
       });
 
+      // Check if we need to show batch summary (after every 10 words)
+      const currentProgress = currentWordIndex + 1;
+      const wordsPerBatch = 10;
+      const needsBatchSummary = currentProgress % wordsPerBatch === 0 && currentProgress < words.length;
+
+      if (needsBatchSummary) {
+        // Show batch summary
+        const batchSummary = await reviewService.getBatchSummary(session?.sessionId || sessionId);
+        
+        // Use listId from batch summary (from backend) or fallback to URL params
+        const targetListId = batchSummary.listId || listId || listInfo?.id;
+        console.log("StudyWithFlashcard - navigating to batch-summary with listId:", targetListId);
+        console.log("Available IDs - batchSummary.listId:", batchSummary.listId, "URL listId:", listId, "listInfo.id:", listInfo?.id);
+        
+        navigate(`/review/${targetListId}/batch-summary`, {
+          state: { 
+            summary: batchSummary,
+            sessionId: session?.sessionId || sessionId,
+            listId: targetListId, // Pass the actual listId
+            listInfo,
+            currentProgress
+          }
+        });
+        return;
+      }
+
       // Move to next word or finish session
       if (currentWordIndex < words.length - 1) {
         setCurrentWordIndex(currentWordIndex + 1);
@@ -153,9 +181,20 @@ export default function StudyWithFlashcard() {
         setIsSessionCompleted(true); // Mark session as completed to prevent further API calls
         const response = await reviewService.endSession(session?.sessionId || sessionId);
         const summary = response.summary || response; // Handle both wrapped and unwrapped responses
+        
+        // Use listId from end session response (from backend) or fallback to URL params
+        const targetListId = summary.listId || listId || listInfo?.id;
+        console.log("StudyWithFlashcard - ending session, navigating to summary with listId:", targetListId);
+        console.log("Available IDs - summary.listId:", summary.listId, "URL listId:", listId, "listInfo.id:", listInfo?.id);
+        
+        console.log("StudyWithFlashcard - ending session, summary:", summary); // Debug log
         toast("Study session completed!", "success");
-        navigate(`/review/${listId || listInfo?.id}/summary`, {
-          state: { summary }
+        navigate(`/review/${targetListId}/summary`, {
+          state: { 
+            summary,
+            sessionId: session?.sessionId || sessionId,
+            listId: targetListId, // Pass the actual listId
+          }
         });
       }
     } catch (err) {

@@ -34,6 +34,15 @@ export default function ViewList() {
   useEffect(() => {
     async function fetchData() {
       try {
+        console.log("ViewList - fetching data for listId:", listId);
+        console.log("ViewList - listId type:", typeof listId, "length:", listId?.length);
+        
+        // Validate listId
+        if (!listId || typeof listId !== 'string' || listId.trim() === '') {
+          console.error("Invalid listId:", listId);
+          return;
+        }
+        
         const info = await vocabularyService.getListById(listId);
         setListInfo(info);
 

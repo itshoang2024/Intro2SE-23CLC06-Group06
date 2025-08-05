@@ -77,6 +77,11 @@ export default function ReviewWithSR() {
       try {
         sessionResponse = await reviewService.startSession(requestData);
         console.log("Session response:", sessionResponse);
+
+        // Check if backend automatically switched to practice mode
+        if (sessionResponse.session.practiceMode && !requestData.practiceMode) {
+          toast("No due words found. Starting practice mode with all words.", "success");
+        }
       } catch (error) {
         console.log("Error starting session:", error);
         console.log("Error details:", {
@@ -86,32 +91,14 @@ export default function ReviewWithSR() {
           data: error.response?.data
         });
         
-        // If no due words, offer practice mode
-        // Check multiple possible error message formats
-        const isNoDueWordsError = 
-          error.message?.includes('No words are currently due for review') ||
-          error.response?.data?.message?.includes('No words are currently due for review') ||
-          error.response?.status === 404;
+        // If no words in list at all, offer practice mode choice
+        const isNoWordsError = 
+          error.message?.includes('has no words to practice') ||
+          error.response?.data?.message?.includes('has no words to practice');
         
-        if (isNoDueWordsError) {
-          const confirmed = await confirm(
-            "There's no words to review, do you want to continue to review?"
-          );
-          if (confirmed) {
-            const practiceRequestData = {
-              listId: listId,
-              sessionType: sessionType,
-              practiceMode: true
-            };
-            console.log("Practice mode request data:", practiceRequestData);
-            
-            sessionResponse = await reviewService.startSession(practiceRequestData);
-            console.log("Practice mode session response:", sessionResponse);
-            toast("Starting practice mode with all words.", "info");
-          } else {
-            toast("No review session started.", "info");
-            return;
-          }
+        if (isNoWordsError) {
+          toast("This list has no words to practice.", "error");
+          return;
         } else {
           throw error; // Re-throw if it's a different error
         }

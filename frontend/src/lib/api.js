@@ -20,6 +20,8 @@ import("../services/Auth/authService.js").then((module) => {
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
+    console.log("API Request - URL:", config.url, "Token exists:", !!token); // Debug log
+    
     if (token) {
       // Skip token expiration check for auth endpoints and during OAuth flow
       const isAuthEndpoint =
@@ -34,6 +36,8 @@ api.interceptors.request.use(
         return Promise.reject(new Error("Token expired"));
       }
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      console.log("API Request - No token found in localStorage"); // Debug log
     }
     return config;
   },
