@@ -70,9 +70,10 @@ export default function ViewList() {
       <Header />
       <div className="view-list__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-        {loading ? (
-          <ViewListSkeleton />
-        ) : listInfo && (
+        <main className="view-list__main">
+          {loading ? (
+            <ViewListSkeleton />
+          ) : listInfo && (
             <>
               <div className="view-list__header">
                 <div className="view-list__title-row">
