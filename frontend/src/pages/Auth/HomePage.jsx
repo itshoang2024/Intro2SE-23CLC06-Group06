@@ -1,4 +1,4 @@
-import { Header, SideBar, Footer } from '../../components';
+import { Header, SideBar, Footer, SearchResultsGridSkeleton, CarouselSectionSkeleton } from '../../components';
 import CarouselVocabSection from '../../components/Vocabulary/CarouselVocabSection';
 import { useState, useEffect } from 'react';
 import  LoadingCursor from '../../components/UI/LoadingCursor';
@@ -188,7 +188,7 @@ const HomePage = () => {
                 <div className="search-results-content">
                   {(() => {
                     if (searchResults.isLoading) {
-                      return <p className="search-status-message loading">Searching...</p>;
+                      return <SearchResultsGridSkeleton count={8} />;
                     }
 
                     if (searchResults.error) {
@@ -211,31 +211,43 @@ const HomePage = () => {
               </section>
             ) : (
               <>
-                <CarouselVocabSection 
-                  title="REVIEW LISTS" 
-                  vocabLists={reviewLists.data}
-                  isLoading={reviewLists.isLoading} 
-                  error={reviewLists.error}        
-                >
-                  <ReviewTabs 
-                    activeTab={activeReviewTab} 
-                    onTabChange={handleTabChange} 
+                {reviewLists.isLoading ? (
+                  <CarouselSectionSkeleton title="REVIEW LISTS" showTabs={true} />
+                ) : (
+                  <CarouselVocabSection 
+                    title="REVIEW LISTS" 
+                    vocabLists={reviewLists.data}
+                    isLoading={reviewLists.isLoading} 
+                    error={reviewLists.error}        
+                  >
+                    <ReviewTabs 
+                      activeTab={activeReviewTab} 
+                      onTabChange={handleTabChange} 
+                    />
+                  </CarouselVocabSection>
+                )}
+
+                {recentLists.isLoading ? (
+                  <CarouselSectionSkeleton title="RECENTLY LISTS" />
+                ) : (
+                  <CarouselVocabSection 
+                    title="RECENTLY LISTS" 
+                    vocabLists={recentLists.data}
+                    isLoading={recentLists.isLoading} 
+                    error={recentLists.error}         
                   />
-                </CarouselVocabSection>
+                )}
 
-                <CarouselVocabSection 
-                  title="RECENTLY LISTS" 
-                  vocabLists={recentLists.data}
-                  isLoading={recentLists.isLoading} 
-                  error={recentLists.error}         
-                />
-
-                <CarouselVocabSection 
-                  title="POPULAR LISTS" 
-                  vocabLists={popularLists.data}
-                  isLoading={popularLists.isLoading} 
-                  error={popularLists.error}         
-                />
+                {popularLists.isLoading ? (
+                  <CarouselSectionSkeleton title="POPULAR LISTS" />
+                ) : (
+                  <CarouselVocabSection 
+                    title="POPULAR LISTS" 
+                    vocabLists={popularLists.data}
+                    isLoading={popularLists.isLoading} 
+                    error={popularLists.error}         
+                  />
+                )}
               </>
             )}
 
