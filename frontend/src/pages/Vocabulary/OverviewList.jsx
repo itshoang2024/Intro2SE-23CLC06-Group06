@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, SideBar, Footer } from "../../components";
+import { Header, SideBar, Footer, ContentSkeleton, WordCardSkeleton } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { RightMoreIcon, TotalWordIcon, CategoryIcon, TimeIcon, LearnerIcon } from "../../assets/Vocabulary";
 import { jwtDecode } from "jwt-decode"; // Thư viện để giải mã JWT
@@ -12,6 +12,7 @@ export default function OverviewList() {
   console.log("List ID from params:", listId); // Kiểm tra trong console
   const [listInfo, setListInfo] = useState(null);
   const [words, setWords] = useState([]);
+  const [loading, setLoading] = useState(true);
   const toast = useToast(); 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,6 +22,7 @@ export default function OverviewList() {
   useEffect(() => {
     const fetchListAndWords = async () => {
       try {
+        setLoading(true);
         const list = await vocabularyService.getListById(listId);
         const words = await vocabularyService.getWordsByListId(listId);
 
@@ -45,6 +47,8 @@ export default function OverviewList() {
         setIsOwner(isMine);
       } catch (error) {
         console.error("Failed to load list:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -74,7 +78,36 @@ export default function OverviewList() {
       <div className="overview-list__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <main className="overview-list__main">
-            {listInfo && (
+            {loading ? (
+              <>
+                <div className="overview-list__header">
+                  <ContentSkeleton lines={1} height={32} />
+                  <ContentSkeleton lines={1} height={16} />
+                  <ContentSkeleton lines={1} height={14} />
+                </div>
+                
+                <div className="overview-list__line" />
+
+                <section className="overview-list__description">
+                  <ContentSkeleton lines={1} height={24} />
+                  <ContentSkeleton lines={2} height={16} />
+                </section>  
+
+                <section className="overview-list__sample">
+                  <ContentSkeleton lines={1} height={24} />
+                  <WordCardSkeleton count={5} />
+                </section>      
+
+                <section className="overview-list__statistic">
+                  <ContentSkeleton lines={1} height={24} />
+                  <ContentSkeleton lines={4} height={20} />
+                  <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                    <ContentSkeleton lines={1} height={40} />
+                    <ContentSkeleton lines={1} height={40} />
+                  </div>
+                </section>
+              </>
+            ) : listInfo && (
             <>
               <div className="overview-list__header">
                 <div className="overview-list__title">{listInfo.title}</div>
