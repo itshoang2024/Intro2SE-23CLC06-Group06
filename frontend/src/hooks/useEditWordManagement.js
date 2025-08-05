@@ -179,7 +179,10 @@ export const useEditWordManagement = () => {
           console.error("Response data:", error.response.data);
           console.error("Response status:", error.response.status);
         }
-        toast("Failed to generate example. Please try again.", "error");
+        const errorMessage = error.response?.data?.message || 
+                           error.response?.data?.error || 
+                           "Failed to generate example. Please try again.";
+        toast(errorMessage, "error");
       } finally {
         setLoadingAI((prev) => {
           const newSet = new Set(prev);

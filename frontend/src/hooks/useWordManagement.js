@@ -100,7 +100,10 @@ export const useWordManagement = () => {
       }
     } catch (error) {
       console.error("Error generating example:", error);
-      toast("Failed to generate example. Please try again.", "error");
+      const errorMessage = error.response?.data?.message || 
+                         error.response?.data?.error || 
+                         "Failed to generate example. Please try again.";
+      toast(errorMessage, "error");
     } finally {
       setLoadingAI(prev => {
         const newSet = new Set(prev);
