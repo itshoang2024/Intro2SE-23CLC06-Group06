@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Header, SideBar, Footer, ContentSkeleton, WordCardSkeleton } from "../../components";
+import { Header, SideBar, Footer, OverviewListSkeleton } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { RightMoreIcon, TotalWordIcon, CategoryIcon, TimeIcon, LearnerIcon } from "../../assets/Vocabulary";
 import { jwtDecode } from "jwt-decode"; // Thư viện để giải mã JWT
@@ -77,37 +77,11 @@ export default function OverviewList() {
       <Header />
       <div className="overview-list__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-        <main className="overview-list__main">
-            {loading ? (
-              <>
-                <div className="overview-list__header">
-                  <ContentSkeleton lines={1} height={32} />
-                  <ContentSkeleton lines={1} height={16} />
-                  <ContentSkeleton lines={1} height={14} />
-                </div>
-                
-                <div className="overview-list__line" />
-
-                <section className="overview-list__description">
-                  <ContentSkeleton lines={1} height={24} />
-                  <ContentSkeleton lines={2} height={16} />
-                </section>  
-
-                <section className="overview-list__sample">
-                  <ContentSkeleton lines={1} height={24} />
-                  <WordCardSkeleton count={5} />
-                </section>      
-
-                <section className="overview-list__statistic">
-                  <ContentSkeleton lines={1} height={24} />
-                  <ContentSkeleton lines={4} height={20} />
-                  <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
-                    <ContentSkeleton lines={1} height={40} />
-                    <ContentSkeleton lines={1} height={40} />
-                  </div>
-                </section>
-              </>
-            ) : listInfo && (
+        {loading ? (
+          <OverviewListSkeleton />
+        ) : (
+          <main className="overview-list__main">
+            {listInfo && (
             <>
               <div className="overview-list__header">
                 <div className="overview-list__title">{listInfo.title}</div>
@@ -199,7 +173,8 @@ export default function OverviewList() {
               </section>
             </>
             )}
-        </main>
+          </main>
+        )}
       </div>
       <Footer />
     </div>
