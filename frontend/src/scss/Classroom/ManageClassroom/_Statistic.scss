@@ -79,7 +79,7 @@
             font-size: 20px;
         }
 
-        table{
+        table {
             width: 100%;
             text-align: center;
         }
@@ -93,13 +93,28 @@
         tbody {
             font-family: $font-inriasans;
             font-size: 15px;
+
+            .progress-bar {
+                width: 300px;
+                height: 30px;
+                background-color: #F1EDE4; // màu nền
+                border-radius: 999px; // bo tròn toàn bộ
+                overflow: hidden;
+                .fill {
+                    height: 100%;
+                    background-color: #FEC957; // màu vàng cam
+                    border-radius: 999px;
+                    transition: width 0.3s ease;
+                }
+            }
+
         }
 
-        tr{
+        tr {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
 
         }
-        
+
     }
 }

@@ -3,16 +3,6 @@ import { AssignSubMenu, ClassroomTitle, TeacherClassroomMenuTab } from "../../..
 import { useState, useEffect } from "react";
 import classroomService from "../../../services/Classroom/classroomService";
 
-const learners = [
-    { name: "Anna Nguyen", progress: 60, avgScore: "86%", lastActive: "Today" },
-    { name: "Anna Nguyen", progress: 35, avgScore: "86%", lastActive: "Yesterday" },
-    { name: "Anna Nguyen", progress: 90, avgScore: "86%", lastActive: "5 minutes ago" },
-    { name: "Anna Nguyen", progress: 70, avgScore: "86%", lastActive: "now" },
-    { name: "Anna Nguyen", progress: 20, avgScore: "86%", lastActive: "Today" },
-    { name: "Anna Nguyen", progress: 55, avgScore: "86%", lastActive: "Today" },
-    { name: "Anna Nguyen", progress: 40, avgScore: "86%", lastActive: "Today" },
-];
-
 export default function Statistic() {
     // Truy xuất dữ liệu lớp học được lưu khi users chọn classroom ở trang MyClassroom. 
     const [classroomId, setClassroomId] = useState(() => {
