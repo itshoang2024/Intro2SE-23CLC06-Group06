@@ -459,93 +459,188 @@ export function ProfileSkeleton() {
   );
 }
 
-// ViewClassroom Page Skeleton
+// ViewClassroom Page Skeleton (SCSS-based)
 export function ViewClassroomSkeleton() {
   return (
-    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
-      <div className="manage-classroom-learner__content">
-        {/* Classroom Title Skeleton */}
-        <div style={{ marginBottom: '24px' }}>
-          <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
-          <Skeleton height={16} width="25%" />
-        </div>
+    <SkeletonTheme baseColor="#FFFCF7" highlightColor="#F7F1E3">
+      <div className="manage-classroom-learner" style={{
+        display: 'grid',
+        gridTemplateRows: 'auto 1fr auto',
+        minHeight: '100vh',
+        background: '#FFFCF7',
+        fontFamily: 'Inria Sans, sans-serif',
+        backgroundColor: '#fdfbf7',
+        margin: 'auto'
+      }}>
+        <div className="manage-classroom-learner__container" style={{
+          margin: '2em 0',
+          display: 'flex',
+          gap: '2em'
+        }}>
+          <div className="manage-classroom-learner__content" style={{
+            width: '80%',
+            margin: 'auto'
+          }}>
+            {/* Classroom Title Skeleton */}
+            <div style={{ marginBottom: '24px' }}>
+              <Skeleton height={36} width="40%" style={{ marginBottom: '8px' }} />
+              <Skeleton height={16} width="25%" />
+            </div>
 
-        {/* Menu Tabs Skeleton */}
-        <div className="sub-menu-tabs" style={{ marginBottom: '24px' }}>
-          <div className="tab-list" style={{ display: 'flex', gap: '16px' }}>
-            <Skeleton height={36} width={100} />
-            <Skeleton height={36} width={90} />
-            <Skeleton height={36} width={140} />
+            {/* Menu Tabs Skeleton */}
+            <div className="sub-menu-tabs" style={{ marginTop: '2em' }}>
+              <div className="tab-list" style={{ 
+                display: 'flex',
+                justifyContent: 'space-around',
+                borderBottom: '2px solid #ddd',
+                paddingBottom: '4px',
+                fontFamily: 'Lalezar, sans-serif'
+              }}>
+                <Skeleton height={50} width="20%" style={{ 
+                  borderRadius: '6px 6px 0 0',
+                  backgroundColor: '#fcf3d6'
+                }} />
+                <Skeleton height={50} width="20%" style={{ 
+                  borderRadius: '6px 6px 0 0',
+                  backgroundColor: '#FFFCF7'
+                }} />
+                <Skeleton height={50} width="20%" style={{ 
+                  borderRadius: '6px 6px 0 0',
+                  backgroundColor: '#FFFCF7'
+                }} />
+              </div>
+            </div>
+
+            {/* Top Bar Skeleton */}
+            <div className="list-topbar" style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              margin: '1em',
+              justifyContent: 'end',
+              gap: '2em'
+            }}>
+              <Skeleton height={16} width={120} style={{ color: '#777' }} />
+              <Skeleton height={16} width={80} />
+            </div>
+
+            {/* Assignment Cards Grid Skeleton */}
+            <div className="list-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '28px'
+            }}>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <ViewClassroomCardSkeleton key={index} />
+              ))}
+            </div>
+
+            {/* See More Button */}
+            <div className="see-more" style={{ 
+              marginTop: '2rem',
+              textAlign: 'center'
+            }}>
+              <Skeleton height={16} width={100} style={{ color: '#555' }} />
+            </div>
           </div>
-        </div>
-
-        {/* Top Bar Skeleton */}
-        <div className="list-topbar" style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          marginBottom: '24px' 
-        }}>
-          <Skeleton height={18} width={120} />
-          <Skeleton height={32} width={100} />
-        </div>
-
-        {/* Assignment Cards Grid Skeleton */}
-        <div className="list-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '20px'
-        }}>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <ViewClassroomCardSkeleton key={index} />
-          ))}
         </div>
       </div>
     </SkeletonTheme>
   );
 }
 
-// ViewClassroom Assignment Card Skeleton
+// ViewClassroom Assignment Card Skeleton (SCSS-based)
 export function ViewClassroomCardSkeleton() {
   return (
-    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+    <SkeletonTheme baseColor="#F9F3E4" highlightColor="#F1EBD8">
       <div className="vocab-card" style={{
-        padding: '1rem',
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        border: '1px solid #e0e0e0',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+        backgroundColor: '#F9F3E4',
+        padding: '1.2rem',
+        borderRadius: '20px',
+        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.06)',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '220px',
+        maxWidth: '300px',
+        overflow: 'hidden'
       }}>
         {/* Title */}
-        <Skeleton height={20} width="75%" style={{ marginBottom: '8px' }} />
+        <Skeleton height={19} width="80%" style={{ 
+          marginBottom: '0.5rem',
+          fontFamily: 'Lalezar, sans-serif'
+        }} />
         
-        {/* Description/Exercise Method */}
-        <Skeleton height={16} width="90%" style={{ marginBottom: '4px' }} />
-        
-        {/* Review Progress */}
-        <Skeleton height={14} width="30%" style={{ marginBottom: '4px' }} />
+        {/* Description */}
+        <Skeleton height={14} count={2} style={{ 
+          marginBottom: '0.5rem',
+          fontFamily: 'Inria Sans, sans-serif',
+          color: '#444'
+        }} />
         
         {/* Completion Date */}
-        <Skeleton height={14} width="45%" style={{ marginBottom: '4px' }} />
+        <Skeleton height={10} width="60%" style={{ 
+          marginBottom: '0.3rem',
+          fontFamily: 'Inter, sans-serif',
+          color: '#2932B1'
+        }} />
         
         {/* Result/Status */}
-        <Skeleton height={14} width="25%" style={{ marginBottom: '16px' }} />
+        <Skeleton height={10} width="40%" style={{ 
+          marginBottom: '0.5rem',
+          fontFamily: 'Inter, sans-serif',
+          color: '#2932B1'
+        }} />
+        
+        {/* Next Review */}
+        <Skeleton height={10} width="50%" style={{ 
+          marginBottom: '1rem',
+          fontFamily: 'Inter, sans-serif',
+          color: '#2932B1'
+        }} />
         
         {/* Footer */}
         <div className="vocab-footer" style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
-          marginTop: '16px'
+          marginTop: 'auto',
+          paddingTop: '1rem',
+          fontFamily: 'Inria Sans, sans-serif'
         }}>
-          <div className="user-block" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Skeleton circle height={32} width={32} />
-            <div>
-              <Skeleton height={14} width={100} style={{ marginBottom: '4px' }} />
-              <Skeleton height={12} width={50} />
+          <div className="user-block" style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            minWidth: '150px',
+            gap: '5%'
+          }}>
+            {/* Avatar */}
+            <Skeleton circle height={40} width={40} style={{
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
+            }} />
+            
+            <div className="user-info" style={{ 
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              {/* Username */}
+              <Skeleton height={13} width={80} style={{ 
+                marginBottom: '2px',
+                color: '#222',
+                fontWeight: 'bold'
+              }} />
+              
+              {/* Role Tag */}
+              <Skeleton height={12} width={50} style={{ 
+                borderRadius: '7px',
+                backgroundColor: '#d6e5ff'
+              }} />
             </div>
           </div>
-          <Skeleton height={32} width={80} />
+          
+          {/* Review Button */}
+          <Skeleton height={32} width={70} style={{ 
+            backgroundColor: '#2e2a25',
+            borderRadius: '20px'
+          }} />
         </div>
       </div>
     </SkeletonTheme>
