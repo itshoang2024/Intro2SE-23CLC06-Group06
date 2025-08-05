@@ -8,8 +8,6 @@ import { AssignSubMenu } from "../../../components";
 
 export default function AssignmentDetail() {
 
-  // Lấy pathname hiện tại, ví dụ: "/my-classroom"
-  const [currentTab, setCurrentTab] = useState("Details");
 
   // quan ly trang thai "..."
   const [showDropdown, setShowDropdown] = useState(false);
@@ -44,14 +42,6 @@ export default function AssignmentDetail() {
   const [assignmentsDetail, setAssignmentsDetail] = useState({});
 
   useEffect(() => {
-    if (currentTab !== "Details")
-      return;
-
-    if (!classroomId || !assignment?.id) {
-      console.error("Missing classroom ID or assignment ID");
-      return;
-    }
-
     const fetchingAssignmentDetail = async () => {
       const res = await classroomService.getAssignmentDetails(classroomId, assignment?.id);
       if (res.success) {
@@ -60,7 +50,7 @@ export default function AssignmentDetail() {
         setAssignmentsDetail(res.data);
       }
       else {
-        console.log(res.message);
+        console.log(res?.message);
       }
     }
     fetchingAssignmentDetail();

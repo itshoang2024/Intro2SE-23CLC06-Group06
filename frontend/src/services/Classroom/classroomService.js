@@ -1,5 +1,5 @@
-import api from "../../lib/api";
 
+import api from "../../lib/api";
 const classroomService = {
     //1. Create classroom
     createClassroom: async (data) => {
@@ -162,6 +162,12 @@ const classroomService = {
         const res = await api.get(`/classroom/${classroomId}/assignments/overdue`);
         return res.data;
     },
+
+    //26. Get Assignment Statistics (Learner)
+    getAssignmentStatistics: async (classroomId, assignmentId) => {
+        const res = await api.get(`/classroom/${classroomId}/${assignmentId}/statistics`);
+        return res.data; 
+    }
 };
 
 export default classroomService;
