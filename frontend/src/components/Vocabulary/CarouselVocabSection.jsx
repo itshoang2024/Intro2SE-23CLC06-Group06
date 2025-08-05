@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import VocabularyListCard from '../Classroom/VocabularyListCard'; 
 import { LeftArrow, RightArrow } from '../../assets/User';
-import { VocabularyListCardSkeleton } from '../UI/SkeletonLoader';
+import { VocabularyListCardSkeleton } from '../UI/Skeleton';
 
 export default function CarouselVocabSection({ title, children, vocabLists = [], isLoading, error }) {
   const [startIndex, setStartIndex] = useState(0);
