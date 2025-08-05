@@ -73,7 +73,7 @@ export const useWordManagement = () => {
     const word = words[index];
     
     if (!word.term.trim() || !word.definition.trim()) {
-      toast("Please fill in both term and definition before generating an example.", "error");
+      toast("Please add term and definition first.", "error");
       return;
     }
 

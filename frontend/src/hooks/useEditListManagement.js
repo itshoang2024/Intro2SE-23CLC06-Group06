@@ -69,7 +69,7 @@ export const useEditListManagement = (listId, validationHook, wordManagementHook
 
       } catch (error) {
         console.error('Failed to fetch list data:', error);
-        toast('Failed to load list data', 'error');
+        toast('Could not load list data.', 'error');
       } finally {
         setIsLoading(false);
       }
@@ -277,12 +277,13 @@ export const useEditListManagement = (listId, validationHook, wordManagementHook
         // Show multiple error messages if needed
         const mainMessage = errorMessages.slice(0, 2).join('; ');
         const additionalCount = errorMessages.length > 2 ? ` (+${errorMessages.length - 2} more)` : '';
-        toast(`Validation errors found in existing and new words: ${mainMessage}${additionalCount}`, "error");
+        const errorCount = errorMessages.length;
+        toast(`${errorCount} validation errors found. Please check your inputs.`, "error");
         
         // Also log all errors for debugging
         console.error('All validation errors (existing + new words):', errorMessages);
       } else {
-        toast("Please fix the validation errors in all words before submitting.", "error");
+        toast("Please fix the validation errors before submitting.", "error");
       }
       return;
     }
@@ -423,7 +424,7 @@ export const useEditListManagement = (listId, validationHook, wordManagementHook
         // Don't fail the whole operation for sync issues
       }
 
-      toast("List updated successfully! All words validated and processed.", "success");
+      toast("List updated successfully!", "success");
       
       // Navigate faster like in useListManagement
       const navigationDelay = validatedCompleteWords.length > 0 ? 1000 : 500;
@@ -435,9 +436,9 @@ export const useEditListManagement = (listId, validationHook, wordManagementHook
       
       // More detailed error handling
       if (err.response?.data?.message) {
-        toast(`Failed to update list: ${err.response.data.message}`, "error");
+        toast("Failed to update list.", "error");
       } else {
-        toast("Failed to update list. Please try again.", "error");
+        toast("Failed to update list.", "error");
       }
     }
   }, [

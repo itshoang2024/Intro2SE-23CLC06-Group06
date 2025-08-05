@@ -95,14 +95,12 @@ export const useEditWordManagement = () => {
       if (!word) {
         console.error("Word not found at index:", index);
         toast("Word not found. Please refresh and try again.", "error");
+        toast("Word not found.", "error");
         return;
       }
 
       if (!word.term?.trim() || !word.definition?.trim()) {
-        toast(
-          "Please fill in both term and definition before generating an example.",
-          "error"
-        );
+        toast("Please add term and definition first.", "error");
         return;
       }
 
@@ -163,10 +161,7 @@ export const useEditWordManagement = () => {
             toast("Example generated successfully!", "success");
           } catch (stateError) {
             console.error("Error updating word state:", stateError);
-            toast(
-              "Generated example but failed to update. Please try again.",
-              "error"
-            );
+            toast("Generated example but couldn't save it.", "error");
           }
         } else {
           console.error("Unexpected response structure:", response);

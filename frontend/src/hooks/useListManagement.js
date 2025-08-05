@@ -262,15 +262,18 @@ export const useListManagement = (listId, validationHook, wordManagementHook, is
       console.log('Formatted error messages:', errorMessages);
       
       if (errorMessages.length > 0) {
-        // Show multiple error messages if needed
-        const mainMessage = errorMessages.slice(0, 2).join('; ');
-        const additionalCount = errorMessages.length > 2 ? ` (+${errorMessages.length - 2} more)` : '';
-        toast(`Validation errors: ${mainMessage}${additionalCount}`, "error");
+        // Show concise error message
+        if (errorMessages.length === 1) {
+          toast(errorMessages[0], "error");
+        } else {
+          const errorCount = errorMessages.length;
+          toast(`${errorCount} validation errors found. Please check your inputs.`, "error");
+        }
         
         // Also log all errors for debugging
         console.error('All validation errors:', errorMessages);
       } else {
-        toast("Please fix the validation errors before submitting.", "error");
+        toast("Please fix the errors before submitting.", "error");
       }
       return;
     }
@@ -370,7 +373,7 @@ export const useListManagement = (listId, validationHook, wordManagementHook, is
         } catch (wordError) {
           console.error("Error adding words:", wordError);
           // Don't reset isSubmitted here - list was created successfully
-          toast("List created but some words failed to save. Please edit the list to add them.", "warning");
+          toast("List created, but some words couldn't be saved.", "warning");
           setTimeout(() => navigate("/vocabulary"), 1000); // Reduced from 2000ms
           return;
         }
