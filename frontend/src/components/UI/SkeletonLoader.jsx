@@ -414,3 +414,47 @@ export function WordFormSkeleton({ count = 3 }) {
     </SkeletonTheme>
   );
 }
+
+// Profile Page Skeleton
+export function ProfileSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#f3f4f6" highlightColor="#e5e7eb">
+      <form className="profile__content">
+        <Skeleton height={32} width="20%" style={{ marginBottom: '32px' }} />
+        
+        {/* Avatar Section */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '32px' }}>
+          <Skeleton circle height={80} width={80} />
+          <div>
+            <Skeleton height={20} width={150} style={{ marginBottom: '8px' }} />
+            <Skeleton height={16} width={200} />
+          </div>
+        </div>
+
+        {/* Form Fields */}
+        {Array.from({ length: 6 }).map((_, index) => (
+          <div key={index} style={{ marginBottom: '24px' }}>
+            <Skeleton height={16} width="25%" style={{ marginBottom: '8px' }} />
+            <Skeleton height={40} />
+          </div>
+        ))}
+
+        {/* Teacher Verification Section */}
+        <div style={{ 
+          backgroundColor: '#f8f9fa', 
+          padding: '20px', 
+          borderRadius: '8px', 
+          marginBottom: '24px',
+          border: '1px solid #e0e0e0'
+        }}>
+          <Skeleton height={18} width="30%" style={{ marginBottom: '12px' }} />
+          <Skeleton height={14} count={2} style={{ marginBottom: '16px' }} />
+          <Skeleton height={36} width={150} />
+        </div>
+
+        {/* Action Button */}
+        <Skeleton height={44} width={120} />
+      </form>
+    </SkeletonTheme>
+  );
+}
