@@ -699,6 +699,38 @@ class ClassroomModel {
     if (error) throw error;
     return data;
   }
+
+  async getLearnerPerformanceData(assignmentId) {
+    const { data, error } = await supabase
+      .from('learner_assignments')
+      .select(
+        `
+        learner_id,
+        status,
+        score,
+        completed_sublist_index,
+        users (display_name, avatar_url)
+      `
+      )
+      .eq('assignment_id', assignmentId);
+
+    if (error) throw error;
+    return data;
+  }
+
+  // Gọi RPC function để lấy thống kê thời gian học
+  async getStudyTimeStats(assignmentId) {
+    const { data, error } = await supabase.rpc('get_assignment_study_stats', {
+      assignment_id_param: assignmentId,
+    });
+
+    if (error) {
+        console.error('RPC call to get_assignment_study_stats failed:', error);
+        throw error;
+    }
+    
+    return data && data.length > 0 ? data[0] : { total_duration_seconds: 0, total_studying_learners: 0 };
+  }
 }
 
 module.exports = new ClassroomModel();

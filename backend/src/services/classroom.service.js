@@ -564,6 +564,71 @@ class ClassroomService {
 
     await classroomModel.deleteLearnerAssignmentsByLearnerId(learnerId);
   }
+
+  async getAssignmentStatistics( classroomId, assignmentId ) {
+    const assignment = await classroomModel.getAssignmentById(classroomId, assignmentId);
+    
+    // Lấy đồng thời dữ liệu học viên và dữ liệu thời gian học
+    const [learnerData, studyTimeStats] = await Promise.all([
+      classroomModel.getLearnerPerformanceData(assignmentId),
+      classroomModel.getStudyTimeStats(assignmentId),
+    ]);
+
+    // 3. Xử lý trường hợp không có học viên nào làm bài
+    if (learnerData.length === 0) {
+      return {
+        summary: {
+          totalLearners: 0,
+          completionRate: 0,
+          lowPerformers: 0,
+          avgStudyTimeInSeconds: 0,
+        },
+        learners: [],
+      };
+    }
+
+    // Tính toán các chỉ số tổng quan
+    const totalLearners = learnerData.length;
+    const completedCount = learnerData.filter(
+      (s) => s.status === 'completed'
+    ).length;
+    const lowPerformersCount = learnerData.filter((s) => s.score < 5).length;
+
+    const completionRate = totalLearners > 0 ? Math.round((completedCount / totalLearners) * 100) : 0;
+
+    const { total_duration_seconds, total_studying_learners } = studyTimeStats;
+    const avgStudyTimeInSeconds =
+      total_studying_learners > 0
+        ? Math.round(total_duration_seconds / total_studying_learners / 60)
+        : 0;
+    console.log(learnerData);
+    
+    // Định dạng lại danh sách học viên
+    const learners = learnerData.map((learner) => ({
+      learnerId: learner.learner_id,
+      displayName: learner.users.display_name,
+      avatarUrl: learner.users.avatar_url,
+      progress:
+        assignment.sublist_count > 0
+          ? Math.round(
+              (learner.completed_sublist_index / assignment.sublist_count) * 100
+            )
+          : learner.status === 'completed' ? 100 : 0,
+      score: learner.score,
+      status:learner.status,
+    }));
+    console.log(learners.progress)
+    
+    return {
+      summary: {
+        totalLearners,
+        completionRate,
+        lowPerformers: lowPerformersCount,
+        avgStudyTimeInSeconds,
+      },
+      learners,
+    };
+  }
 }
 
 module.exports = new ClassroomService();

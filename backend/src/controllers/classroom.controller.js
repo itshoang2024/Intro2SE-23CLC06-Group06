@@ -608,6 +608,27 @@ class ClassroomController {
       );
     }
   }
+
+  async getAssignmentStatistics(req, res) {
+    try {
+      const { classroomId, assignmentId } = req.params;
+
+      const statistics = await classroomService.getAssignmentStatistics(classroomId, assignmentId);
+
+      return ResponseUtils.success(
+        res,
+        'Successfully retrieved assignment statistics',
+        statistics
+      );
+    } catch (error) {
+      return ErrorHandler.handleError(
+        res,
+        error,
+        'getAssignmentStatistics',
+        'Failed to retrieve assignment statistics'
+      );
+    }
+  }
 }
 
 module.exports = new ClassroomController();

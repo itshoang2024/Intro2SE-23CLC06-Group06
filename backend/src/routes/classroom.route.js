@@ -174,4 +174,11 @@ classroomRouter.get(
   classroomController.getLearnerOverdueAssignments
 );
 
+classroomRouter.get(
+  '/:classroomId/:assignmentId/statistics',
+  hasClassroomAccess,
+  requireClassRole('teacher'),
+  classroomController.getAssignmentStatistics
+)
+
 module.exports = classroomRouter;
