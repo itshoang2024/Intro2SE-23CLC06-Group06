@@ -43,23 +43,7 @@ class ReviewService {
     if (error) throw error;
     
     const totalItems = await reviewModel.countListsWithScheduledWords(userId);
-    // const data =
-    // [
-    //   {
-    //     id: '20000000-0000-0000-0000-000000000001',      
-    //     title: 'TOEFL Essential Vocabulary',
-    //     description: 'Essential words for TOEFL preparation focusing on academic contexts',
-    //     wordCount: 20,
-    //     creator: {
-    //       id: '00000000-0000-0000-0000-000000000002',    
-    //       display_name: 'Ms. Sarah Johnson',
-    //       role: 'teacher',
-    //       avatar_url: null
-    //     },
-    //     tags: [ 'TOEFL', 'Academic', 'Intermediate' ], 
-    //     next_review_date: '2025-08-10 10:00:00+00'  
-    //   }
-    // ]
+
     const now = new Date();
     const formattedLists = (data || []).map(list => {
         const nextReviewDate = new Date(list.next_review_date);
@@ -81,7 +65,7 @@ class ReviewService {
             next_review_in_days: Math.max(1, diffDays),
         };
     });
-    // console.log(formattedLists);
+    
     return {
       lists: formattedLists,
       pagination: this._formatPagination(page, limit, totalItems),
