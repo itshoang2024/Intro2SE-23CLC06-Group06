@@ -174,7 +174,8 @@ const FillInBlankPage = () => {
             sessionId: session?.sessionId || sessionId,
             listId: targetListId,
             listInfo,
-            currentProgress
+            currentProgress,
+            sessionType: 'fill_blank' // Pass session type for correct navigation
           }
         });
         return;
