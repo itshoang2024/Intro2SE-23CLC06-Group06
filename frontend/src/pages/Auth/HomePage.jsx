@@ -5,6 +5,7 @@ import  LoadingCursor from '../../components/UI/LoadingCursor';
 import { useDebounce } from '../../hooks/useDebounce'; 
 import { VocabularyListCard } from '../../components';
 import vocabularyService from '../../services/Vocabulary/vocabularyService';
+import { useSkeletonToggle } from '../../hooks/useSkeletonToggle';
 
 // Component cho các Tab
 const ReviewTabs = ({ activeTab, onTabChange }) => (
@@ -41,6 +42,8 @@ const HomePage = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
   const [isOpen, setIsOpen] = useState(false);
 
+  // Development skeleton toggle hook
+  const { isLoading: isSkeletonLoading } = useSkeletonToggle();
 
   useEffect(() => {
     if (searchQuery) return; 
@@ -187,7 +190,7 @@ const HomePage = () => {
                 
                 <div className="search-results-content">
                   {(() => {
-                    if (searchResults.isLoading) {
+                    if (isSkeletonLoading(searchResults.isLoading)) {
                       return <SearchResultsGridSkeleton count={8} />;
                     }
 
@@ -211,7 +214,7 @@ const HomePage = () => {
               </section>
             ) : (
               <>
-                {reviewLists.isLoading ? (
+                {isSkeletonLoading(reviewLists.isLoading) ? (
                   <CarouselSectionSkeleton title="REVIEW LISTS" showTabs={true} />
                 ) : (
                   <CarouselVocabSection 
@@ -227,7 +230,7 @@ const HomePage = () => {
                   </CarouselVocabSection>
                 )}
 
-                {recentLists.isLoading ? (
+                {isSkeletonLoading(recentLists.isLoading) ? (
                   <CarouselSectionSkeleton title="RECENTLY LISTS" />
                 ) : (
                   <CarouselVocabSection 
@@ -238,7 +241,7 @@ const HomePage = () => {
                   />
                 )}
 
-                {popularLists.isLoading ? (
+                {isSkeletonLoading(popularLists.isLoading) ? (
                   <CarouselSectionSkeleton title="POPULAR LISTS" />
                 ) : (
                   <CarouselVocabSection 

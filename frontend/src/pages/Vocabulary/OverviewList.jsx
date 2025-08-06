@@ -5,7 +5,7 @@ import vocabularyService from "../../services/Vocabulary/vocabularyService";
 import { RightMoreIcon, TotalWordIcon, CategoryIcon, TimeIcon, LearnerIcon } from "../../assets/Vocabulary";
 import { jwtDecode } from "jwt-decode"; // Thư viện để giải mã JWT
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
-
+import { useSkeletonToggle } from "../../hooks/useSkeletonToggle";
 
 export default function OverviewList() {
   const { listId } = useParams(); // Lấy ID từ URL
@@ -18,6 +18,7 @@ export default function OverviewList() {
 
   const currentUserId = localStorage.getItem("userId"); // hoặc lấy từ context
   const [isOwner, setIsOwner] = useState(false);
+  const { isLoading: isSkeletonLoading } = useSkeletonToggle();
 
   useEffect(() => {
     const fetchListAndWords = async () => {
@@ -77,7 +78,7 @@ export default function OverviewList() {
       <Header />
       <div className="overview-list__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-        {loading ? (
+        {isSkeletonLoading(loading) ? (
           <OverviewListSkeleton />
         ) : (
           <main className="overview-list__main">
