@@ -3,6 +3,8 @@ import { Header, Footer, SideBar, VocabularyListCard, ClassroomTitle, ViewClassr
 import { useNavigate } from "react-router-dom";
 import classroomService from "../../services/Classroom/classroomService";
 import SeeMoreSection from "../../components/Classroom/SeeMoreSection";
+// import { addDevDelay } from "../../utils/devUtils";
+import { useSkeletonToggle } from "../../hooks/useSkeletonToggle";
 
 const tabs = [
     { name: "To-review" },
@@ -17,6 +19,9 @@ export default function ManageClassroomLearner() {
 
     // Xử lý việc navigate
     const navigate = useNavigate();
+
+    // Development skeleton toggle (only in development)
+    const { isLoading: skeletonToggle } = useSkeletonToggle();
 
     // Get id về để fetch data 
     const [classroomId, setClassroomId] = useState(() => {
@@ -36,6 +41,9 @@ export default function ManageClassroomLearner() {
         const fetchAssignments = async () => {
             setIsLoading(true);
             try {
+                // Artificial delay for skeleton testing (only in development)
+                // await addDevDelay(2000); // 2 seconds delay
+                
                 let res;
                 switch (activeTab) {
                     case "To-review":
@@ -71,7 +79,7 @@ export default function ManageClassroomLearner() {
                 <div className="manage-classroom__sidebar">
                     <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
                 </div>
-                {isLoading ? (
+                {skeletonToggle(isLoading) ? (
                     <ViewClassroomSkeleton />
                 ) : (
                     <div className="manage-classroom-learner__content">

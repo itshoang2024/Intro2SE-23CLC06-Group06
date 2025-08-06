@@ -6,12 +6,14 @@ import authRoutes from "./routes/AuthRoutes";
 import vocabularyRoutes from "./routes/VocabularyRoutes.jsx";
 import classroomRoutes from "./routes/ClassroomRoutes.jsx";
 import userRoutes from "./routes/UserRoutes.jsx";
+import devRoutes from "./routes/DevRoutes.jsx"; 
 
 const router = createBrowserRouter([
   ...authRoutes,
   ...vocabularyRoutes,
   ...classroomRoutes,
   ...userRoutes,
+  ...devRoutes
 ]);
 
 createRoot(document.getElementById("root")).render(
