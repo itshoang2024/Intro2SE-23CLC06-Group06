@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { Header, SideBar, Footer } from "../../components";
-import BatchSummary from "../../components/Review/BatchSummary.jsx";
+import { Header, SideBar, Footer, BatchSummary } from "../../components";
 import reviewService from "../../services/Review/reviewService";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
 
