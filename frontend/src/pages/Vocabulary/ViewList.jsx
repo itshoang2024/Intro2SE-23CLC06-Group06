@@ -169,7 +169,7 @@ export default function ViewList() {
               </div>
               <button
                   className="view-list__review-button"
-                  onClick={() => window.location.href = "/review/list-id"}
+                  onClick={() => window.location.href = `/review/${listId}`}
               >
                   Review now
               </button>
