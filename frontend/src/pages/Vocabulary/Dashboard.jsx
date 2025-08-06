@@ -12,6 +12,7 @@ export default function Dashboard() {
     const [visibleRows, setVisibleRows] = useState(2);
     const [columns, setColumns] = useState(3);
     const [activeListId, setActiveListId] = useState(null);
+    const [deletingListId, setDeletingListId] = useState(null);
     const [filterMode, setFilterMode] = useState(null); // 'alphabet' | 'tag' | null
     const [showFilterOptions, setShowFilterOptions] = useState(false);
     const [alphabetFilter, setAlphabetFilter] = useState(null);
@@ -203,23 +204,28 @@ export default function Dashboard() {
                                             {activeListId === list.id && (
                                                 <div className="dashboard__more-popup">
                                                 <div
-                                                    className="more-option delete"
+                                                    className={`more-option delete ${deletingListId === list.id ? 'deleting' : ''}`}
                                                     onClick={async () => {
-                                                    const confirmed =  await confirm("Are you sure you want to delete this list?");
+                                                    if (deletingListId === list.id) return;
+                                                    const confirmed = await confirm("Are you sure you want to delete this list?");
                                                     if (!confirmed) return;
 
+                                                    setDeletingListId(list.id);
                                                     try {
                                                         await vocabularyService.deleteList(list.id);
                                                         // Cập nhật lại list trong Dashboard
                                                         setLists(prev => prev.filter(item => item.id !== list.id));
                                                         setActiveListId(null);
+                                                        toast("List deleted successfully", "success");
                                                     } catch (err) {
                                                         console.error("Delete failed:", err);
                                                         toast("Failed to delete list.", "error");
+                                                    } finally {
+                                                        setDeletingListId(null);
                                                     }
                                                     }}
                                                 >
-                                                    Delete List
+                                                    {deletingListId === list.id ? 'Deleting...' : 'Delete List'}
                                                 </div>
                                                 </div>
                                             )}

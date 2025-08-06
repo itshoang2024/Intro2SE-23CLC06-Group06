@@ -44,6 +44,7 @@ export default function CreateList() {
     handleCancel,
     setPrivacy,
     setSelectedTags,
+    isSubmitting,
   } = listManagementHook;
 
   // Simulate initial loading for tags/setup
@@ -110,14 +111,17 @@ export default function CreateList() {
               type="button"
               className="create-list__form--cancel"
               onClick={handleCancel}
+              disabled={isSubmitting}
             >
               Cancel
             </button>
-            <input
-              className="create-list__form--submit"
+            <button
+              className={`create-list__form--submit ${isSubmitting ? 'create-list__form--submit--loading' : ''}`}
               type="submit"
-              value="Create List"
-            />
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creating...' : 'Create List'}
+            </button>
           </div>
         </form>
       </div>

@@ -36,6 +36,7 @@ export default function EditList() {
     selectedTags,
     availableTags,
     isLoading,
+    isSubmitting,
     handleTitleChange,
     handleDescriptionChange,
     handleSubmit,
@@ -101,17 +102,21 @@ export default function EditList() {
             />
 
             <div className="edit-list__actions">
-              <input
+              <button
                 type="button"
-                value="Cancel"
                 className="edit-list__form--cancel"
                 onClick={handleCancel}
-              />
-              <input
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
+              <button
                 type="submit"
-                value="Save Changes"
-                className="edit-list__form--submit"
-              />
+                className={`edit-list__form--submit ${isSubmitting ? 'edit-list__form--submit--loading' : ''}`}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Saving...' : 'Save Changes'}
+              </button>
             </div>
           </form>
         </div>

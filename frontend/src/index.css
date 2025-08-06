@@ -3958,6 +3958,23 @@ h2 {
   padding: 0.8rem 0 0.8rem;
   border-radius: 999px;
   color: #FFF3DF;
+  background-color: #352d24;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.create-list__form--submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+.create-list__form--submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.create-list__form--submit--loading {
+  background-color: #6b6660;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 .create-list__form--cancel {
   font-size: 1rem;
@@ -3965,6 +3982,10 @@ h2 {
   padding: 0.8rem 0 0.8rem;
   border-radius: 999px;
   color: #2a1e17;
+}
+.create-list__form--cancel:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .create-list-input-group {
@@ -4616,6 +4637,23 @@ h2 {
   padding: 0.8rem 0 0.8rem;
   border-radius: 999px;
   color: #FFF3DF;
+  background-color: #352d24;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.edit-list__form--submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+.edit-list__form--submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.edit-list__form--submit--loading {
+  background-color: #6b6660;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 .edit-list__form--cancel {
   font-size: 1rem;
@@ -4623,6 +4661,18 @@ h2 {
   padding: 0.8rem 0 0.8rem;
   border-radius: 999px;
   color: #2a1e17;
+  background-color: #FFFCF7;
+  font-weight: bold;
+  border: 0.075rem solid #2a1e17;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.edit-list__form--cancel:hover:not(:disabled) {
+  opacity: 0.9;
+}
+.edit-list__form--cancel:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .edit-list__word-input-group {
