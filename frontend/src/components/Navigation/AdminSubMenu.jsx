@@ -1,18 +1,17 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 const tabs = [
-  { name: "General", route: "/admin-general" },
-
+  { name: "Dashboard", route: "/admin-dashboard" },
   {
     name: "Users",
-    route:  "/teacher-request",
+    route:  "/admin-users",
     matchRoutes: [
-      "/teacher-request",
-      "/teacher-request",
-      "/teacher-request",
+      "/admin-users",
       "/teacher-request",
     ]
   },
+  { name: "Content", route: "/admin-content" },
+  { name: "Statistic", route: "/admin-statistic" },
 ];
 
 export default function TeacherClassroomMenuTab() {

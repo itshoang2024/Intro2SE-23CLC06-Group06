@@ -27,11 +27,11 @@ const TeacherRequest = () => {
                         <div className="pending-request__filter-dropdown">
                             <span>All lists: </span>
                             <select
-                                value={location.pathname}
+                                value="/admin-users"
                                 onChange={(e) => navigate(e.target.value)}
                             >
                                 <option value="/teacher-request">Teacher's Request</option>
-                                <option value="/teacher-request">General</option>
+                                <option value="/admin-users">Users</option>
                             </select>
                         </div>
                     </div>

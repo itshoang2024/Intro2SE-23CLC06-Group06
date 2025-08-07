@@ -67,6 +67,13 @@ const TeacherRequest = () => {
                         <h1>Teacher's Request</h1>
                         <div className="pending-request__filter-dropdown">
                             <span>All lists: {teacherRequests.length}</span>
+                            <select
+                                value="/teacher-request"
+                                onChange={(e) => navigate(e.target.value)}
+                            >
+                                <option value="/teacher-request">Teacher's Request</option>
+                                <option value="/admin-users">Users</option>
+                            </select>
                         </div>
                     </div>
                     <div className="find-user-bar">
