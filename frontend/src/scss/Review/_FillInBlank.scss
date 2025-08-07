@@ -228,17 +228,26 @@
     opacity: 0.85;
   }
 
-  &__continue {
+  &__bottom-actions {
     display: flex;
-    justify-content: flex-end;
-    padding: 0 5rem 1rem;
-    animation: fadeIn 0.3s ease forwards;
-  }
-
-  &__submit {
-    display: flex;
-    justify-content: flex-end;
+    align-items: center;
     padding: 0 5rem 2rem;
+    animation: fadeIn 0.3s ease forwards;
+    gap: 1rem;
+    width: 100%;
+    
+    .fill-blank__submit-button {
+      margin-left: auto;
+    }
+    
+    // When continue button is shown, reset margin and use space-between
+    &--with-continue {
+      justify-content: space-between;
+      
+      .fill-blank__submit-button {
+        margin-left: 0;
+      }
+    }
   }
 
   &__submit-button {
@@ -296,14 +305,16 @@
       text-align: center;
     }
 
-    &__continue {
-      padding: 0 2rem 1rem;
-      justify-content: center;
-    }
-
-    &__submit {
+    &__bottom-actions {
       padding: 0 2rem 2rem;
-      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+      
+      .fill-blank__button--continue,
+      .fill-blank__submit-button {
+        width: 100%;
+      }
     }
 
     &__title {

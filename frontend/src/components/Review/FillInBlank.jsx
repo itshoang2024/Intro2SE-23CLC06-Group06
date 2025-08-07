@@ -161,8 +161,8 @@ const FillInBlank = ({
         </div>
       </div>
 
-      {isAnswered && (
-        <div className="fill-blank__continue">
+      <div className={`fill-blank__bottom-actions ${isAnswered ? 'fill-blank__bottom-actions--with-continue' : ''}`}>
+        {isAnswered && (
           <button
             className="fill-blank__button fill-blank__button--continue"
             onClick={handleContinue}
@@ -171,10 +171,8 @@ const FillInBlank = ({
           >
             Continue
           </button>
-        </div>
-      )}
-
-      <div className="fill-blank__submit">
+        )}
+        
         <button 
           className="fill-blank__submit-button" 
           onClick={onEndSession}

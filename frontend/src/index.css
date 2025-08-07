@@ -4624,16 +4624,22 @@ h2 {
   color: inherit;
   opacity: 0.85;
 }
-.fill-blank__continue {
+.fill-blank__bottom-actions {
   display: flex;
-  justify-content: flex-end;
-  padding: 0 5rem 1rem;
-  animation: fadeIn 0.3s ease forwards;
-}
-.fill-blank__submit {
-  display: flex;
-  justify-content: flex-end;
+  align-items: center;
   padding: 0 5rem 2rem;
+  animation: fadeIn 0.3s ease forwards;
+  gap: 1rem;
+  width: 100%;
+}
+.fill-blank__bottom-actions .fill-blank__submit-button {
+  margin-left: auto;
+}
+.fill-blank__bottom-actions--with-continue {
+  justify-content: space-between;
+}
+.fill-blank__bottom-actions--with-continue .fill-blank__submit-button {
+  margin-left: 0;
 }
 .fill-blank__submit-button {
   background-color: #3F3122;
@@ -4681,13 +4687,15 @@ h2 {
     gap: 1rem;
     text-align: center;
   }
-  .fill-blank__continue {
-    padding: 0 2rem 1rem;
-    justify-content: center;
-  }
-  .fill-blank__submit {
+  .fill-blank__bottom-actions {
     padding: 0 2rem 2rem;
-    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .fill-blank__bottom-actions .fill-blank__button--continue,
+  .fill-blank__bottom-actions .fill-blank__submit-button {
+    width: 100%;
   }
   .fill-blank__title {
     font-size: 1.5rem;
