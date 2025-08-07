@@ -34,69 +34,69 @@ const AdminUsers = () => {
 
     
 
-    return (
-        <div className="teacher-request-page">
-            <Header />
-            <main className="main-content">
-                <AdminSubMenu />
+  return (
+    <div className="teacher-request-page">
+      <Header />
+      <main className="main-content">
+        <AdminSubMenu />
 
-                <section className="requests-section">
-                    <div className="requests-header">
-                        <h1>Users</h1>
-                        <div className="pending-request__filter-dropdown">
-                            <span>All lists: {filteredRequests.length}</span>
-                            <select
-                                value="/admin-users"
-                                onChange={(e) => navigate(e.target.value)}
-                            >
-                                <option value="/teacher-request">Teacher's Request</option>
-                                <option value="/admin-users">Users</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="find-user-bar">
-                        <input 
-                            type="text" 
-                            placeholder="Enter content you want to find"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-
-                    <table className="requests-table">
-                        <thead>
-                            <tr className='request-table__tr'>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Verify</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredRequests.map((request, index) => (
-                                <tr key={index}>
-                                    <td>{request.id}</td>
-                                    <td>{request.username}</td>
-                                    <td>{request.email}</td>
-                                    <td>
-                                        <div className="btn">
-                                            <button className="btn verify"
-                                            // onClick={() => handleApproveJoinRequest(item.learner_id)}
-                                            >Verifed</button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button className="review-btn" onClick={() => navigate("/admin-teacher-verification")}>-</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
-            </main>
-            <Footer />
+        <section className="requests-section">
+        <div className="requests-header">
+          <h1>Users</h1>
+          <div className="pending-request__filter-dropdown">
+              <span>All lists: {filteredRequests.length}</span>
+              <select
+                  value="/admin-users"
+                  onChange={(e) => navigate(e.target.value)}
+              >
+                  <option value="/teacher-request">Teacher's Request</option>
+                  <option value="/admin-users">Users</option>
+              </select>
+          </div>
         </div>
+        <div className="find-user-bar">
+          <input 
+              type="text" 
+              placeholder="Enter content you want to find"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <table className="requests-table">
+          <thead>
+              <tr className='request-table__tr'>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Verify</th>
+                  <th>Status</th>
+              </tr>
+          </thead>
+          <tbody>
+              {filteredRequests.map((request, index) => (
+                  <tr key={index}>
+                      <td>{request.id}</td>
+                      <td>{request.username}</td>
+                      <td>{request.email}</td>
+                      <td>
+                          <div className="btn">
+                              <button className="btn verify"
+                              // onClick={() => handleApproveJoinRequest(item.learner_id)}
+                              >Verifed</button>
+                          </div>
+                      </td>
+                      <td>
+                          <button className="review-btn" onClick={() => navigate("/admin-teacher-verification")}>-</button>
+                      </td>
+                  </tr>
+              ))}
+          </tbody>
+        </table>
+        </section>
+      </main>
+      <Footer />
+    </div>
     );
 };
 

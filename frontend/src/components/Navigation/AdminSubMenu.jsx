@@ -8,7 +8,7 @@ const tabs = [
     matchRoutes: [
       "/admin-users",
       "/teacher-request",
-    ]
+    ],
   },
   { name: "Content", route: "/admin-content" },
   { name: "Statistic", route: "/admin-statistics" },
@@ -44,4 +44,3 @@ export default function TeacherClassroomMenuTab() {
     </div>
   );
 }
-
