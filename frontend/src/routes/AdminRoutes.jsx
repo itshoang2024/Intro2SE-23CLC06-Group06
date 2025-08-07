@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import ProtectedAdminRoute from "../components/Auth/ProtectedAdminRoute";
 
 const AdminTeacherVerification = lazy(
   () => import("../pages/Admin/AdminTeacherVerification")
@@ -25,7 +26,9 @@ const LoadingFallback = () => (
 
 const withSuspense = (Component) => (
   <Suspense fallback={<LoadingFallback />}>
-    <Component />
+    <ProtectedAdminRoute>
+      <Component />
+    </ProtectedAdminRoute>
   </Suspense>
 );
 
