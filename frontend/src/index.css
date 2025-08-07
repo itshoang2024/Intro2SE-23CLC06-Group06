@@ -409,6 +409,153 @@ body {
   height: 1.5rem;
 }
 
+.admin-report {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+  font-family: "Lalezar", sans-serif;
+  font-weight: normal;
+}
+.admin-report .main-content {
+  flex: 1;
+  padding: 2rem;
+}
+.admin-report__section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.admin-report__section .dashboard__header {
+  margin-bottom: 2rem;
+}
+.admin-report__section .dashboard__header h1 {
+  font-size: 2rem;
+  font-weight: normal;
+  color: #2A1E17;
+  margin-top: 2rem;
+}
+.admin-report__section .search-bar {
+  margin-bottom: 2rem;
+}
+.admin-report__section .search-bar input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f8f9fa;
+  color: #999;
+}
+.admin-report__section .search-bar input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  background-color: white;
+  color: #333;
+}
+.admin-report__section .search-bar input::placeholder {
+  color: #999;
+}
+.admin-report__section__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.admin-report__section__item {
+  background: #e8e8e8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+.admin-report__section__item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+.admin-report__section__item__content {
+  flex: 1;
+  margin-right: 1rem;
+}
+.admin-report__section__item__content__type {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+}
+.admin-report__section__item__content__text {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #555;
+}
+.admin-report__section__item__content__text__label {
+  font-weight: 600;
+  color: #333;
+}
+.admin-report__section__item__content__date {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  color: #777;
+}
+.admin-report__section__item__actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.admin-report__section__item__actions button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+.admin-report__section__item__actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.admin-report__section__item__actions .btn-delete {
+  background-color: #ff6b6b;
+  color: white;
+}
+.admin-report__section__item__actions .btn-delete:hover {
+  background-color: #ff5252;
+}
+.admin-report__section__item__actions .btn-keep {
+  background-color: #4CAF50;
+  color: white;
+}
+.admin-report__section__item__actions .btn-keep:hover {
+  background-color: #45a049;
+}
+.admin-report__section .see-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+.admin-report__section .see-more-container .btn-see-more {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: color 0.2s ease;
+}
+.admin-report__section .see-more-container .btn-see-more:hover {
+  color: #333;
+}
+.admin-report__section .no-reports {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: 1fr 1fr;

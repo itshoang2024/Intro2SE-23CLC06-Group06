@@ -1,6 +1,8 @@
 import { lazy, Suspense } from "react";
 
-const AdminTeacherVerification = lazy(() => import("../pages/Admin/AdminTeacherVerification"));
+const AdminTeacherVerification = lazy(
+  () => import("../pages/Admin/AdminTeacherVerification")
+);
 const TeacherRequest = lazy(() => import("../pages/Admin/TeacherRequest"));
 const AdminUsers = lazy(() => import("../pages/Admin/AdminUsers"));
 const AdminDashboard = lazy(() => import("../pages/Admin/AdminDashboard"));
@@ -27,10 +29,13 @@ const withSuspense = (Component) => (
 );
 
 const adminRoutes = [
-    { path: "/admin-teacher-verification", element: withSuspense(AdminTeacherVerification) },
-    { path: "/teacher-request", element: withSuspense(TeacherRequest) },
-    { path: "/admin-users", element: withSuspense(AdminUsers) },
-    { path: "/admin-dashboard", element: withSuspense(AdminDashboard) },
+  {
+    path: "/admin-teacher-verification",
+    element: withSuspense(AdminTeacherVerification),
+  },
+  { path: "/teacher-request", element: withSuspense(TeacherRequest) },
+  { path: "/admin-users", element: withSuspense(AdminUsers) },
+  { path: "/admin-dashboard", element: withSuspense(AdminDashboard) },
 ];
 
 export default adminRoutes;
