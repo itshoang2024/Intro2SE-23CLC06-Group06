@@ -4,7 +4,6 @@ const AdminTeacherVerification = lazy(
   () => import("../pages/Admin/AdminTeacherVerification")
 );
 const TeacherRequest = lazy(() => import("../pages/Admin/TeacherRequest"));
-const AdminGeneral = lazy(() => import("../pages/Admin/AdminGeneral"));
 const AdminUsers = lazy(() => import("../pages/Admin/AdminUsers"));
 const AdminDashboard = lazy(() => import("../pages/Admin/AdminDashboard"));
 const AdminContent = lazy(() => import("../pages/Admin/AdminContent"));
