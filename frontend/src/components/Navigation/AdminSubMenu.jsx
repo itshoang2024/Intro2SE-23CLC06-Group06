@@ -11,7 +11,7 @@ const tabs = [
     ]
   },
   { name: "Content", route: "/admin-content" },
-  { name: "Statistic", route: "/admin-statistic" },
+  { name: "Statistic", route: "/admin-statistics" },
 ];
 
 export default function TeacherClassroomMenuTab() {
@@ -26,7 +26,6 @@ export default function TeacherClassroomMenuTab() {
           const matchRoutes = Array.isArray(tab.matchRoutes)
             ? tab.matchRoutes
             : [tab.route]; // fallback nếu không có matchRoutes
-
           const isActive = matchRoutes.some((route) =>
             currentPath.startsWith(route)
           );

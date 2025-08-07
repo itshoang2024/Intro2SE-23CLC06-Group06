@@ -8,6 +8,7 @@ const TeacherRequest = () => {
     const navigate = useNavigate();
 
     const [teacherRequests, setTeacherRequests] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [isReload, setIsReload] = useState(false);
 
@@ -28,6 +29,19 @@ const TeacherRequest = () => {
 
     }, [isReload]);
 
+    // Filter teacher requests based on search term
+    const filteredRequests = teacherRequests.filter(request => {
+        if (!searchTerm) return true; // Show all if no search term
+        
+        const searchLower = searchTerm.toLowerCase();
+        const username = request.user?.displayName || '';
+        const email = request.user?.email || '';
+        const requestId = request.requestId?.toString() || '';
+        
+        return username.toLowerCase().includes(searchLower) ||
+               email.toLowerCase().includes(searchLower) ||
+               requestId.includes(searchLower);
+    });
 
     const handleApproveTeacherRequest = async (id) => {
         try {
@@ -66,7 +80,7 @@ const TeacherRequest = () => {
                     <div className="requests-header">
                         <h1>Teacher's Request</h1>
                         <div className="pending-request__filter-dropdown">
-                            <span>All lists: {teacherRequests.length}</span>
+                            <span>All lists: {filteredRequests.length}</span>
                             <select
                                 value="/teacher-request"
                                 onChange={(e) => navigate(e.target.value)}
@@ -77,7 +91,12 @@ const TeacherRequest = () => {
                         </div>
                     </div>
                     <div className="find-user-bar">
-                        <input type="text" placeholder="Enter user's email you want to find" />
+                        <input 
+                            type="text" 
+                            placeholder="Enter content you want to find"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
 
                     <table className="requests-table">
@@ -89,7 +108,7 @@ const TeacherRequest = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {teacherRequests.map((request) => (
+                            {filteredRequests.map((request) => (
                                 <tr key={request?.requestId}>
                                     <td>{request?.requestId}</td>
                                     <td>{request?.user?.displayName}</td>

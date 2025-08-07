@@ -24,7 +24,7 @@ const AdminDashboard = () => {
             title: 'Approve Teacher Requests',
             description: 'Review teaching applications',
             icon: <img src={ApproveIcon} alt="Approve Icon" className='icon' />,
-            action: () => navigate('/teacher-verification')
+            action: () => navigate('/teacher-request')
         },
         {
             title: 'View system analytics',

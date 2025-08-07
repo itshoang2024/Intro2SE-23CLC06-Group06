@@ -1,79 +1,92 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DropdownIcon } from '../../assets/Vocabulary';
 import { AdminSubMenu, Footer, Header } from '../../components';
 import { toast } from 'react-toastify';
+import adminService from '../../services/Admin/adminService';
 
 const AdminContent = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [visibleReports, setVisibleReports] = useState(4);
-    const [reports, setReports] = useState([
-        {
-            id: 1,
-            type: 'WORDS',
-            reportContent: 'spam, don\'t like it',
-            date: 'Aug, 14, 2025',
-            reportedBy: 'user@example.com',
-            contentId: 'vocab_123'
-        },
-        {
-            id: 2,
-            type: 'WORDS',
-            reportContent: 'spam, don\'t like it',
-            date: 'Aug, 14, 2025',
-            reportedBy: 'user2@example.com',
-            contentId: 'vocab_124'
-        },
-        {
-            id: 3,
-            type: 'WORDS',
-            reportContent: 'spam, don\'t like it',
-            date: 'Aug, 14, 2025',
-            reportedBy: 'user3@example.com',
-            contentId: 'vocab_125'
-        },
-        {
-            id: 4,
-            type: 'WORDS',
-            reportContent: 'spam, don\'t like it',
-            date: 'Aug, 14, 2025',
-            reportedBy: 'user4@example.com',
-            contentId: 'vocab_126'
-        },
-        {
-            id: 5,
-            type: 'WORDS',
-            reportContent: 'inappropriate content',
-            date: 'Aug, 13, 2025',
-            reportedBy: 'user5@example.com',
-            contentId: 'vocab_127'
-        },
-        {
-            id: 6,
-            type: 'WORDS',
-            reportContent: 'offensive language',
-            date: 'Aug, 13, 2025',
-            reportedBy: 'user6@example.com',
-            contentId: 'vocab_128'
+    const [reports, setReports] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalItems: 0,
+        limit: 20
+    });
+
+    // Fetch reports from API
+    useEffect(() => {
+        fetchReports();
+    }, []);
+
+    const fetchReports = async (page = 1) => {
+        try {
+            setLoading(true);
+            const response = await adminService.getAllOpenReports(page, pagination.limit);
+            console.log(' Full API Response:', response);
+            
+            // Try both possible structures
+            let reportsData = response.data?.reports || [];
+            let paginationData = response.data?.pagination;
+
+            setReports(reportsData);
+            if (paginationData) {
+                setPagination({
+                    currentPage: paginationData.currentPage,
+                    totalPages: paginationData.totalPages,
+                    totalItems: paginationData.totalItems,
+                    limit: paginationData.limit
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching reports:', error);
+            toast.error('Failed to load reports');
+            setReports([]);
+        } finally {
+            setLoading(false);
         }
-    ]);
+    };
 
     // Lọc báo cáo theo từ khóa tìm kiếm
-    const filteredReports = reports.filter(report =>
-        report.reportContent.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        report.reportedBy.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredReports = reports.filter(report => {
+        if (!searchTerm) return true; // Show all if no search term
+        
+        const searchLower = searchTerm.toLowerCase();
+        const reportedWord = report.reportedWord?.term || '';
+        const reporterName = report.reporter?.displayName || '';
+        const reason = report.reason || '';
+        
+        return reportedWord.toLowerCase().includes(searchLower) ||
+               reporterName.toLowerCase().includes(searchLower) ||
+               reason.toLowerCase().includes(searchLower);
+    });
 
     // Hiển thị số lượng báo cáo giới hạn
     const displayedReports = filteredReports.slice(0, visibleReports);
 
-    const handleDelete = (reportId) => {
-        setReports(prevReports => prevReports.filter(report => report.id !== reportId));
-        toast.success('Report deleted successfully');
+
+    const handleDelete = async (reportId) => {
+        try {
+            await adminService.approveAReport(reportId, 'Content removed by admin');
+            setReports(prevReports => prevReports.filter(report => report.reportId !== reportId));
+            toast.success('Report approved and content deleted successfully');
+        } catch (error) {
+            console.error('Error approving report:', error);
+            toast.error('Failed to approve report');
+        }
     };
 
-    const handleKeep = (reportId) => {
-        setReports(prevReports => prevReports.filter(report => report.id !== reportId));
-        toast.success('Report kept successfully');
+    const handleKeep = async (reportId) => {
+        try {
+            await adminService.dismissAReport(reportId, 'Content kept by admin');
+            setReports(prevReports => prevReports.filter(report => report.reportId !== reportId));
+            toast.success('Report dismissed and content kept successfully');
+        } catch (error) {
+            console.error('Error dismissing report:', error);
+            toast.error('Failed to dismiss report');
+        }
     };
 
     const handleSeeMore = () => {
@@ -101,31 +114,48 @@ const AdminContent = () => {
                     </div>
 
                     <div className="admin-report__list">
-                        {displayedReports.map(report => (
-                            <div key={report.id} className="admin-report__item">
-                                <div className="admin-report__content">
-                                    <h3 className="admin-report__type">{report.type}</h3>
-                                    <p className="admin-report__text">
-                                        <span className="admin-report__label">Report Content:</span> {report.reportContent}
-                                    </p>
-                                    <p className="admin-report__date">Date: {report.date}</p>
-                                </div>
-                                <div className="admin-report__actions">
-                                    <button 
-                                        className="btn-delete"
-                                        onClick={() => handleDelete(report.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                    <button 
-                                        className="btn-keep"
-                                        onClick={() => handleKeep(report.id)}
-                                    >
-                                        Keep
-                                    </button>
-                                </div>
+                        {loading ? (
+                            <div className="loading-message">
+                                <p>Loading reports...</p>
                             </div>
-                        ))}
+                        ) : displayedReports.length > 0 ? (
+                            displayedReports.map(report => (
+                                <div key={report.reportId} className="admin-report__item">
+                                    <div className="admin-report__content">
+                                        <h3 className="admin-report__word">{report.reportedWord?.term || 'N/A'}</h3>
+                                        <p className="admin-report__text">
+                                            <span className="admin-report__label">Report Content:</span> {report.reason || 'N/A'}
+                                        </p>
+                                        <p className="admin-report__text">
+                                            <span className="admin-report__label">User:</span> {report.reporter?.displayName || 'Anonymous'}
+                                        </p>
+                                        <p className="admin-report__date">Date: {new Date(report.reportedAt).toLocaleDateString('en-US', { 
+                                            year: 'numeric', 
+                                            month: 'short', 
+                                            day: 'numeric' 
+                                        })}</p>
+                                    </div>
+                                    <div className="admin-report__actions">
+                                        <button 
+                                            className="btn-delete"
+                                            onClick={() => handleDelete(report.reportId)}
+                                        >
+                                            Delete
+                                        </button>
+                                        <button 
+                                            className="btn-keep"
+                                            onClick={() => handleKeep(report.reportId)}
+                                        >
+                                            Keep
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="no-reports">
+                                <p>No reports found.</p>
+                            </div>
+                        )}
                     </div>
 
                     {filteredReports.length > visibleReports && (
@@ -133,12 +163,6 @@ const AdminContent = () => {
                             <button className="btn-see-more" onClick={handleSeeMore}>
                                 See more <img src={DropdownIcon} alt="more" />
                             </button>
-                        </div>
-                    )}
-
-                    {filteredReports.length === 0 && (
-                        <div className="no-reports">
-                            <p>No reports found.</p>
                         </div>
                     )}
                 </section>

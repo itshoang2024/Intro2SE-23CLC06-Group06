@@ -1,19 +1,38 @@
 import { useNavigate } from 'react-router-dom';
-import { Line } from '../../assets/Classroom';
+import { useState } from 'react';
 import { AdminSubMenu, Footer, Header } from '../../components';
 
-const TeacherRequest = () => {
+const AdminUsers = () => {
     const requests = [
         { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Alex Nguyen', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Maria Grande', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Billie Eilish', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Brad Pitt', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Phi Hùng', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Hoàng Phan', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Quang Nghị', email: 'janesmith@gmail.com' },
+        { id: 123, username: 'Hiệp Thắng', email: 'johndoe@gmail.com' }
     ];
 
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filter users based on search term
+    const filteredRequests = requests.filter(request => {
+        if (!searchTerm) return true; // Show all if no search term
+        
+        const searchLower = searchTerm.toLowerCase();
+        const username = request.username || '';
+        const email = request.email || '';
+        const id = request.id?.toString() || '';
+        
+        return username.toLowerCase().includes(searchLower) ||
+               email.toLowerCase().includes(searchLower) ||
+               id.includes(searchLower);
+    });
+
+    
 
     return (
         <div className="teacher-request-page">
@@ -23,9 +42,9 @@ const TeacherRequest = () => {
 
                 <section className="requests-section">
                     <div className="requests-header">
-                        <h1>General</h1>
+                        <h1>Users</h1>
                         <div className="pending-request__filter-dropdown">
-                            <span>All lists: </span>
+                            <span>All lists: {filteredRequests.length}</span>
                             <select
                                 value="/admin-users"
                                 onChange={(e) => navigate(e.target.value)}
@@ -36,7 +55,12 @@ const TeacherRequest = () => {
                         </div>
                     </div>
                     <div className="find-user-bar">
-                        <input type="text" placeholder="Enter user's email you want to find" />
+                        <input 
+                            type="text" 
+                            placeholder="Enter content you want to find"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
 
                     <table className="requests-table">
@@ -50,7 +74,7 @@ const TeacherRequest = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {requests.map((request, index) => (
+                            {filteredRequests.map((request, index) => (
                                 <tr key={index}>
                                     <td>{request.id}</td>
                                     <td>{request.username}</td>
@@ -76,4 +100,4 @@ const TeacherRequest = () => {
     );
 };
 
-export default TeacherRequest;
+export default AdminUsers;
