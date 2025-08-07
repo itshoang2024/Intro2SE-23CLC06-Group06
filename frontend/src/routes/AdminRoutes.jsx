@@ -30,10 +30,10 @@ const withSuspense = (Component) => (
 );
 
 const adminRoutes = [
-    { path: "/admin-teacher-verification", element: <AdminTeacherVerification /> },
-    { path: "/teacher-request", element: <TeacherRequest /> },
-    { path: "/admin-users", element: <AdminUsers /> },
-    { path: "/admin-dashboard", element: <AdminDashboard /> },
-    { path: "/admin-content", element: <AdminContent /> },
+    { path: "/admin-teacher-verification", element: withSuspense(AdminTeacherVerification) },
+    { path: "/teacher-request", element: withSuspense(TeacherRequest) },
+    { path: "/admin-users", element: withSuspense(AdminUsers) },
+    { path: "/admin-dashboard", element: withSuspense(AdminDashboard) },
+    { path: "/admin-content", element: withSuspense(AdminContent) },
 ]
 export default adminRoutes;

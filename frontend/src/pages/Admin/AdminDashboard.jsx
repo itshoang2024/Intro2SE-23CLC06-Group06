@@ -1,38 +1,68 @@
 import { useNavigate } from 'react-router-dom';
+import { useMemo, useCallback, memo } from 'react';
 import { AdminSubMenu, Footer, Header } from '../../components';
 import { AnalyticsIcon, ApproveIcon, UsersIcon } from '../../assets/Admin';
 
-const AdminDashboard = () => {
+// Memoized QuickActionCard component
+const QuickActionCard = memo(function QuickActionCard({ action, onClick }) {
+  return (
+    <div className="action-card" onClick={onClick}>
+      <div className="action-icon">{action.icon}</div>
+      <div className="action-content">
+        <h4>{action.title}</h4>
+        <p>{action.description}</p>
+      </div>
+    </div>
+  );
+});
+
+// Memoized StatCard component  
+const StatCard = memo(function StatCard({ value, label, className }) {
+  return (
+    <div className={`stat-card ${className}`}>
+      <div className="stat-number">{value}</div>
+      <div className="stat-label">{label}</div>
+    </div>
+  );
+});
+
+const AdminDashboard = memo(function AdminDashboard() {
     const navigate = useNavigate();
 
-    // Mock data for the dashboard
-    const stats = {
+    // Memoized stats to prevent recreating on every render
+    const stats = useMemo(() => ({
         users: 250,
         serverLoad: 32.5,
         teacherRequests: 14,
         moderateContent: 3
-    };
+    }), []);
 
-    const quickActions = [
+    // Memoized navigation handlers
+    const navigateToUsers = useCallback(() => navigate('/admin-users'), [navigate]);
+    const navigateToTeacherRequests = useCallback(() => navigate('/teacher-request'), [navigate]);
+    const navigateToAnalytics = useCallback(() => navigate('/admin-dashboard'), [navigate]);
+
+    // Memoized quick actions to prevent recreating on every render
+    const quickActions = useMemo(() => [
         {
             title: 'Ban/Unban Account',
             description: 'Manage users access',
             icon: <img src={UsersIcon} alt="Users Icon" className='icon' />,
-            action: () => navigate('/admin-users')
+            action: navigateToUsers
         },
         {
             title: 'Approve Teacher Requests',
             description: 'Review teaching applications',
             icon: <img src={ApproveIcon} alt="Approve Icon" className='icon' />,
-            action: () => navigate('/teacher-request')
+            action: navigateToTeacherRequests
         },
         {
             title: 'View system analytics',
             description: 'Review system performance and usage',
             icon: <img src={AnalyticsIcon} alt="Analytics Icon" className='icon' />,
-            action: () => navigate('/admin-dashboard')
+            action: navigateToAnalytics
         }
-    ];
+    ], [navigateToUsers, navigateToTeacherRequests, navigateToAnalytics]);
 
     return (
         <div className="dashboard">
@@ -46,15 +76,17 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="dashboard__stats">
-                        <div className="stat-card stat-card--users">
-                            <div className="stat-number">{stats.users}</div>
-                            <div className="stat-label">Users</div>
-                        </div>
+                        <StatCard 
+                            value={stats.users} 
+                            label="Users" 
+                            className="stat-card--users" 
+                        />
 
-                        <div className="stat-card stat-card--server">
-                            <div className="stat-number">{stats.serverLoad}%</div>
-                            <div className="stat-label">Server load</div>
-                        </div>
+                        <StatCard 
+                            value={`${stats.serverLoad}%`} 
+                            label="Server load" 
+                            className="stat-card--server" 
+                        />
 
                         <div className="stat-card stat-card--requests">
                             <div className="stat-number">{stats.teacherRequests}</div>
@@ -85,17 +117,11 @@ const AdminDashboard = () => {
 
                         <div className="quick-actions">
                             {quickActions.map((action, index) => (
-                                <div 
-                                    key={index} 
-                                    className="action-card"
+                                <QuickActionCard
+                                    key={index}
+                                    action={action}
                                     onClick={action.action}
-                                >
-                                    <div className="action-icon">{action.icon}</div>
-                                    <div className="action-content">
-                                        <h4>{action.title}</h4>
-                                        <p>{action.description}</p>
-                                    </div>
-                                </div>
+                                />
                             ))}
                         </div>
                     </div>
@@ -104,6 +130,6 @@ const AdminDashboard = () => {
             <Footer />
         </div>
     );
-};
+});
 
 export default AdminDashboard;

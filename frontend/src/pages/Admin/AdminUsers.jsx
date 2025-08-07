@@ -1,36 +1,66 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useMemo, useCallback, memo } from 'react';
 import { AdminSubMenu, Footer, Header } from '../../components';
 
-const AdminUsers = () => {
-    const requests = [
+// Memoized UserItem component
+const UserItem = memo(function UserItem({ user }) {
+  return (
+    <div className="request-card">
+      <div className="request-info">
+        <h3>{user.username}</h3>
+        <p>ID: {user.id}</p>
+        <p>Email: {user.email}</p>
+      </div>
+      <div className="request-actions">
+        <button className="btn btn-primary">Unban</button>
+        <button className="btn btn-danger">Ban</button>
+      </div>
+    </div>
+  );
+});
+
+const AdminUsers = memo(function AdminUsers() {
+    // Memoized users data to prevent recreating on every render
+    const users = useMemo(() => [
         { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Alex Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Maria Grande', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Billie Eilish', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Brad Pitt', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Phi Hùng', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Hoàng Phan', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Quang Nghị', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Hiệp Thắng', email: 'johndoe@gmail.com' }
-    ];
+        { id: 124, username: 'Alex Nguyen', email: 'janesmith@gmail.com' },
+        { id: 125, username: 'Maria Grande', email: 'janesmith@gmail.com' },
+        { id: 126, username: 'Billie Eilish', email: 'janesmith@gmail.com' },
+        { id: 127, username: 'Brad Pitt', email: 'janesmith@gmail.com' },
+        { id: 128, username: 'Phi Hùng', email: 'janesmith@gmail.com' },
+        { id: 129, username: 'Hoàng Phan', email: 'janesmith@gmail.com' },
+        { id: 130, username: 'Quang Nghị', email: 'janesmith@gmail.com' },
+        { id: 131, username: 'Hiệp Thắng', email: 'johndoe@gmail.com' }
+    ], []);
 
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Filter users based on search term
-    const filteredRequests = requests.filter(request => {
-        if (!searchTerm) return true; // Show all if no search term
+    // Memoized search handler
+    const handleSearchChange = useCallback((e) => {
+        setSearchTerm(e.target.value);
+    }, []);
+
+    // Memoized navigation handler
+    const handleNavigationChange = useCallback((e) => {
+        navigate(e.target.value);
+    }, [navigate]);
+
+    // Memoized filtering computation - expensive operation
+    const filteredUsers = useMemo(() => {
+        if (!searchTerm) return users; // Show all if no search term
         
         const searchLower = searchTerm.toLowerCase();
-        const username = request.username || '';
-        const email = request.email || '';
-        const id = request.id?.toString() || '';
-        
-        return username.toLowerCase().includes(searchLower) ||
-               email.toLowerCase().includes(searchLower) ||
-               id.includes(searchLower);
-    });
+        return users.filter(user => {
+            const username = user.username || '';
+            const email = user.email || '';
+            const id = user.id?.toString() || '';
+            
+            return username.toLowerCase().includes(searchLower) ||
+                   email.toLowerCase().includes(searchLower) ||
+                   id.includes(searchLower);
+        });
+    }, [users, searchTerm]);
 
     
 
@@ -44,10 +74,10 @@ const AdminUsers = () => {
         <div className="requests-header">
           <h1>Users</h1>
           <div className="pending-request__filter-dropdown">
-              <span>All lists: {filteredRequests.length}</span>
+              <span>All lists: {filteredUsers.length}</span>
               <select
                   value="/admin-users"
-                  onChange={(e) => navigate(e.target.value)}
+                  onChange={handleNavigationChange}
               >
                   <option value="/teacher-request">Teacher's Request</option>
                   <option value="/admin-users">Users</option>
@@ -59,7 +89,7 @@ const AdminUsers = () => {
               type="text" 
               placeholder="Enter content you want to find"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleSearchChange}
           />
         </div>
 
@@ -74,11 +104,11 @@ const AdminUsers = () => {
               </tr>
           </thead>
           <tbody>
-              {filteredRequests.map((request, index) => (
-                  <tr key={index}>
-                      <td>{request.id}</td>
-                      <td>{request.username}</td>
-                      <td>{request.email}</td>
+              {filteredUsers.map((user, index) => (
+                  <tr key={user.id}>
+                      <td>{user.id}</td>
+                      <td>{user.username}</td>
+                      <td>{user.email}</td>
                       <td>
                           <div className="btn">
                               <button className="btn verify"
@@ -98,6 +128,6 @@ const AdminUsers = () => {
       <Footer />
     </div>
     );
-};
+});
 
 export default AdminUsers;
