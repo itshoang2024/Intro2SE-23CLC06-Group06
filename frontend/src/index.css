@@ -2902,6 +2902,7 @@ h2 {
   padding: 10px 10px;
   animation: fadeIn 0.2s ease-out;
   margin-top: 10px;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 20px;
