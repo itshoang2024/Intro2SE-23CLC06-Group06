@@ -1,15 +1,18 @@
-import { useEffect, useRef, useState, useMemo, useCallback, memo } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 // import { SearchBarPattern } from "../../assets/icons/index";
-import { DropdownIcon, MoreIcon, ShareIcon } from "../../assets/Vocabulary";
+import { MoreIcon, ShareIcon } from "../../assets/Vocabulary";
 import { Footer, Header, SideBar, ViewListSkeleton } from "../../components";
+import { WordListSkeleton } from "../../components/UI/Skeleton/Pages/ViewListSkeleton";
 import { useConfirm } from "../../components/Providers/ConfirmProvider.jsx";
 import { useToast } from "../../components/Providers/ToastProvider.jsx";
 import useClickOutside from "../../hooks/useClickOutside";
+import { useDebounce } from "../../hooks/useDebounce";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
+import { useSkeletonToggle } from "../../hooks/useSkeletonToggle.js";
 
 // Memoized WordBox component to prevent unnecessary re-renders
-const WordBox = memo(function WordBox({ word, index }) {
+const WordBox = memo(({ word, index }) => {
   return (
     <div key={word.id} className="view-list__word-box">
       <div className="view-list__word-box--index">{index + 1}</div>
@@ -74,7 +77,9 @@ const WordBox = memo(function WordBox({ word, index }) {
   );
 });
 
-const ViewList = memo(function ViewList() {
+WordBox.displayName = "WordBox";
+
+const ViewList = memo(() => {
   const [listInfo, setListInfo] = useState(null);
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -83,7 +88,12 @@ const ViewList = memo(function ViewList() {
   const [sortBy, setSortBy] = useState("default");
   const [showShareBox, setShowShareBox] = useState(false);
   const [showMoreBox, setShowMoreBox] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const { listId } = useParams();
+  const { isLoading: skeletonToggle } = useSkeletonToggle();
+
+  // Debounce search term to show loading skeleton
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   // Memoized capitalize function
   const capitalize = useCallback(
@@ -144,9 +154,18 @@ const ViewList = memo(function ViewList() {
     window.location.href = `/review/${listId}`;
   }, [listId]);
 
-  const handleSearchChange = useCallback((e) => {
-    setSearchTerm(e.target.value);
-  }, []);
+  const handleSearchChange = useCallback(
+    (e) => {
+      const newSearchTerm = e.target.value;
+      setSearchTerm(newSearchTerm);
+
+      // Show searching skeleton if search term is not empty
+      if (newSearchTerm !== debouncedSearchTerm) {
+        setIsSearching(true);
+      }
+    },
+    [debouncedSearchTerm]
+  );
 
   const handleSortChange = useCallback((e) => {
     setSortBy(e.target.value);
@@ -184,12 +203,19 @@ const ViewList = memo(function ViewList() {
     fetchData();
   }, [listId]);
 
+  // Set searching to false when debounced search term changes
+  useEffect(() => {
+    if (debouncedSearchTerm !== undefined) {
+      setIsSearching(false);
+    }
+  }, [debouncedSearchTerm]);
+
   // Memoized filtering and sorting - expensive computation
   const filteredAndSortedWords = useMemo(() => {
     const filtered = words.filter((word) => {
-      if (!searchTerm) return true; // Show all if no search term
+      if (!debouncedSearchTerm) return true; // Show all if no search term
 
-      const searchLower = searchTerm.toLowerCase();
+      const searchLower = debouncedSearchTerm.toLowerCase();
       const term = word.term || "";
       const definition = word.definition || "";
       const phonetics = word.phonetics || "";
@@ -217,7 +243,7 @@ const ViewList = memo(function ViewList() {
           return 0; // Keep original order
       }
     });
-  }, [words, searchTerm, sortBy]);
+  }, [words, debouncedSearchTerm, sortBy]);
 
   return (
     <div className="view-list">
@@ -225,7 +251,7 @@ const ViewList = memo(function ViewList() {
       <div className="view-list__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <main className="view-list__main">
-          {loading ? (
+          {skeletonToggle(loading) ? (
             <ViewListSkeleton />
           ) : (
             listInfo && (
@@ -356,20 +382,27 @@ const ViewList = memo(function ViewList() {
                 </section>
 
                 <section className="view-list__words">
-                  <h2>Word List ({filteredAndSortedWords.length} words)</h2>
-                  <div className="view-list__word-list">
-                    {filteredAndSortedWords.length === 0 ? (
-                      <div className="view-list__empty">
-                        {searchTerm
-                          ? "No words found matching your search."
-                          : "This list currently has no words."}
-                      </div>
-                    ) : (
-                      filteredAndSortedWords.map((word, index) => (
-                        <WordBox key={word.id} word={word} index={index} />
-                      ))
-                    )}
-                  </div>
+                  <h2>
+                    Word List (
+                    {isSearching ? "..." : filteredAndSortedWords.length} words)
+                  </h2>
+                  {isSearching ? (
+                    <WordListSkeleton count={3} theme="viewList" />
+                  ) : (
+                    <div className="view-list__word-list">
+                      {filteredAndSortedWords.length === 0 ? (
+                        <div className="view-list__empty">
+                          {debouncedSearchTerm
+                            ? "No words found matching your search."
+                            : "This list currently has no words."}
+                        </div>
+                      ) : (
+                        filteredAndSortedWords.map((word, index) => (
+                          <WordBox key={word.id} word={word} index={index} />
+                        ))
+                      )}
+                    </div>
+                  )}
                 </section>
               </>
             )
@@ -380,5 +413,7 @@ const ViewList = memo(function ViewList() {
     </div>
   );
 });
+
+ViewList.displayName = "ViewList";
 
 export default ViewList;
