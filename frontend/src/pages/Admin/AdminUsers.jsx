@@ -1,25 +1,25 @@
-import { useNavigate } from 'react-router-dom';
-import { Line } from '../../assets/Classroom';
-import { AdminSubMenu, Footer, Header } from '../../components';
+import { useNavigate } from "react-router-dom";
+import { Line } from "../../assets/Classroom";
+import { AdminSubMenu, Footer, Header } from "../../components";
 
 const TeacherRequest = () => {
-    const requests = [
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-        { id: 123, username: 'Mia Nguyen', email: 'janesmith@gmail.com' },
-    ];
+  const requests = [
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+    { id: 123, username: "Mia Nguyen", email: "janesmith@gmail.com" },
+  ];
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    return (
-        <div className="teacher-request-page">
-            <Header />
-            <main className="main-content">
-                <AdminSubMenu />
+  return (
+    <div className="teacher-request-page">
+      <Header />
+      <main className="main-content">
+        <AdminSubMenu />
 
                 <section className="requests-section">
                     <div className="requests-header">
@@ -39,41 +39,49 @@ const TeacherRequest = () => {
                         <input type="text" placeholder="Enter user's email you want to find" />
                     </div>
 
-                    <table className="requests-table">
-                        <thead>
-                            <tr className='request-table__tr'>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Verify</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {requests.map((request, index) => (
-                                <tr key={index}>
-                                    <td>{request.id}</td>
-                                    <td>{request.username}</td>
-                                    <td>{request.email}</td>
-                                    <td>
-                                        <div className="btn">
-                                            <button className="btn verify"
-                                            // onClick={() => handleApproveJoinRequest(item.learner_id)}
-                                            >Verifed</button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <button className="review-btn" onClick={() => navigate("/admin-teacher-verification")}>-</button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
-            </main>
-            <Footer />
-        </div>
-    );
+          <table className="requests-table">
+            <thead>
+              <tr className="request-table__tr">
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Verify</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {requests.map((request, index) => (
+                <tr key={index}>
+                  <td>{request.id}</td>
+                  <td>{request.username}</td>
+                  <td>{request.email}</td>
+                  <td>
+                    <div className="btn">
+                      <button
+                        className="btn verify"
+                        // onClick={() => handleApproveJoinRequest(item.learner_id)}
+                      >
+                        Verifed
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <button
+                      className="review-btn"
+                      onClick={() => navigate("/admin-teacher-verification")}
+                    >
+                      -
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default TeacherRequest;

@@ -1,7 +1,7 @@
 .pending-request__filter-dropdown {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
     select {
       font-family: 'Inria-sans', sans-serif;
@@ -13,8 +13,8 @@
       cursor: pointer;
     }
 
-    span {
-      color: #aaa;
-      font-size: 14px;
-    }
+  span {
+    color: #aaa;
+    font-size: 14px;
   }
+}
