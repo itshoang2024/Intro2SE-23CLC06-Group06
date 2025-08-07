@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { SearchBarPattern } from "../../assets/icons/index";
+// import { SearchBarPattern } from "../../assets/icons/index";
 import {
   DropdownIcon,
   MoreIcon,
@@ -17,6 +17,8 @@ export default function ViewList() {
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('default');
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const [showShareBox, setShowShareBox] = useState(false);
   const [showMoreBox, setShowMoreBox] = useState(false);
@@ -74,6 +76,35 @@ export default function ViewList() {
     }
     fetchData();
   }, [listId]);
+
+  // Filter and sort words based on search term and sort option
+  const filteredAndSortedWords = words.filter(word => {
+    if (!searchTerm) return true; // Show all if no search term
+    
+    const searchLower = searchTerm.toLowerCase();
+    const term = word.term || '';
+    const definition = word.definition || '';
+    const phonetics = word.phonetics || '';
+    const example = word.example || '';
+    
+    return term.toLowerCase().includes(searchLower) ||
+           definition.toLowerCase().includes(searchLower) ||
+           phonetics.toLowerCase().includes(searchLower) ||
+           example.toLowerCase().includes(searchLower);
+  }).sort((a, b) => {
+    switch (sortBy) {
+      case 'alphabetical':
+        return a.term.localeCompare(b.term);
+      case 'reverse-alphabetical':
+        return b.term.localeCompare(a.term);
+      case 'newest':
+        return new Date(b.created_at) - new Date(a.created_at);
+      case 'oldest':
+        return new Date(a.created_at) - new Date(b.created_at);
+      default:
+        return 0; // Keep original order
+    }
+  });
 
   return (
     <div className="view-list">
@@ -208,33 +239,40 @@ export default function ViewList() {
                 </section>
 
                 <section className="view-list__controls">
-                  <div className="view-list__search">
-                    <img
-                      src={SearchBarPattern}
-                      alt="Search"
-                      className="view-list__search-icon"
-                    />
+                  <div className="search-bar">
                     <input
+
                       type="text"
-                      placeholder="Enter word you want to find"
-                      className="view-list__search-input"
+                      placeholder="Enter content you want to find"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                   <div className="view-list__sort">
-                    <span>Sort by</span>
-                    <img src={DropdownIcon} alt="Sort dropdown" />
+                    <span>Sort by: </span>
+                    <select 
+                      value={sortBy} 
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="sort-dropdown"
+                    >
+                      <option value="default">Default</option>
+                      <option value="alphabetical">A - Z</option>
+                      <option value="reverse-alphabetical">Z - A</option>
+                      <option value="newest">Newest</option>
+                      <option value="oldest">Oldest</option>
+                    </select>
                   </div>
                 </section>
 
                 <section className="view-list__words">
-                  <h2>Word List ({listInfo.wordCount} words)</h2>
+                  <h2>Word List ({filteredAndSortedWords.length} words)</h2>
                   <div className="view-list__word-list">
-                    {words.length === 0 ? (
+                    {filteredAndSortedWords.length === 0 ? (
                       <div className="view-list__empty">
-                        This list currently has no words.
+                        {searchTerm ? 'No words found matching your search.' : 'This list currently has no words.'}
                       </div>
                     ) : (
-                      words.map((word, index) => (
+                      filteredAndSortedWords.map((word, index) => (
                         <div key={word.id} className="view-list__word-box">
                           <div className="view-list__word-box--index">
                             {index + 1}
