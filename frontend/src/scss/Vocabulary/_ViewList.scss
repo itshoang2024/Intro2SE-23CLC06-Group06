@@ -43,6 +43,11 @@
       margin: 0 0.5rem;
       padding: 0.25rem;
       cursor: pointer;
+      
+      // Performance optimizations
+      will-change: opacity, transform;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      transform: translateZ(0); // Force hardware acceleration
 
       img {
         width: 1.5rem;
@@ -51,6 +56,11 @@
 
       &:hover {
         opacity: 0.8;
+        transform: scale(1.05);
+      }
+      
+      &:active {
+        transform: scale(0.95);
       }
     }
   }
@@ -70,12 +80,18 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100;
     min-width: 150px;
+    
+    // Performance optimizations for popups
+    transform: translateZ(0);
+    will-change: opacity, transform;
+    animation: fadeInUp 0.2s ease-out;
 
     .more-option {
       padding: 0.75rem 1rem;
       font-size: 1rem;
       cursor: pointer;
       color: #2a1e17;
+      transition: background-color 0.15s ease;
 
       &.delete {
         color: #a30000;
@@ -136,10 +152,19 @@
     border: none;
     border-radius: 2rem;
     cursor: pointer;
-    transition: background 0.2s;
+    
+    // Performance optimizations
+    will-change: background-color, transform;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    transform: translateZ(0); // Force hardware acceleration
 
     &:hover {
       background-color: #1e150f;
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      transform: translateY(0);
     }
   }
 
@@ -318,6 +343,10 @@
     flex-direction: column;
     gap: 2rem;
     margin-top: 1.5rem;
+    
+    // Performance optimizations for large lists
+    contain: layout;
+    will-change: scroll-position;
   }
 
   &__word-box {
@@ -327,6 +356,19 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    
+    // Performance optimizations
+    contain: layout style;
+    transform: translateZ(0); // Force hardware acceleration
+    backface-visibility: hidden;
+    
+    // Smooth transitions
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
     &--index {
       font-weight: bold;
@@ -346,6 +388,21 @@
         border: none;
         background-color: #f9ddb3;
         font-size: 1rem;
+        
+        // Performance optimizations for input fields
+        will-change: background-color, border-color;
+        transition: background-color 0.15s ease;
+        
+        &:focus {
+          background-color: #f5d299;
+          outline: 2px solid #d5962c;
+          outline-offset: 1px;
+        }
+        
+        &:read-only {
+          cursor: default;
+          user-select: text;
+        }
       }
 
       .input-note {
@@ -403,6 +460,18 @@
         }
       }
     }
+  }
+}
+
+// Performance-optimized animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
