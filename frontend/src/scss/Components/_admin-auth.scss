@@ -1,0 +1,225 @@
+// Admin Authentication Styles
+.admin-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  
+  &__spinner {
+    margin-bottom: 1rem;
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  p {
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.admin-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  
+  h2 {
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.admin-route-guard-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  
+  .loading-container {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    
+    .loading-spinner {
+      margin-bottom: 1.5rem;
+      
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #007bff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+    }
+    
+    .loading-text {
+      h3 {
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-size: 1.25rem;
+      }
+      
+      p {
+        color: #666;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Admin Session Status Component
+.admin-session-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  &__icon {
+    .admin-badge {
+      background: #28a745;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+  
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  &__time {
+    font-size: 0.875rem;
+    color: #495057;
+    font-weight: 500;
+  }
+  
+  &__actions {
+    .admin-session-status__extend {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background: #0056b3;
+      }
+    }
+  }
+  
+  &__controls {
+    .admin-session-status__logout {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background: #c82333;
+      }
+    }
+  }
+}
+
+// Compact version for header
+.admin-session-status--compact {
+  margin: 0;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  
+  .admin-session-status__info {
+    gap: 0.5rem;
+  }
+  
+  .admin-session-status__icon .admin-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .admin-session-status__time {
+    font-size: 0.8rem;
+  }
+  
+  .admin-session-status__controls .admin-session-status__logout {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
+
+// Animation keyframes
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .admin-route-guard-loading {
+    .loading-container {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+  }
+  
+  .admin-session-status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    
+    &__info {
+      width: 100%;
+    }
+    
+    &__controls {
+      align-self: flex-end;
+    }
+  }
+}

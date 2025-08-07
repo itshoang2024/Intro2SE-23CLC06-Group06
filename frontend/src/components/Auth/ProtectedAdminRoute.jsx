@@ -16,13 +16,11 @@ const ProtectedAdminRoute = ({ children }) => {
       // If no user is logged in, redirect to signin
       if (!user) {
         navigate("/signin");
-        return;
       }
 
       // If user doesn't have admin access, redirect to homepage
-      if (!canAccessAdminRoutes(user)) {
+      else if (!canAccessAdminRoutes(user)) {
         navigate("/homepage");
-        return;
       }
     }
   }, [user, loading, navigate]);

@@ -92,7 +92,7 @@ export const useListManagement = (
 
   // Function to format validation errors for display
   const formatValidationErrors = useCallback((errors) => {
-    let errorMessages = [];
+    const errorMessages = [];
 
     // Title errors
     if (errors.title) {
