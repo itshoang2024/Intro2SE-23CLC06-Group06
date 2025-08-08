@@ -59,8 +59,8 @@ const AdminContent = memo(function AdminContent() {
             console.log(' Full API Response:', response);
             
             // Try both possible structures
-            const reportsData = response.data?.reports || [];
-            const paginationData = response.data?.pagination;
+            let reportsData = response.data?.reports || [];
+            let paginationData = response.data?.pagination;
 
             setReports(reportsData);
             if (paginationData) {
