@@ -1,33 +1,35 @@
-// Custom React Toastify styles to match VocaBoost brand
+// Custom React Toastify styles using VocaBoost design tokens
+@use "../ComponentTokens" as components;
+
 .Toastify__toast-container {
   width: auto;
   max-width: 80vh;
   min-width: 300px;
-  z-index: 11000 !important; // Higher than React Modal overlay (10000)
+  z-index: var(--vb-z-index-toast) !important;
 }
 
 .Toastify__toast {
-  font-family: "Inria Sans", sans-serif !important;
-  font-weight: bold !important;
-  font-size: 1rem !important;
-  border-radius: 0.2rem !important;
-  padding: 1rem 1.5rem !important;
-  margin-bottom: 0.5rem !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: var(--vb-font-primary) !important;
+  font-weight: var(--vb-font-weight-bold) !important;
+  font-size: var(--vb-font-size-base) !important;
+  border-radius: var(--vb-border-radius-base) !important;
+  padding: components.$toast-padding !important;
+  margin-bottom: var(--vb-spacing-sm) !important;
+  box-shadow: var(--vb-elevation-toast) !important;
 }
 
 // Success toasts - Green theme
 .Toastify__toast--success {
-  background-color: #3bc042 !important;
-  color: #e0ffe1 !important;
+  background-color: components.$toast-success-bg !important;
+  color: components.$toast-success-color !important;
 }
 
 .Toastify__toast--success .Toastify__progress-bar {
-  background-color: #e0ffe1 !important;
+  background-color: components.$toast-success-color !important;
 }
 
 .Toastify__toast--success .Toastify__close-button {
-  color: #e0ffe1 !important;
+  color: components.$toast-success-color !important;
   opacity: 0.8;
 
   &:hover {
@@ -37,8 +39,8 @@
 
 // Error toasts - Red theme
 .Toastify__toast--error {
-  background-color: #c03b3b !important;
-  color: #ffe2e2 !important;
+  background-color: components.$toast-error-bg !important;
+  color: components.$toast-error-color !important;
 }
 
 .Toastify__toast--error .Toastify__progress-bar {
