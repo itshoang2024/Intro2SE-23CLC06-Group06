@@ -4,6 +4,7 @@
 // Component-specific tokens built on top of base design tokens
 // Import this after _DesignTokens.scss
 
+@use "sass:color";
 @use "DesignTokens" as tokens;
 
 // ====================================================================
@@ -30,7 +31,7 @@ $btn-secondary-hover-color: tokens.$color-text-inverse;
 // AI Button (Special)
 $btn-ai-bg: tokens.$color-accent-orange;
 $btn-ai-color: tokens.$color-text-inverse;
-$btn-ai-hover-bg: darken(tokens.$color-accent-orange, 10%);
+$btn-ai-hover-bg: color.adjust(tokens.$color-accent-orange, $lightness: -10%);
 $btn-ai-border-radius: tokens.$border-radius-base;
 
 // ====================================================================
@@ -47,7 +48,7 @@ $card-transition: tokens.$transition-base;
 
 // Word Card Specific
 $word-card-selected-border: 2px solid tokens.$color-brand-primary;
-$word-card-selected-bg: lighten(tokens.$color-bg-primary, 2%);
+$word-card-selected-bg: color.adjust(tokens.$color-bg-primary, $lightness: 2%);
 
 // Vocabulary List Card
 $vocab-card-bg: tokens.$color-bg-primary;
@@ -143,7 +144,7 @@ $toast-success-color: tokens.$color-success-bg;
 
 // Toast Error
 $toast-error-bg: tokens.$color-error-primary;
-$toast-error-color: lighten(tokens.$color-error-bg, 10%);
+$toast-error-color: color.adjust(tokens.$color-error-bg, $lightness: 10%);
 
 // Toast Warning
 $toast-warning-bg: tokens.$color-warning-primary;
