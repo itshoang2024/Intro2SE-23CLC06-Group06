@@ -3,6 +3,512 @@
 @import url("https://fonts.googleapis.com/css2?family=Lalezar&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-200deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0);
+  }
+}
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pageExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes modalSlideOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.8);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes flash {
+  0%, 50%, 100% {
+    opacity: 1;
+  }
+  25%, 75% {
+    opacity: 0;
+  }
+}
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.3);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.3);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+@keyframes rubber {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+@keyframes jello {
+  from, 11.1%, to {
+    transform: translate3d(0, 0, 0);
+  }
+  22.2% {
+    transform: skewX(-12.5deg) skewY(-12.5deg);
+  }
+  33.3% {
+    transform: skewX(6.25deg) skewY(6.25deg);
+  }
+  44.4% {
+    transform: skewX(-3.125deg) skewY(-3.125deg);
+  }
+  55.5% {
+    transform: skewX(1.5625deg) skewY(1.5625deg);
+  }
+  66.6% {
+    transform: skewX(-0.78125deg) skewY(-0.78125deg);
+  }
+  77.7% {
+    transform: skewX(0.390625deg) skewY(0.390625deg);
+  }
+  88.8% {
+    transform: skewX(-0.1953125deg) skewY(-0.1953125deg);
+  }
+}
+@keyframes wobble {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  15% {
+    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+  }
+  30% {
+    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+  }
+  45% {
+    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+  }
+  60% {
+    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+  }
+  75% {
+    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.animate-fade-in {
+  animation: fadeIn 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-slide-up {
+  animation: slideInUp 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-slide-down {
+  animation: slideInDown 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-slide-right {
+  animation: slideInRight 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+}
+
+.animate-rotate-in {
+  animation: rotateIn 300ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.hover-lift {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-scale {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.card-hover {
+  transition: transform, box-shadow 300ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-press {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform;
+}
+.btn-press:active {
+  transform: scale(0.98);
+}
+
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn-ripple:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width 0.6s, height 0.6s;
+  transform: translate(-50%, -50%);
+}
+.btn-ripple:active:before {
+  width: 300px;
+  height: 300px;
+}
+
+.transition-fast {
+  transition: all 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: all;
+}
+
+.transition-normal {
+  transition: all 300ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: all;
+}
+
+.transition-slow {
+  transition: all 500ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: all;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+.delay-400 {
+  animation-delay: 400ms;
+}
+
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+  animation: skeleton 1.2s ease-in-out infinite;
+}
+
+.loading-spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+.page-enter {
+  animation: pageEnter 500ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+.page-exit {
+  animation: pageExit 150ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.stagger-children > * {
+  animation-delay: calc(var(--stagger-delay, 0) * 0.1s);
+}
+
+.stagger-fast > * {
+  animation-delay: calc(var(--stagger-delay, 0) * 0.05s);
+}
+
+.stagger-slow > * {
+  animation-delay: calc(var(--stagger-delay, 0) * 0.2s);
+}
+
+.animate-flash {
+  animation: flash 1s infinite;
+}
+
+.animate-heartbeat {
+  animation: heartBeat 1.3s infinite;
+}
+
+.animate-rubber {
+  animation: rubber 1s;
+}
+
+.animate-jello {
+  animation: jello 1s;
+}
+
+.animate-wobble {
+  animation: wobble 1s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 .account-page-label {
   font-weight: bold;
   display: flex;
@@ -743,13 +1249,14 @@ body {
   justify-content: center;
   align-items: center;
   gap: 5%;
+  width: 100%;
   text-decoration: none;
   color: #352d24;
   font-family: "Lalezar", sans-serif;
   border: 2px solid #a0a0a0;
   border-radius: 40px;
   padding: 10px;
-  margin: 10px 0;
+  margin: 40px 0;
 }
 .login-container {
   position: relative;
@@ -790,6 +1297,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 2.5rem;
 }
 .login-back-button-container .login-back-button {
   display: flex;
@@ -3371,6 +3879,7 @@ h2 {
   display: grid;
   grid-template-columns: 60% 40%;
   align-items: center;
+  width: 100%;
   text-decoration: none;
   color: #2a1e17;
   background: none;
@@ -3378,6 +3887,8 @@ h2 {
   box-shadow: none;
   text-align: start;
   font: inherit;
+  padding: 0;
+  margin: 0.2rem;
 }
 .dropdown__item .drop-down-menu-pattern1 {
   grid-column-start: 2/3;
@@ -3645,6 +4156,11 @@ h2 {
   align-items: center;
   cursor: pointer;
   padding: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.sidebar .sidebar__toggle:hover {
+  background-color: #f8a2c0;
+  border-color: #1a1515;
 }
 .sidebar .sidebar__toggle img {
   width: 16px;
@@ -4225,8 +4741,14 @@ h2 {
 .vocab-card .vocab-result {
   font-family: "Inter", sans-serif;
   font-size: 12px;
-  color: #2932b1;
+  color: #535de3;
   font-weight: bold;
+}
+.vocab-card .vocab-result.completed {
+  color: #26C917;
+}
+.vocab-card .vocab-result.late {
+  color: #DF0101;
 }
 .vocab-card .vocab-next-review {
   font-family: "Inter", sans-serif;
@@ -7712,6 +8234,64 @@ h2 {
 body {
   background: #fffcf7;
   margin: 0 0;
+}
+
+button:not(.no-animation) {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform;
+  transition: all 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: all;
+}
+button:not(.no-animation):active {
+  transform: scale(0.98);
+}
+button:not(.no-animation):hover {
+  transform: translateY(-1px);
+}
+
+.card, .classroom-card, .vocab-card {
+  transition: transform, box-shadow 300ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
+.card:hover, .classroom-card:hover, .vocab-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+input:not(.no-animation), textarea:not(.no-animation) {
+  transition: border-color, box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: border-color, box-shadow;
+}
+input:not(.no-animation):focus, textarea:not(.no-animation):focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.nav-item, .dropdown__item, .sidebar-item {
+  position: relative;
+  transition: color 150ms cubic-bezier(0, 0, 0.2, 1);
+  will-change: color;
+}
+.nav-item:before, .dropdown__item:before, .sidebar-item:before {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: width;
+}
+.nav-item:hover:before, .dropdown__item:hover:before, .sidebar-item:hover:before {
+  width: 100%;
+}
+
+.loading {
+  animation: pulse 2s infinite;
+}
+
+.vocabulary-list > *, .classroom-list > *, .user-list > *, .menu-list > * {
+  animation-delay: calc(var(--stagger-delay, 0) * 0.1s);
 }
 
 /*# sourceMappingURL=index.css.map */

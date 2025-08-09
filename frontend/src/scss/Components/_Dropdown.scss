@@ -79,6 +79,7 @@
     display: grid;
     grid-template-columns: 60% 40%;
     align-items: center;
+    width: 100%;
 
     text-decoration: none;
     color: #2a1e17;
@@ -93,6 +94,8 @@
     box-shadow: none;
     text-align: start;
     font: inherit;
+    padding: 0;
+    margin: 0.2rem;
   }
 }
 

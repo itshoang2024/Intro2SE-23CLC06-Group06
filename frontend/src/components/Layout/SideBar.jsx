@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       ref={sidebarRef}
       className={`sidebar ${isOpen ? "open" : "collapsed"}`}
     >
-      <button className="sidebar__toggle" onClick={() => setIsOpen(!isOpen)}>
+      <button className="sidebar__toggle no-animation" onClick={() => setIsOpen(!isOpen)}>
         <img src={isOpen ? ArrowLeft : ArrowRight} alt="toggle" />
       </button>
 

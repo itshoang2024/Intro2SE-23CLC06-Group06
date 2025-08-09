@@ -13,6 +13,17 @@ import {
   clearAuthErrors,
   handleLoginError,
 } from "../../utils/authErrorHandler";
+import { 
+  PageWrapper, 
+  FadeInUp, 
+  SlideInLeft, 
+  SlideInRight,
+  StaggerContainer,
+  StaggerItem,
+  InteractiveButton,
+  HoverScale,
+  Shake
+} from "../../components/UI/Animations.jsx";
 
 export default function Signin() {
   // Xử lý việc navigate trang
@@ -115,74 +126,99 @@ export default function Signin() {
   };
 
   return (
-    <div className="grid-container">
-      {/* Xử lý cursor */}
-      <LoadingCursor loading={isLoading} />
-      <div className="left-grid">
-        <Link to="/" className="login-logo">
-          <img src={MainPageLogo} alt="logo-page" />
-        </Link>
+    <PageWrapper>
+      <div className="grid-container">
+        {/* Xử lý cursor */}
+        <LoadingCursor loading={isLoading} />
+        
+        <SlideInLeft>
+          <div className="left-grid">
+            <FadeInUp>
+              <Link to="/" className="login-logo">
+                <HoverScale>
+                  <img src={MainPageLogo} alt="logo-page" />
+                </HoverScale>
+              </Link>
+            </FadeInUp>
 
-        <div className="login-container">
-          <div className="login-signup-container">
-            <Link to="" className="login-login-button">
-              Sign in
-            </Link>
-            <Link to="/signup" className="login-signup-button">
-              Sign up
-            </Link>
+            <FadeInUp delay={0.2}>
+              <div className="login-container">
+                <StaggerContainer>
+                  <StaggerItem>
+                    <div className="login-signup-container">
+                      <Link to="" className="login-login-button">
+                        Sign in
+                      </Link>
+                      <Link to="/signup" className="login-signup-button">
+                        Sign up
+                      </Link>
+                    </div>
+                  </StaggerItem>
+
+                  <StaggerItem>
+                    <InteractiveButton onClick={handleGoogleLogin} className="login-google">
+                      <img src={GoogleLogo} alt="google-logo" />
+                      Sign in with Google account
+                    </InteractiveButton>
+                  </StaggerItem>
+
+                  <StaggerItem>
+                    <Shake trigger={!!errors.login}>
+                      <form className="login-form" onSubmit={handleLogin}>
+                        <AccountPageInput
+                          label="Email:"
+                          name="email"
+                          type="text"
+                          placeholder="Enter your email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+
+                        <AccountPageInput
+                          label="Password:"
+                          name="password"
+                          type="password"
+                          placeholder="Enter password"
+                          required
+                          error={errors.login}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <div className="login-forgot-password">
+                          <Link to="/forgot-password">Forgot password?</Link>
+                        </div>
+
+                        <AccountPageInput
+                          type="submit"
+                          value={isLoading ? "Signing in..." : "Sign in"}
+                          disabled={isLoading}
+                        />
+                      </form>
+                    </Shake>
+                  </StaggerItem>
+
+                  <StaggerItem>
+                    {/* Back button  */}
+                    <div className="login-back-button-container">
+                      <Link to="/" className="login-back-button">
+                        Back
+                      </Link>
+                    </div>
+                  </StaggerItem>
+                </StaggerContainer>
+              </div>
+            </FadeInUp>
           </div>
+        </SlideInLeft>
 
-          <Link onClick={handleGoogleLogin} className="login-google">
-            <img src={GoogleLogo} alt="google-logo" />
-            Sign in with Google account
-          </Link>
-
-          <form className="login-form" onSubmit={handleLogin}>
-            <AccountPageInput
-              label="Email:"
-              name="email"
-              type="text"
-              placeholder="Enter your email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-
-            <AccountPageInput
-              label="Password:"
-              name="password"
-              type="password"
-              placeholder="Enter password"
-              required
-              error={errors.login}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <div className="login-forgot-password">
-              <Link to="/forgot-password">Forgot password?</Link>
-            </div>
-
-            <AccountPageInput
-              type="submit"
-              value={isLoading ? "Signing in..." : "Sign in"}
-              disabled={isLoading}
-            />
-          </form>
-
-          {/* Back button  */}
-          <div className="login-back-button-container">
-            <Link to="/" className="login-back-button">
-              Back
-            </Link>
+        <SlideInRight delay={0.3}>
+          <div className="right-grid">
+            <img src={SignInSignUpBG} alt="sign-in-sign-up-background" />
           </div>
-        </div>
+        </SlideInRight>
       </div>
-
-      <div className="right-grid">
-        <img src={SignInSignUpBG} alt="sign-in-sign-up-background" />
-      </div>
-    </div>
+    </PageWrapper>
   );
 }

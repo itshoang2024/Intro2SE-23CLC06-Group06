@@ -1,4 +1,5 @@
 @use "Fonts" as *;
+@use "Animations" as *;
 @use "./Admin";
 @use "./Auth";
 @use "./Classroom";
@@ -16,4 +17,39 @@
 body {
   background: #fffcf7;
   margin: 0 0;
+}
+
+// Apply animations to common elements
+button:not(.no-animation) {
+  @include button-press;
+  @include smooth-transition(all, $duration-fast);
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+// Card-like elements
+.card, .classroom-card, .vocab-card {
+  @include card-hover;
+}
+
+// Input focus animations
+input:not(.no-animation), textarea:not(.no-animation) {
+  @include input-focus;
+}
+
+// Navigation items
+.nav-item, .dropdown__item, .sidebar-item {
+  @include nav-item-hover;
+}
+
+// Loading states
+.loading {
+  @include pulse-animation;
+}
+
+// Apply stagger to common list containers
+.vocabulary-list, .classroom-list, .user-list, .menu-list {
+  @include stagger-children;
 }

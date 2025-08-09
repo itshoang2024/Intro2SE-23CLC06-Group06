@@ -19,6 +19,14 @@ import {
   validateDisplayName,
   validateProfile,
 } from "../../utils/validation";
+import { 
+  PageWrapper, 
+  FadeInUp, 
+  StaggerContainer, 
+  StaggerItem,
+  AnimatedCard,
+  InteractiveButton
+} from "../../components/UI/Animations.jsx";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -121,150 +129,182 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile">
-      <Header />
-      <div className="profile__container">
-        <div className="profile__sidebar">
-          <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+    // <PageWrapper>
+      <div className="profile">
+        <Header />
+        <div className="profile__container">
+          <div className="profile__sidebar">
+            <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+          </div>
+
+          {/* <AnimatedCard> */}
+            <form className="profile__content" onSubmit={handleSave}>
+              <LoadingCursor loading={isLoading} />
+
+              <FadeInUp>
+                <h2>My Profile</h2>
+              </FadeInUp>
+
+              {/* <StaggerContainer> */}
+                <StaggerItem>
+                  <ProfileAvatar
+                    avatarUrl={formData.avatarPreview || userProfile?.avatar_url}
+                    displayName={formData.displayName}
+                    email={formData.email}
+                    isEditing={isEditing}
+                    onAvatarChange={handleAvatarChange}
+                    errors={validationErrors.avatar}
+                  />
+                </StaggerItem>
+
+                <StaggerItem>
+                  <ProfileInput
+                    label="Display name"
+                    name="displayName"
+                    type="text"
+                    value={formData.displayName}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    placeholder="Your display name"
+                    errors={validationErrors.displayName}
+                  />
+                </StaggerItem>
+
+                {userProfile?.phone_number && (
+                  <StaggerItem>
+                    <ProfileInput
+                      label="Phone number"
+                      name="phone"
+                      type="tel"
+                      value={userProfile.phone_number}
+                      disabled={true}
+                      className="readonly"
+                    />
+                  </StaggerItem>
+                )}
+
+                <StaggerItem>
+                  <ProfileInput
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    disabled={true}
+                    className="readonly"
+                  />
+                </StaggerItem>
+
+                <StaggerItem>
+                  <ProfileInput
+                    label="Password"
+                    name="password"
+                    type="password"
+                    value="Jane Smith"
+                    disabled={true}
+                    className="readonly"
+                  />
+                </StaggerItem>
+
+                <StaggerItem>
+                  <ProfileInput
+                    label="Daily learning goals"
+                    name="dailyGoal"
+                    type="number"
+                    min={1}
+                    max={1000}
+                    value={formData.dailyGoal}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    placeholder="10"
+                    errors={validationErrors.dailyGoal}
+                  />
+                </StaggerItem>
+
+                <StaggerItem>
+                  <TeacherVerification
+                    userProfile={userProfile}
+                    onVerificationClick={() =>
+                      (window.location.href = "/teacher-verification")
+                    }
+                  />
+                </StaggerItem>
+
+                {userProfile?.teacherVerification?.status === "approved" &&
+                  userProfile?.teacherVerification?.institution && (
+                    <StaggerItem>
+                      <ProfileInput
+                        label="School"
+                        name="school"
+                        type="text"
+                        value={userProfile.teacherVerification.institution}
+                        disabled={true}
+                        className="readonly"
+                      />
+                    </StaggerItem>
+                  )}
+
+                {userProfile?.teacherVerification?.status === "approved" &&
+                  userProfile?.school_email && (
+                    <StaggerItem>
+                      <ProfileInput
+                        label="School Email"
+                        name="schoolEmail"
+                        type="email"
+                        value={userProfile.school_email}
+                        disabled={true}
+                        className="readonly"
+                      />
+                    </StaggerItem>
+                  )}
+
+                {/* Action Buttons */}
+                <StaggerItem>
+                  {!isEditing ? (
+                    <InteractiveButton
+                      type="button"
+                      className="edit-btn"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      Edit Profile
+                    </InteractiveButton>
+                  ) : (
+                    <div className="button-group">
+                      <InteractiveButton
+                        type="button"
+                        className="cancel-btn"
+                        onClick={() => {
+                          setIsEditing(false);
+                          // Clean up preview URL if it exists
+                          if (formData.avatarPreview) {
+                            URL.revokeObjectURL(formData.avatarPreview);
+                          }
+                          setFormData({
+                            ...formData,
+                            avatarFile: null,
+                            avatarPreview: null,
+                          });
+                          setValidationErrors({}); // Clear validation errors
+                        }}
+                      >
+                        Cancel
+                      </InteractiveButton>
+                      <InteractiveButton 
+                        type="submit" 
+                        className="save-btn" 
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Saving..." : "Save Changes"}
+                      </InteractiveButton>
+                    </div>
+                  )}
+                </StaggerItem>
+              {/* </StaggerContainer> */}
+            </form>
+          {/* </AnimatedCard> */}
         </div>
-
-        <form className="profile__content" onSubmit={handleSave}>
-          <LoadingCursor loading={isLoading} />
-
-          <h2>My Profile</h2>
-
-          <ProfileAvatar
-            avatarUrl={formData.avatarPreview || userProfile?.avatar_url}
-            displayName={formData.displayName}
-            email={formData.email}
-            isEditing={isEditing}
-            onAvatarChange={handleAvatarChange}
-            errors={validationErrors.avatar}
-          />
-
-          <ProfileInput
-            label="Display name"
-            name="displayName"
-            type="text"
-            value={formData.displayName}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            placeholder="Your display name"
-            errors={validationErrors.displayName}
-          />
-
-          {userProfile?.phone_number && (
-            <ProfileInput
-              label="Phone number"
-              name="phone"
-              type="tel"
-              value={userProfile.phone_number}
-              disabled={true}
-              className="readonly"
-            />
-          )}
-
-          <ProfileInput
-            label="Email"
-            name="email"
-            type="email"
-            value={formData.email}
-            disabled={true}
-            className="readonly"
-          />
-
-          <ProfileInput
-            label="Password"
-            name="password"
-            type="password"
-            value="Jane Smith"
-            disabled={true}
-            className="readonly"
-          />
-
-          <ProfileInput
-            label="Daily learning goals"
-            name="dailyGoal"
-            type="number"
-            min={1}
-            max={1000}
-            value={formData.dailyGoal}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            placeholder="10"
-            errors={validationErrors.dailyGoal}
-          />
-
-          <TeacherVerification
-            userProfile={userProfile}
-            onVerificationClick={() =>
-              (window.location.href = "/teacher-verification")
-            }
-          />
-
-          {userProfile?.teacherVerification?.status === "approved" &&
-            userProfile?.teacherVerification?.institution && (
-              <ProfileInput
-                label="School"
-                name="school"
-                type="text"
-                value={userProfile.teacherVerification.institution}
-                disabled={true}
-                className="readonly"
-              />
-            )}
-
-          {userProfile?.teacherVerification?.status === "approved" &&
-            userProfile?.school_email && (
-              <ProfileInput
-                label="School Email"
-                name="schoolEmail"
-                type="email"
-                value={userProfile.school_email}
-                disabled={true}
-                className="readonly"
-              />
-            )}
-
-          {/* Action Buttons */}
-          {!isEditing ? (
-            <button
-              type="button"
-              className="edit-btn"
-              onClick={() => setIsEditing(true)}
-            >
-              Edit Profile
-            </button>
-          ) : (
-            <div className="button-group">
-              <button
-                type="button"
-                className="cancel-btn"
-                onClick={() => {
-                  setIsEditing(false);
-                  // Clean up preview URL if it exists
-                  if (formData.avatarPreview) {
-                    URL.revokeObjectURL(formData.avatarPreview);
-                  }
-                  setFormData({
-                    ...formData,
-                    avatarFile: null,
-                    avatarPreview: null,
-                  });
-                  setValidationErrors({}); // Clear validation errors
-                }}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="save-btn" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          )}
-        </form>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    // </PageWrapper>
   );
 };
 

@@ -21,6 +21,9 @@ export { default as ConfirmModal } from "./UI/ConfirmModal.jsx";
 export { default as LoadingCursor } from "./UI/LoadingCursor.jsx";
 export * from "./UI/Skeleton";
 export { default as Pagination } from "./UI/Pagination.jsx";
+// Animation and Interactive Components
+export * from "./UI/Animations.jsx";
+export * from "./UI/LoadingAndProgress.jsx";
 
 // Providers
 export { ConfirmProvider } from "./Providers/ConfirmProvider.jsx";

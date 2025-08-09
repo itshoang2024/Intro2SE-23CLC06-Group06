@@ -38,7 +38,12 @@ export default function VocabularyListCard({
               ? `Completion date: ${completionDate}`
               : ""}
           </span>
-          <span className="vocab-result">
+          <span 
+            className={`vocab-result ${
+              result?.toLowerCase().includes('completed') ? 'completed' :
+              result?.toLowerCase().includes('late') ? 'late' : ''
+            }`}
+          >
             {result !== "0%" ? `Result: ${result}` : ""}
           </span>
         </>

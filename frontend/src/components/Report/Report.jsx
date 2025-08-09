@@ -2,9 +2,17 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import { useToast } from "../Providers/ToastProvider.jsx";
 import { useModal } from "../../hooks/useModal.js";
+import { 
+  AnimatedModal, 
+  AnimatedBackdrop, 
+  FadeInUp,
+  InteractiveButton,
+  Shake 
+} from "../UI/Animations.jsx";
 
 const Report = ({ onClose, onSubmit }) => {
   const [description, setDescription] = useState("");
+  const [shake, setShake] = useState(false);
   const toast = useToast();
   const {
     getModalProps,
@@ -18,6 +26,8 @@ const Report = ({ onClose, onSubmit }) => {
     if (description.trim()) {
       if (description.length < 5) {
         toast("Description must be at least 5 characters long.", "warning");
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
         return;
       }
 
@@ -31,12 +41,15 @@ const Report = ({ onClose, onSubmit }) => {
       }
     } else {
       toast("Please enter a description before submitting.", "warning");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
     }
   };
 
   return (
     <Modal {...getModalProps()}>
-      <div
+      <AnimatedBackdrop 
+        isOpen={true}
         {...getOverlayProps()}
         style={{
           width: "100%",
@@ -45,38 +58,51 @@ const Report = ({ onClose, onSubmit }) => {
           justifyContent: "center",
         }}
       >
-        <div
+        <AnimatedModal
+          isOpen={true}
           {...getContentProps()}
           className={`${getContentProps().className} report-modal-content`}
         >
-          <button className="close-button" onClick={handleClose}>
-            ×
-          </button>
+          <FadeInUp delay={0.1}>
+            <InteractiveButton className="close-button" onClick={handleClose}>
+              ×
+            </InteractiveButton>
+          </FadeInUp>
 
-          <h2 className="report-title">REPORT</h2>
+          <FadeInUp delay={0.2}>
+            <h2 className="report-title">REPORT</h2>
+          </FadeInUp>
 
-          <p className="report-instruction">
-            Please provide more detail about the issues
-          </p>
+          <FadeInUp delay={0.3}>
+            <p className="report-instruction">
+              Please provide more detail about the issues
+            </p>
+          </FadeInUp>
 
-          <textarea
-            className="report-textarea"
-            placeholder="Enter the description..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            autoFocus
-            onKeyDown={(e) => {
-              if (e.key === "Escape") {
-                handleClose();
-              }
-            }}
-          />
+          <FadeInUp delay={0.4}>
+            <Shake trigger={shake}>
+              <textarea
+                className="report-textarea"
+                placeholder="Enter the description..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    handleClose();
+                  }
+                }}
+              />
+            </Shake>
+          </FadeInUp>
 
-          <button className="submit-button" onClick={handleSubmit}>
-            Submit
-          </button>
-        </div>
-      </div>
+          <FadeInUp delay={0.5}>
+            <InteractiveButton className="submit-button" onClick={handleSubmit}>
+              Submit
+            </InteractiveButton>
+          </FadeInUp>
+        </AnimatedModal>
+      </AnimatedBackdrop>
     </Modal>
   );
 };

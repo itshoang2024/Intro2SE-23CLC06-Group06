@@ -54,8 +54,16 @@
   .vocab-result {
     font-family: $font-inter;
     font-size: 12px;
-    color: #2932b1;
+    color: #535de3;
     font-weight: bold;
+
+    &.completed {
+      color: #26C917;
+    }
+
+    &.late {
+      color: #DF0101;
+    }
   }
 
   .vocab-next-review {

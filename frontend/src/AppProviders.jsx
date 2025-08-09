@@ -11,7 +11,9 @@ export default function AppProviders({ children }) {
       <ErrorBoundary>
         <AuthProvider>
           <ConfirmProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </ConfirmProvider>
         </AuthProvider>
       </ErrorBoundary>
