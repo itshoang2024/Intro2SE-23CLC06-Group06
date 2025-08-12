@@ -82,6 +82,18 @@ vocabularyRouter.post(
   vocabularyController.generateExampleForNewWord
 );
 
+vocabularyRouter.post(
+  '/words/:wordId/generate-missing-fields',
+  ...vocabularyValidator.generateMissingFields,
+  vocabularyController.generateMissingFields
+);
+
+vocabularyRouter.post(
+  '/generate-missing-fields',
+  ...vocabularyValidator.generateMissingFieldsForNewWord,
+  vocabularyController.generateMissingFieldsForNewWord
+);
+
 // =================================================================
 //  TAGS & UPLOADS
 // =================================================================

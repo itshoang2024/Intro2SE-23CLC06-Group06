@@ -9,7 +9,7 @@ const WordsSection = ({
   onWordChange,
   onDeleteWord,
   onToggleWordSelection,
-  onGenerateExample,
+  onGenerateMissingFields,
   onDeleteSelectedWords,
   onAddWord,
 }) => {
@@ -36,12 +36,12 @@ const WordsSection = ({
             word={word}
             index={index}
             isSelected={selectedWordIds.has(index)}
-            isGeneratingExample={loadingAI.has(index)}
+            isGeneratingAI={loadingAI.has(index)}
             validationErrors={validationErrors}
             onWordChange={onWordChange}
             onDelete={onDeleteWord}
             onToggleSelect={onToggleWordSelection}
-            onGenerateExample={onGenerateExample}
+            onGenerateMissingFields={onGenerateMissingFields}
           />
         ))}
       </div>

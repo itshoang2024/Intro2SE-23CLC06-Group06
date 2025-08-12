@@ -5,12 +5,12 @@ const WordCard = ({
   word,
   index,
   isSelected,
-  isGeneratingExample,
+  isGeneratingAI,
   validationErrors,
   onWordChange,
   onDelete,
   onToggleSelect,
-  onGenerateExample,
+  onGenerateMissingFields,
   classPrefix = "create-list",
 }) => {
   const handleCardClick = (e) => {
@@ -148,10 +148,11 @@ const WordCard = ({
         <button
           type="button"
           className={`${classPrefix}__ai-btn`}
-          onClick={() => onGenerateExample(index)}
-          disabled={isGeneratingExample}
+          onClick={() => onGenerateMissingFields(index)}
+          disabled={isGeneratingAI}
+          title="Generate missing fields (phonetics, synonyms, translation, example)"
         >
-          {isGeneratingExample ? "Generating..." : "AI"}
+          {isGeneratingAI ? "Generating..." : "AI"}
         </button>
       </div>
     </div>

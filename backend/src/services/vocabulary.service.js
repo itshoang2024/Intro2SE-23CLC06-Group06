@@ -532,6 +532,144 @@ class VocabularyService {
     }
   }
 
+  async generateMissingFields(wordId, userId, currentData = {}, context = null) {
+    await this._verifyWordPermission(wordId, userId, 'write');
+
+    const { data: word, error } = await vocabularyModel.findById(wordId);
+    if (error || !word) throw new Error('Word not found');
+
+    if (!aiService.isAvailable()) {
+      throw new Error('AI service is temporarily unavailable');
+    }
+
+    try {
+      // Merge word data with current data - prioritize currentData even if empty
+      const mergedData = {
+        phonetics: currentData.hasOwnProperty('phonetics') ? currentData.phonetics : (word.phonetics || ''),
+        synonyms: currentData.hasOwnProperty('synonyms') ? currentData.synonyms : (word.synonyms || []),
+        translation: currentData.hasOwnProperty('translation') ? currentData.translation : (word.translation || ''),
+        exampleSentence: currentData.hasOwnProperty('exampleSentence') ? currentData.exampleSentence : (word.exampleSentence || ''),
+      };
+
+      console.log('🔄 Current data from frontend:', currentData);
+      console.log('🔄 Word data from database:', {
+        phonetics: word.phonetics,
+        synonyms: word.synonyms,
+        translation: word.translation,
+        exampleSentence: word.exampleSentence
+      });
+      console.log('🔄 Merged data being checked for missing fields:', mergedData);
+      
+      const generatedFields = await aiService.generateMissingFields(
+        word.term,
+        word.definition,
+        mergedData,
+        context
+      );
+
+      console.log('🤖 AI generated fields:', generatedFields);
+
+      const generationPrompt = `Generate missing fields for "${word.term}" (${word.definition})${context ? ` in context: ${context}` : ''}`;
+
+      // Separate update data for different tables
+      const vocabularyUpdateData = {
+        aiGenerated: true,
+        generationPrompt: generationPrompt,
+      };
+
+      // Add phonetics and translation to vocabulary table
+      if (generatedFields.phonetics) {
+        vocabularyUpdateData.phonetics = generatedFields.phonetics;
+      }
+      if (generatedFields.translation) {
+        vocabularyUpdateData.translation = generatedFields.translation;
+      }
+
+      console.log('📝 Data being sent to vocabulary table update:', vocabularyUpdateData);
+
+      // Update vocabulary table
+      try {
+        await vocabularyModel.updateWord(wordId, vocabularyUpdateData);
+        console.log('✅ Vocabulary table updated successfully');
+      } catch (error) {
+        console.error('❌ Error updating vocabulary table:', error);
+        throw error;
+      }
+
+      // Handle synonyms separately
+      if (generatedFields.synonyms && generatedFields.synonyms.length > 0) {
+        console.log('🔄 Updating synonyms:', generatedFields.synonyms);
+        try {
+          await vocabularyModel.clearSynonyms(wordId);
+          console.log('✅ Cleared existing synonyms');
+          for (const synonym of generatedFields.synonyms) {
+            await vocabularyModel.addSynonym(wordId, synonym);
+          }
+          console.log('✅ Added new synonyms successfully');
+        } catch (error) {
+          console.error('❌ Error updating synonyms:', error);
+          throw error;
+        }
+      }
+
+      // Handle example sentence separately
+      if (generatedFields.exampleSentence) {
+        console.log('🔄 Updating example sentence:', generatedFields.exampleSentence);
+        try {
+          await vocabularyModel.upsertExample(wordId, {
+            exampleSentence: generatedFields.exampleSentence,
+            aiGenerated: true,
+          });
+          console.log('✅ Example sentence updated successfully');
+        } catch (error) {
+          console.error('❌ Error updating example sentence:', error);
+          throw error;
+        }
+      }
+
+      const result = {
+        wordId,
+        term: word.term,
+        generatedFields,
+        aiGenerated: true,
+        generationPrompt: generationPrompt,
+      };
+
+      console.log('✅ Successfully completed field generation. Returning:', result);
+      return result;
+    } catch (error) {
+      logger.error(`Failed to generate missing fields for word ${wordId}:`, error);
+      throw new Error('Failed to generate missing fields. Please try again.');
+    }
+  }
+
+  async generateMissingFieldsForNewWord(term, definition, currentData = {}, context = null) {
+    if (!aiService.isAvailable()) {
+      throw new Error('AI service is temporarily unavailable');
+    }
+
+    try {
+      const generatedFields = await aiService.generateMissingFields(
+        term,
+        definition,
+        currentData,
+        context
+      );
+
+      const generationPrompt = `Generate missing fields for "${term}" (${definition})${context ? ` in context: ${context}` : ''}`;
+
+      return {
+        term: term,
+        generatedFields,
+        aiGenerated: true,
+        generationPrompt: generationPrompt,
+      };
+    } catch (error) {
+      logger.error(`Failed to generate missing fields for new word ${term}:`, error);
+      throw new Error('Failed to generate missing fields. Please try again.');
+    }
+  }
+
   // =================================================================
   //  SYNONYMS
   // =================================================================

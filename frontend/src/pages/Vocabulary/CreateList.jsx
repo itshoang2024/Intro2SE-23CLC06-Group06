@@ -40,7 +40,7 @@ export default function CreateList() {
     deleteSelectedWords,
     updateWord,
     toggleWordSelection,
-    generateExample,
+    generateMissingFields,
   } = wordManagementHook;
   const {
     title,
@@ -111,7 +111,7 @@ export default function CreateList() {
             onWordChange={handleWordChange}
             onDeleteWord={deleteWord}
             onToggleWordSelection={toggleWordSelection}
-            onGenerateExample={generateExample}
+            onGenerateMissingFields={generateMissingFields}
             onDeleteSelectedWords={deleteSelectedWords}
             onAddWord={addWord}
           />
