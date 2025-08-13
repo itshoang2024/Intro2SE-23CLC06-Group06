@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 
 const Profile = lazy(() => import("../pages/User/Profile"));
+const LearningStatistics = lazy(() => import("../pages/User/LearningStatistics"));
 
 const LoadingFallback = () => (
   <div
@@ -23,6 +24,9 @@ const withSuspense = (Component) => (
   </Suspense>
 );
 
-const userRoutes = [{ path: "profile", element: withSuspense(Profile) }];
+const userRoutes = [
+  { path: "profile", element: withSuspense(Profile) },
+  { path: "statistics", element: withSuspense(LearningStatistics) }
+];
 
 export default userRoutes;
