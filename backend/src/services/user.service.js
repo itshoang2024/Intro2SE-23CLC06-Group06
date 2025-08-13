@@ -126,29 +126,28 @@ class UserService {
       if (consistencyError) throw consistencyError;
 
       return {
-        summary: {
-          wordsLearned: summaryData?.total_vocabulary || 0,
-          currentStreak: summaryData?.current_streak || 0,
-          longestStreak: summaryData?.longest_streak || 0,
-
-          avgDailyStudyMinutes:
-            Math.round(
-              summaryData?.total_study_time / (summaryData?.total_study_days || 1)
-            ) || 0,
-
-          retentionRate:
-            summaryData?.total_reviews > 0
-              ? parseFloat(
-                  (
-                    (summaryData.correct_reviews / summaryData.total_reviews) *
-                    100
-                  ).toFixed(2)
-                )
+        summaryStats: {
+          data: {
+            total_words_learned: summaryData?.total_vocabulary || 0,
+            current_streak: summaryData?.current_streak || 0,
+            longest_streak: summaryData?.longest_streak || 0,
+            total_study_time_minutes: summaryData?.total_study_time || 0,
+            average_accuracy: summaryData?.total_reviews > 0 
+              ? summaryData.correct_reviews / summaryData.total_reviews 
               : 0,
+            vocabulary_lists_count: 0, // Will be populated from a separate query if needed
+            total_reviews_completed: summaryData?.total_reviews || 0
+          }
         },
-        progressOverTime: progressData || [],
-        completionRateByList: completionData || [],
-        studyConsistency: (consistencyData || []).map((d) => d.study_date), // Extract just the date string
+        progressOverTime: {
+          data: progressData || []
+        },
+        completionRates: {
+          data: completionData || []
+        },
+        studyConsistency: {
+          data: (consistencyData || []).map((d) => d.study_date)
+        }
       };
     } catch (error) {
       logger.error(

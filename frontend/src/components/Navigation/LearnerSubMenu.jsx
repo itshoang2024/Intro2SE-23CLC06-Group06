@@ -21,13 +21,10 @@ export default function LearnerSubMenu() {
       </NavLink>
 
       <NavLink
-        className={({ isActive }) => `submenu-tab ${isActive ? "" : "active"}`}
-        onClick={(e) => {
-          e.preventDefault();
-          toast("This feature is coming soon!", "success");
-        }}
+        to="/statistics"
+        className={({ isActive }) => `submenu-tab ${isActive ? "active" : ""}`}
       >
-        Statistic
+        Statistics
       </NavLink>
     </div>
   );

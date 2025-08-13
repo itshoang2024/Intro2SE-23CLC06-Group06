@@ -3165,6 +3165,392 @@ h2 {
     font-size: 13px;
   }
 }
+.statistics-page {
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.statistics__content {
+  display: flex;
+  min-height: calc(100vh - 120px);
+}
+
+.statistics__main {
+  flex: 1;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
+}
+
+.learning-statistics {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: transparent;
+}
+.learning-statistics .summary {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: "Lalezar", sans-serif;
+}
+@media (max-width: 968px) {
+  .learning-statistics .summary {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+@media (max-width: 600px) {
+  .learning-statistics .summary {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.learning-statistics .summary .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  min-width: 200px;
+  transition: transform 0.2s ease;
+}
+.learning-statistics .summary .card:hover {
+  transform: translateY(-2px);
+}
+.learning-statistics .summary .card h4 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: bold;
+}
+.learning-statistics .summary .card p {
+  margin: 0;
+  font-size: 16px;
+  text-transform: lowercase;
+  text-align: center;
+  line-height: 1.2;
+}
+.learning-statistics .summary .card.pink {
+  background-color: #fed1e0;
+  color: #cc6386;
+}
+.learning-statistics .summary .card.green {
+  background-color: #c4e4a4;
+  color: #147919;
+}
+.learning-statistics .summary .card.purple {
+  background-color: #e0b3ff;
+  color: #8f3fa3;
+}
+.learning-statistics .summary .card.blue {
+  background-color: #2c6fdf;
+  color: #f4f9ff;
+}
+.learning-statistics .progress-section {
+  background: white;
+  border-radius: 30px;
+  padding: 2rem;
+  border: 0.5px solid #e1e8ed;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+.learning-statistics .progress-section h4 {
+  font-family: "Inria Sans", sans-serif;
+  font-size: 20px;
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+.learning-statistics .progress-section .chart-wrapper {
+  height: 300px;
+  position: relative;
+}
+.learning-statistics .progress-section .chart-wrapper .empty-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #95a5a6;
+  font-size: 1rem;
+  font-family: "Inria Sans", sans-serif;
+}
+.learning-statistics .bottom-section {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+@media (max-width: 968px) {
+  .learning-statistics .bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+.learning-statistics .bottom-section .completion-section {
+  background: white;
+  border-radius: 30px;
+  padding: 2rem;
+  border: 0.5px solid #e1e8ed;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.learning-statistics .bottom-section .completion-section h4 {
+  font-family: "Inria Sans", sans-serif;
+  font-size: 20px;
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+.learning-statistics .bottom-section .completion-section .chart-wrapper {
+  height: 300px;
+  position: relative;
+}
+.learning-statistics .bottom-section .completion-section .chart-wrapper .empty-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #95a5a6;
+  font-size: 1rem;
+  font-family: "Inria Sans", sans-serif;
+}
+.learning-statistics .consistency-section {
+  background: white;
+  border-radius: 30px;
+  padding: 2rem;
+  border: 0.5px solid #e1e8ed;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.learning-statistics .consistency-section h4 {
+  font-family: "Inria Sans", sans-serif;
+  font-size: 20px;
+  color: #2c3e50;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-header {
+  margin-bottom: 1rem;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-header .days-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  max-width: 100%;
+  margin-left: 0;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-header .days-header .day-label {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 500;
+  width: 18px;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 100%;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day {
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.empty {
+  background: transparent;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.no-study {
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.no-study:hover {
+  background-color: #fffae6;
+  transform: scale(1.1);
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.has-study {
+  background-color: #ffd700;
+  border: 1px solid #ccac00;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.has-study:hover {
+  transform: scale(1.1);
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.has-study .day-indicator {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.has-study .day-indicator .study-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-low {
+  background-color: #fff8dc !important;
+  border-color: #e6d700 !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-low:hover {
+  background-color: #fff3cd !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-medium {
+  background-color: #ffd700 !important;
+  border-color: #ccac00 !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-medium:hover {
+  background-color: #ffcc00 !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-high {
+  background-color: #ffcc00 !important;
+  border-color: #b8860b !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-high:hover {
+  background-color: #ffb300 !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-very-high {
+  background-color: #daa520 !important;
+  border-color: #9d7518 !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-grid .calendar-week .calendar-day.intensity-very-high:hover {
+  background-color: #cd853f !important;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.5rem;
+  font-size: 12px;
+  color: #666;
+  font-family: "Inria Sans", sans-serif;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend span {
+  font-size: 11px;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors {
+  display: flex;
+  gap: 3px;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors .legend-item {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid #ddd;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors .legend-item.no-study {
+  background-color: #f5f5f5;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors .legend-item.intensity-low {
+  background-color: #fff8dc;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors .legend-item.intensity-medium {
+  background-color: #ffd700;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors .legend-item.intensity-high {
+  background-color: #ffcc00;
+}
+.learning-statistics .consistency-section .calendar-heatmap .calendar-legend .legend-colors .legend-item.intensity-very-high {
+  background-color: #daa520;
+}
+.learning-statistics .error-state,
+.learning-statistics .empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 30px;
+  border: 0.5px solid #e1e8ed;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.learning-statistics .error-state h3,
+.learning-statistics .empty-state h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-family: "Lalezar", sans-serif;
+}
+.learning-statistics .error-state p,
+.learning-statistics .empty-state p {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  font-family: "Inria Sans", sans-serif;
+}
+.learning-statistics .error-state .retry-btn,
+.learning-statistics .empty-state .retry-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: "Inria Sans", sans-serif;
+}
+.learning-statistics .error-state .retry-btn:hover,
+.learning-statistics .empty-state .retry-btn:hover {
+  background: #2980b9;
+}
+@media (max-width: 768px) {
+  .learning-statistics {
+    padding: 1rem;
+  }
+  .learning-statistics .progress-section {
+    padding: 1.5rem;
+  }
+  .learning-statistics .bottom-section {
+    gap: 1rem;
+  }
+  .learning-statistics .bottom-section .completion-section {
+    padding: 1.5rem;
+  }
+  .learning-statistics .consistency-section {
+    padding: 1.5rem;
+  }
+  .learning-statistics .consistency-section .calendar-heatmap .calendar-header .days-header,
+  .learning-statistics .consistency-section .calendar-heatmap .calendar-grid {
+    max-width: 280px;
+  }
+  .learning-statistics .summary .card {
+    padding: 40px 30px;
+    min-width: 180px;
+  }
+}
+@media (max-width: 600px) {
+  .learning-statistics .summary {
+    gap: 0.8rem;
+  }
+  .learning-statistics .summary .card {
+    padding: 30px 25px;
+    min-width: 150px;
+  }
+  .learning-statistics .summary .card h4 {
+    font-size: 24px;
+  }
+  .learning-statistics .summary .card p {
+    font-size: 14px;
+  }
+  .learning-statistics .progress-section .chart-wrapper {
+    height: 250px;
+  }
+  .learning-statistics .bottom-section .completion-section .chart-wrapper {
+    height: 250px;
+  }
+}
+.learning-statistics .react-loading-skeleton {
+  border-radius: 8px;
+}
+
 .create-list {
   display: flex;
   flex-direction: column;
@@ -5968,23 +6354,26 @@ h2 {
 }
 
 .my-classroom {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100vh;
+  background: #f8f9fa;
+  min-height: 100vh;
 }
 
-.my-classroom-container {
-  margin: 2em 0;
+.my-classroom__content {
   display: flex;
-  font-family: "Inter", sans-serif;
-  font-weight: bold;
-  color: #352d24;
+  min-height: calc(100vh - 120px);
+}
+
+.my-classroom__main {
+  flex: 1;
+  padding: 2rem;
+  transition: margin-left 0.3s ease;
 }
 
 .my-classroom-page {
   font-family: "Inria Sans", sans-serif;
-  width: 80%;
-  margin: auto;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: transparent;
 }
 .my-classroom-page h1 {
   font-family: "Lalezar", sans-serif;

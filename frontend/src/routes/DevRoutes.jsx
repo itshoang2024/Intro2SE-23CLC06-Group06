@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 
 const SkeletonDemo = lazy(() => import("../pages/Dev/SkeletonDemo"));
+const DesignTokenDemo = lazy(() => import("../pages/Dev/DesignToken"));
 
 const LoadingFallback = () => (
   <div
@@ -25,6 +26,7 @@ const withSuspense = (Component) => (
 
 const devRoutes = [
   { path: "/dev/skeleton", element: withSuspense(SkeletonDemo) },
+  { path: "/dev/design-token", element: withSuspense(DesignTokenDemo) }
 ];
 
 export default devRoutes;
