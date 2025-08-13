@@ -216,6 +216,51 @@ const vocabularyValidator = {
       .withMessage('Context must be between 2 and 500 characters.'),
     handleValidationErrors,
   ],
+
+  generateMissingFields: [
+    param('wordId')
+      .isUUID()
+      .withMessage('URL parameter wordId must be a valid UUID.'),
+    body('currentData')
+      .optional()
+      .isObject()
+      .withMessage('Current data must be an object.'),
+    body('context')
+      .optional()
+      .trim()
+      .escape()
+      .isLength({ min: 2, max: 500 })
+      .withMessage('Context must be between 2 and 500 characters.'),
+    handleValidationErrors,
+  ],
+
+  generateMissingFieldsForNewWord: [
+    body('term')
+      .notEmpty()
+      .trim()
+      .escape()
+      .isLength({ min: 1, max: 200 })
+      .withMessage('Term is required and must be between 1 and 200 characters.'),
+    body('definition')
+      .notEmpty()
+      .trim()
+      .escape()
+      .isLength({ min: 1, max: 1000 })
+      .withMessage(
+        'Definition is required and must be between 1 and 1000 characters.'
+      ),
+    body('currentData')
+      .optional()
+      .isObject()
+      .withMessage('Current data must be an object.'),
+    body('context')
+      .optional()
+      .trim()
+      .escape()
+      .isLength({ min: 2, max: 500 })
+      .withMessage('Context must be between 2 and 500 characters.'),
+    handleValidationErrors,
+  ],
 };
 
 module.exports = vocabularyValidator;

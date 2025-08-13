@@ -112,7 +112,26 @@ const vocabularyService = {
     });
     return res.data;
   },
-  // 15. Get Recently Viewed Lists
+
+  // 15. Generate missing fields for words
+  generateMissingFields: async (wordId, data) => {
+    if (wordId) {
+      const res = await api.post(
+        `/vocabulary/words/${wordId}/generate-missing-fields`,
+        data
+      );
+      return res.data;
+    }
+
+    const res = await api.post(`/vocabulary/generate-missing-fields`, {
+      term: data.term,
+      definition: data.definition,
+      currentData: data.currentData,
+      context: data.context,
+    });
+    return res.data;
+  },
+  // 16. Get Recently Viewed Lists
   getHistoryLists: async (params = {}) => {
     try {
       const response = await api.get("/vocabulary/lists/history", { params });
@@ -130,7 +149,7 @@ const vocabularyService = {
     }
   },
 
-  // 16. Get Popular Lists
+  // 17. Get Popular Lists
   getPopularLists: async (params = {}) => {
     try {
       const response = await api.get("/vocabulary/lists/popular", { params });
@@ -148,7 +167,7 @@ const vocabularyService = {
     }
   },
 
-  // 17. Get Lists with Due Words (cho tab "Today")
+  // 18. Get Lists with Due Words (cho tab "Today")
   getDueLists: async (params = {}) => {
     try {
       const response = await api.get("/review/lists/due", { params });
@@ -166,7 +185,7 @@ const vocabularyService = {
     }
   },
 
-  // 18. Get Upcoming Review Lists (cho tab "Upcoming")
+  // 19. Get Upcoming Review Lists (cho tab "Upcoming")
   getUpcomingLists: async (params = {}) => {
     try {
       const response = await api.get("/review/lists/upcoming", { params });

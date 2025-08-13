@@ -559,6 +559,69 @@ class VocabularyController {
       );
     }
   }
+
+  async generateMissingFields(req, res) {
+    try {
+      const { wordId } = req.params;
+      const userId = req.user.userId;
+      const { currentData, context } = req.body;
+
+      const result = await vocabularyService.generateMissingFields(
+        wordId,
+        userId,
+        currentData,
+        context
+      );
+
+      // console.log('🎯 Controller received result from service:', result);
+
+      const response = ResponseUtils.success(res, 'Missing fields generated successfully.', {
+        result: result,
+      });
+
+      // console.log('📤 Controller sending response to frontend');
+      return response;
+    } catch (error) {
+      if (error.isForbidden) {
+        return ResponseUtils.forbidden(
+          res,
+          'Forbidden: You do not have permission to perform this action.'
+        );
+      }
+      return ErrorHandler.handleError(
+        res,
+        error,
+        'generateMissingFields',
+        'Internal server error',
+        500
+      );
+    }
+  }
+
+  async generateMissingFieldsForNewWord(req, res) {
+    try {
+      const { term, definition, currentData, context } = req.body;
+
+      const result = await vocabularyService.generateMissingFieldsForNewWord(
+        term,
+        definition,
+        currentData,
+        context
+      );
+
+      return ResponseUtils.success(res, 'Missing fields generated successfully.', {
+        result: result,
+      });
+    } catch (error) {
+      return ErrorHandler.handleError(
+        res,
+        error,
+        'generateMissingFieldsForNewWord',
+        'Internal server error',
+        500
+      );
+    }
+  }
 }
 
 module.exports = new VocabularyController();

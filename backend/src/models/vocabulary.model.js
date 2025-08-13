@@ -768,8 +768,10 @@ class VocabularyModel {
       // Step 4: Assemble the final, complete word object.
       const finalWordObject = {
         ...wordData,
-        vocabulary_examples: exampleData, // This will be the example object or null
+        vocabulary_examples: exampleData, // Keep original nested structure for compatibility
         synonyms: synonymsData ? synonymsData.map((s) => s.synonym) : [], // Format into a simple array
+        // Add direct fields for easier access
+        exampleSentence: exampleData ? exampleData.example_sentence : '',
       };
 
       return { data: finalWordObject, error: null };
@@ -877,7 +879,7 @@ class VocabularyModel {
 
     if (listError) throw listError;
     if (!list) throw new Error('List not found');
-
+    
     // If user is creator, they always have access
     if (list.creator_id === userId) {
       return { success: true };
@@ -886,6 +888,25 @@ class VocabularyModel {
     // For other cases, we could add logic to ensure proper access
     // This is a placeholder for more complex access control if needed
     return { success: true };
+  }
+
+  // =================================================================
+  //  SYNONYM MODELS
+  // =================================================================
+  async clearSynonyms(wordId) {
+    return await supabase
+      .from('word_synonyms')
+      .delete()
+      .eq('word_id', wordId);
+  }
+
+  async addSynonym(wordId, synonym) {
+    return await supabase
+      .from('word_synonyms')
+      .insert({
+        word_id: wordId,
+        synonym: synonym
+      });
   }
 }
 
