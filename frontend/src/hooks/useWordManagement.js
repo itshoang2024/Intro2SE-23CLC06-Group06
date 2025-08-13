@@ -116,7 +116,7 @@ export const useWordManagement = () => {
         console.log("Current data being sent:", currentData);
 
         const response = await vocabularyService.generateMissingFields(null, {
-          word: word.term,
+          term: word.term,
           definition: word.definition,
           currentData,
         });

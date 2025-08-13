@@ -17,10 +17,48 @@ $text-color: #352d24;
   font-size: 17px;
 
   &__container {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+
+  &__eye-toggle {
+    position: absolute;
+    right: calc((15 / 1440) * 100vw);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: calc((8 / 1440) * 100vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    color: #6b7280;
+
+    &:hover {
+      background-color: rgba(107, 114, 128, 0.1);
+      color: #4b5563;
+    }
+
+    &:focus {
+      outline: 2px solid #3492ea;
+      outline-offset: 2px;
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+    }
+
+    &:hover img {
+      opacity: 1;
+    }
   }
 
   &__submit {
@@ -60,5 +98,9 @@ $text-color: #352d24;
     border-radius: calc((7 / 1440) * 100vw);
     width: 100%;
     padding: calc((23 / 1440) * 100vh);
+  }
+
+  &__password {
+    padding-right: calc((50 / 1440) * 100vw); // Extra padding for eye icon
   }
 }

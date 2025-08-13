@@ -88,11 +88,10 @@ const ViewList = memo(() => {
   const [sortBy, setSortBy] = useState("default");
   const [showShareBox, setShowShareBox] = useState(false);
   const [showMoreBox, setShowMoreBox] = useState(false);
-  const [isSearching, setIsSearching] = useState(false);
   const { listId } = useParams();
   const { isLoading: skeletonToggle } = useSkeletonToggle();
 
-  // Debounce search term to show loading skeleton
+  // Debounce search term for better performance
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   // Memoized capitalize function
@@ -154,18 +153,9 @@ const ViewList = memo(() => {
     window.location.href = `/review/${listId}`;
   }, [listId]);
 
-  const handleSearchChange = useCallback(
-    (e) => {
-      const newSearchTerm = e.target.value;
-      setSearchTerm(newSearchTerm);
-
-      // Show searching skeleton if search term is not empty
-      if (newSearchTerm !== debouncedSearchTerm) {
-        setIsSearching(true);
-      }
-    },
-    [debouncedSearchTerm]
-  );
+  const handleSearchChange = useCallback((e) => {
+    setSearchTerm(e.target.value);
+  }, []);
 
   const handleSortChange = useCallback((e) => {
     setSortBy(e.target.value);
@@ -203,12 +193,6 @@ const ViewList = memo(() => {
     fetchData();
   }, [listId]);
 
-  // Set searching to false when debounced search term changes
-  useEffect(() => {
-    if (debouncedSearchTerm !== undefined) {
-      setIsSearching(false);
-    }
-  }, [debouncedSearchTerm]);
 
   // Memoized filtering and sorting - expensive computation
   const filteredAndSortedWords = useMemo(() => {
@@ -382,27 +366,20 @@ const ViewList = memo(() => {
                 </section>
 
                 <section className="view-list__words">
-                  <h2>
-                    Word List (
-                    {isSearching ? "..." : filteredAndSortedWords.length} words)
-                  </h2>
-                  {isSearching ? (
-                    <WordListSkeleton count={3} theme="viewList" />
-                  ) : (
-                    <div className="view-list__word-list">
-                      {filteredAndSortedWords.length === 0 ? (
-                        <div className="view-list__empty">
-                          {debouncedSearchTerm
-                            ? "No words found matching your search."
-                            : "This list currently has no words."}
-                        </div>
-                      ) : (
-                        filteredAndSortedWords.map((word, index) => (
-                          <WordBox key={word.id} word={word} index={index} />
-                        ))
-                      )}
-                    </div>
-                  )}
+                  <h2>Word List ({filteredAndSortedWords.length} words)</h2>
+                  <div className="view-list__word-list">
+                    {filteredAndSortedWords.length === 0 ? (
+                      <div className="view-list__empty">
+                        {debouncedSearchTerm
+                          ? "No words found matching your search."
+                          : "This list currently has no words."}
+                      </div>
+                    ) : (
+                      filteredAndSortedWords.map((word, index) => (
+                        <WordBox key={word.id} word={word} index={index} />
+                      ))
+                    )}
+                  </div>
                 </section>
               </>
             )

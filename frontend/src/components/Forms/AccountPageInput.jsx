@@ -1,13 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { EyeOpen, EyeClosed } from "../../assets/icons/index.jsx";
 
 const AccountPageInput = (props) => {
   const inputRef = useRef(null); // tranh render lai khi thay doi props type
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (props.type === "submit" && inputRef.current) {
       inputRef.current.classList.add("cursor-pointer");
     }
   }, [props.type]);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const isPasswordField = props.type === "password";
+  const inputType = isPasswordField ? (showPassword ? "text" : "password") : props.type;
 
   return (
     <div className="input">
@@ -26,7 +35,7 @@ const AccountPageInput = (props) => {
       <div className="input__container">
         <input
           ref={inputRef}
-          type={props.type}
+          type={inputType}
           name={props.name}
           placeholder={props.placeholder}
           value={props.value}
@@ -36,6 +45,19 @@ const AccountPageInput = (props) => {
           disabled={props.disabled}
           className={`input__${props.type || ""}`}
         />
+        {isPasswordField && (
+          <button
+            type="button"
+            className="input__eye-toggle"
+            onClick={togglePasswordVisibility}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            <img 
+              src={showPassword ? EyeClosed : EyeOpen} 
+              alt={showPassword ? "Hide password" : "Show password"}
+            />
+          </button>
+        )}
       </div>
       {props.error && <div className="input-error">{props.error}</div>}
     </div>

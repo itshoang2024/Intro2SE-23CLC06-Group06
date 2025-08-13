@@ -58,6 +58,10 @@ import UploadPattern from "../icons/TeacherVerification/UploadPattern.svg";
 // Report Icon
 import ReportIcon from "../icons/Report/report.svg";
 
+// Eye Icons
+import EyeOpen from "../icons/Eye/EyeOpen.svg";
+import EyeClosed from "../icons/Eye/EyeClosed.svg";
+
 export {
   //
   DropDownMenuPattern1,
@@ -118,4 +122,8 @@ export {
 
   // Report Icon
   ReportIcon,
+
+  // Eye Icons
+  EyeOpen,
+  EyeClosed,
 };
