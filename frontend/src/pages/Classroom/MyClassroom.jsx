@@ -5,6 +5,7 @@ import {
   Footer,
   Header,
   SideBar,
+  LearnerSubMenu,
 } from "../../components/index";
 import SeeMoreSection from "../../components/Classroom/SeeMoreSection";
 import { useAuth } from "../../services/Auth/authContext";
@@ -73,11 +74,12 @@ export default function MyClassroomPage() {
   return (
     <div className="my-classroom">
       <Header />
-      <div className="my-classroom-container">
-        <div className="my-classroom-sidebar">
-          <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-        </div>
-        <div className="my-classroom-page">
+      <LearnerSubMenu />
+      <div className="my-classroom__content">
+        <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+        
+        <div className="my-classroom__main">
+          <div className="my-classroom-page">
           <h1>My Classroom</h1>
 
           {user.role === "teacher" && (
@@ -158,8 +160,10 @@ export default function MyClassroomPage() {
               </div>
             </>
           )}
+          </div>
         </div>
       </div>
+      
       <Footer />
     </div>
   );

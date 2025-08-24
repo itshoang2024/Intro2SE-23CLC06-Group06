@@ -58,14 +58,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <img src={MyClassroom} alt="my classroom icon" />
             <span className="sidebar__label">My Classrooms</span>
           </Link>
-          <Link
-            to="#"
-            className="sidebar__link"
-            onClick={(e) => {
-              e.preventDefault();
-              toast("Feature coming soon!", "success");
-            }}
-          >
+          <Link to="/statistics" className="sidebar__link">
             <img src={Analysis} alt="analysis icon" />
             <span className="sidebar__label">Learning Statistics</span>
           </Link>
