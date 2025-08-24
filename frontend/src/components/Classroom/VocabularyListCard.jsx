@@ -24,21 +24,21 @@ export default function VocabularyListCard({
       return;
     }
     if (type === "classroom") {
-      console.log(
-        "Navigating to classroom review with:",
-        classroomId,
-        assignmentId,
-        listId
-      );
-      // Navigate to classroom review or overview based on button content
-      if (buttonContent.startsWith("Review")) {
-        navigate(
-          `/classroom/${classroomId}/assignment/${assignmentId}/review/${listId}`,
-          { state: { title, description, method, username } }
-        );
-      } else if (buttonContent === "Overview") {
-        navigate(`/classroom/${classroomId}/assignment/${assignmentId}/overview/${listId}`);
-      }
+      // console.log(
+      //   "Navigating to classroom review with:",
+      //   classroomId,
+      //   assignmentId,
+      //   listId
+      // );
+      // // Navigate to classroom review or overview based on button content
+      // if (buttonContent.startsWith("Review")) {
+      //   navigate(
+      //     `/classroom/${classroomId}/assignment/${assignmentId}/review/${listId}`,
+      //     { state: { title, description, method, username } }
+      //   );
+      // } else if (buttonContent === "Overview") {
+      //   navigate(`/classroom/${classroomId}/assignment/${assignmentId}/overview/${listId}`);
+      // }
       return;
     } else {
       console.log("Navigating to review with listId:", listId);
@@ -97,7 +97,7 @@ export default function VocabularyListCard({
 
         <button
           className="btn review-btn"
-          // onClick={handleButtonClick}
+          onClick={handleButtonClick}
           disabled={isReviewDisabled}
         >
           {buttonContent}
