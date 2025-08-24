@@ -38,6 +38,12 @@ const userService = {
     const res = await api.post("/user/report", reportData);
     return res.data;
   },
+
+  // Get user learning statistics - matches API: GET /api/user/profile/statistics
+  getStatistics: async () => {
+    const res = await api.get("/user/profile/statistics");
+    return res.data;
+  },
 };
 
 export default userService;
