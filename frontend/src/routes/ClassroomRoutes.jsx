@@ -43,6 +43,8 @@ const Statistic = lazy(
   () => import("../pages/Classroom/TeacherManageClassroom/Statistics")
 );
 const JoiningVerify = lazy(() => import("../pages/Classroom/JoiningVerify"));
+const ReviewAssignment = lazy(() => import("../pages/Classroom/ReviewAssignment"));
+const OverviewList = lazy(() => import("../pages/Vocabulary/OverviewList"));
 
 const LoadingFallback = () => (
   <div
@@ -125,6 +127,16 @@ const classroomRoutes = [
         element: withSuspense(Statistic),
       },
     ],
+  },
+
+  {
+    path: "/classroom/:classroomId/assignment/:assignmentId/review/:listId",
+    element: withSuspense(ReviewAssignment),
+  },
+
+  {
+    path: "/classroom/:classroomId/assignment/:assignmentId/overview/:listId",
+    element: withSuspense(OverviewList),
   },
 
   {

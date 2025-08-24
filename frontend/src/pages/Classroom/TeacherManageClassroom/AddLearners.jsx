@@ -6,10 +6,16 @@ import {
 } from "../../../components/index";
 import classroomService from "../../../services/Classroom/classroomService";
 
+function isValidEmail(email) {
+  // Regex kiểm tra định dạng email cơ bản
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 export default function AddStudentPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(""); // Xử lý trạng thái của email
   const [invitations, setInvitations] = useState([]); // lưu danh sách lời mời
+  const [emailError, setEmailError] = useState("");
 
   // Truy xuất dữ liệu lớp học được lưu khi users chọn classroom ở trang MyClassroom.
   const [classroomId, _setClassroomId] = useState(() => {
@@ -42,6 +48,11 @@ export default function AddStudentPage() {
 
   // Xử lý việc gửi lời mời đến cho learners
   const handleInviteLearner = async (invited_email) => {
+    if (!invited_email || !isValidEmail(invited_email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+    setEmailError(""); // Xóa lỗi nếu hợp lệ
     try {
       const res = await classroomService.inviteLearner({
         classroomId,
@@ -92,10 +103,16 @@ export default function AddStudentPage() {
               type="email"
               placeholder="Enter student's email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError("");
+              }}
             />
             <button onClick={() => handleInviteLearner(email)}>Add</button>
           </div>
+          {emailError && (
+            <div className="error-message">{emailError}</div>
+          )}
         </div>
 
         {/* Student list */}

@@ -7,6 +7,7 @@ import {
   SideBar,
 } from "../../components";
 import vocabularyService from "../../services/Vocabulary/vocabularyService";
+import classroomService from "../../services/Classroom/classroomService";
 import {
   CategoryIcon,
   LearnerIcon,
@@ -19,8 +20,10 @@ import { useToast } from "../../components/Providers/ToastProvider.jsx";
 import { useSkeletonToggle } from "../../hooks/useSkeletonToggle";
 
 export default function OverviewList() {
-  const { listId } = useParams(); // Lấy ID từ URL
+  const { listId, classroomId, assignmentId } = useParams(); // Lấy ID từ URL
   console.log("List ID from params:", listId); // Kiểm tra trong console
+  const isClassroom = Boolean(classroomId && assignmentId);
+  console.log("Is this a classroom list?", isClassroom); // Kiểm tra xem có phải là danh sách trong lớp học không
   const [listInfo, setListInfo] = useState(null);
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +37,18 @@ export default function OverviewList() {
     const fetchListAndWords = async () => {
       try {
         setLoading(true);
-        const list = await vocabularyService.getListById(listId);
+        let list;
+        if (isClassroom) {
+          // Nếu là danh sách trong lớp học, gọi API lấy thông tin danh sách
+          list = await classroomService.getListToReviewAssignments(
+            classroomId,
+            assignmentId,
+            listId
+          );
+        } else {
+          // Nếu là danh sách từ trang từ điển, gọi API lấy thông tin danh sách
+          list = await vocabularyService.getListById(listId);
+        }
         const words = await vocabularyService.getWordsByListId(listId);
 
         const token = localStorage.getItem("token");

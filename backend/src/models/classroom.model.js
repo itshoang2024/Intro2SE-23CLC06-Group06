@@ -396,12 +396,12 @@ class ClassroomModel {
     return data.map((entry) => {
       const assignments = entry.classrooms.assignments || [];
       const now = new Date();
-
-      const assignedCount = assignments.filter((assignment) => {
-        const startDate = new Date(assignment.start_date);
-        const dueDate = new Date(assignment.due_date);
-        return startDate <= now && now <= dueDate;
-      }).length;
+      const assignedCount = assignments.length;
+      // const assignedCount = assignments.filter((assignment) => {
+      //   const startDate = new Date(assignment.start_date);
+      //   const dueDate = new Date(assignment.due_date);
+      //   return startDate <= now && now <= dueDate;
+      // }).length;
 
       return {
         id: entry.classrooms.id,
@@ -479,6 +479,16 @@ class ClassroomModel {
     return data;
   }
 
+  async getToReviewAssignments(classroomId, learnerId) {
+    const { data, error } = await supabase.rpc('get_learner_to_review_assignments', {
+      p_classroom_id: classroomId,
+      p_learner_id: learnerId,
+    });
+
+    if (error) throw error;
+    return data;
+  }
+
   async getLearnerAssignmentsByStatus(classroomId, learnerId, statusList) {
     const { data, error } = await supabase
       .from('learner_assignments')
@@ -495,6 +505,7 @@ class ClassroomModel {
                 start_date,
                 classroom_id,
                 vocab_lists (
+                  id,
                   creator:users (
                       email,
                       avatar_url,

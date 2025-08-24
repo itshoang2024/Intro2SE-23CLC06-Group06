@@ -1,5 +1,6 @@
 const { body } = require('express-validator');
 const { handleValidationErrors } = require('./common.validator');
+const classroomModel = require('../models/classroom.model');
 
 const classroomValidator = {
   create: [
@@ -62,7 +63,18 @@ const classroomValidator = {
       .withMessage('wordsPerReview is required')
       .bail()
       .isInt({ min: 5, max: 30 })
-      .withMessage('wordsPerReview must be an integer between 5 and 30'),
+      .withMessage('wordsPerReview must be an integer between 5 and 30')
+      .bail()
+      .custom(async (value, { req }) => {
+        const wordList = await classroomModel.getWordsByListId(req.body.vocabListId);
+        if (!wordList) {
+          throw new Error('Vocabulary list not found');
+        }
+        if (value > wordList.length) {
+          throw new Error('wordsPerReview cannot be greater than total words in the list');
+        }
+        return true;
+      }),
 
     body('startDate')
       .notEmpty()

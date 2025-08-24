@@ -174,4 +174,11 @@ classroomRouter.get(
   classroomController.getLearnerOverdueAssignments
 );
 
+classroomRouter.get(
+  '/:classroomId/assignment/:assignmentId/vocab-list/:subListId',
+  hasClassroomAccess,
+  requireClassRole('learner'),
+  classroomController.getSubVocabularyListById
+);
+
 module.exports = classroomRouter;

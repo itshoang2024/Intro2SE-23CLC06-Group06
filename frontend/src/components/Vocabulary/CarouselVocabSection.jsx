@@ -71,6 +71,7 @@ export default function CarouselVocabSection({
                         title === "REVIEW LISTS" ? "Review" : "Overview"
                       }
                       isReviewDisabled={isReviewDisabled}
+                      type='review'
                     />
                   </div>
                 ))}
