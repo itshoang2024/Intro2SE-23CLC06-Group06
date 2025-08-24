@@ -24,6 +24,8 @@ import Group78 from "../icons/MainPage/Group 78.svg";
 import Union from "../icons/MainPage/Union.svg";
 import Vector from "../icons/MainPage/Vector.svg";
 import Group8 from "../icons/MainPage/Group 8.svg";
+import Ready from "../icons/MainPage/Ready.svg";
+import Ready1 from "../icons/MainPage/Ready1.svg";
 
 //Search Bar
 import SearchBarPattern from "../icons/SearchBar/SearchBarPattern.svg";
@@ -89,6 +91,8 @@ export {
   Union,
   Vector,
   Group8,
+  Ready,
+  Ready1,
 
   // Search bar
   SearchBarPattern,

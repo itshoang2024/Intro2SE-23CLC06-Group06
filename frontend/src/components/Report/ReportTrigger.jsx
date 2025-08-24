@@ -3,6 +3,7 @@ import Report from "./Report";
 import { ReportIcon } from "../../assets/icons/index";
 import { useToast } from "../Providers/ToastProvider.jsx";
 import reportService from "../../services/Report/reportService";
+import useClickOutside from "../../hooks/useClickOutside";
 
 // Global modal state to prevent multiple modals
 let isModalOpen = false;
@@ -10,7 +11,15 @@ let isModalOpen = false;
 const ReportTrigger = ({ wordId, onReportSubmit }) => {
   const [show, setShow] = useState(false);
   const isClickingRef = useRef(false);
+  const reportRef = useRef(null);
   const toast = useToast();
+
+  // Use click outside hook to close modal when clicking outside
+  useClickOutside(reportRef, () => {
+    setShow(false);
+    isModalOpen = false; // Reset global modal state
+  }, show);
+
 
   const handleSubmit = async (reason) => {
     try {
@@ -77,7 +86,11 @@ const ReportTrigger = ({ wordId, onReportSubmit }) => {
         <img src={ReportIcon} alt="Report" />
       </button>
 
-      {show && <Report onClose={handleClose} onSubmit={handleModalSubmit} />}
+      {show && (
+        <div ref={reportRef}>
+          <Report onClose={handleClose} onSubmit={handleModalSubmit} />
+        </div>
+      )}
     </>
   );
 };

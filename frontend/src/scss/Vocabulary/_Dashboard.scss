@@ -180,6 +180,7 @@
     justify-content: space-between;
     align-items: center;
     font-family: "Lalezar", sans-serif;
+    font-weight: normal;
 
     h3 {
       font-size: 1.5rem;
@@ -198,8 +199,8 @@
   &__list-title {
     background-color: transparent;
     border: none;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: normal;
     color: #2a1e17;
   }
 
@@ -316,9 +317,9 @@
       color: white;
       border: none;
       font-weight: bold;
-      padding: 0.7rem 1rem;
+      padding: 0.7rem 0.9rem;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 1rem;
       cursor: pointer;
     }
   }

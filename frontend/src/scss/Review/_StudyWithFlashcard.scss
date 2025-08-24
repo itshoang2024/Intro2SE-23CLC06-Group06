@@ -37,6 +37,9 @@
 
   &__prev,
   &__next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: none;
     width: 6rem;
     height: 3rem;

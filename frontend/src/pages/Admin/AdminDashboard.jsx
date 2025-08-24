@@ -26,7 +26,7 @@ const StatCard = memo(function StatCard({ value, label, className }) {
   );
 });
 
-const AdminDashboard = memo(function AdminDashboard() {
+const AdminadminDashboard = memo(function AdminadminDashboard() {
     const navigate = useNavigate();
 
     // Memoized stats to prevent recreating on every render
@@ -40,7 +40,7 @@ const AdminDashboard = memo(function AdminDashboard() {
     // Memoized navigation handlers
     const navigateToUsers = useCallback(() => navigate('/admin-users'), [navigate]);
     const navigateToTeacherRequests = useCallback(() => navigate('/teacher-request'), [navigate]);
-    const navigateToAnalytics = useCallback(() => navigate('/admin-dashboard'), [navigate]);
+    const navigateToAnalytics = useCallback(() => navigate('/admin-adminDashboard'), [navigate]);
 
     // Memoized quick actions to prevent recreating on every render
     const quickActions = useMemo(() => [
@@ -65,17 +65,17 @@ const AdminDashboard = memo(function AdminDashboard() {
     ], [navigateToUsers, navigateToTeacherRequests, navigateToAnalytics]);
 
     return (
-        <div className="dashboard">
+        <div className="adminDashboard">
             <Header />
             <main className="main-content">
                 <AdminSubMenu />
 
-                <section className="dashboard__section">
-                    <div className="dashboard__header">
+                <section className="adminDashboard__section">
+                    <div className="adminDashboard__header">
                         <h1>System Overview</h1>
                     </div>
 
-                    <div className="dashboard__stats">
+                    <div className="adminDashboard__stats">
                         <StatCard 
                             value={stats.users} 
                             label="Users" 
@@ -101,7 +101,7 @@ const AdminDashboard = memo(function AdminDashboard() {
                         </div>
                     </div>
 
-                    <div className="dashboard__actions">
+                    <div className="adminDashboard__actions">
                         <div className="activity-log-card">
                             <h3>Activity log</h3>
                             <div className="activity-chart">
@@ -132,4 +132,4 @@ const AdminDashboard = memo(function AdminDashboard() {
     );
 });
 
-export default AdminDashboard;
+export default AdminadminDashboard;

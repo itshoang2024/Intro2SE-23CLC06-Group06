@@ -68,7 +68,7 @@ export default function CheckYourMail() {
 
       {email && (
         <div className="email-info">
-          Verification email sent to: <strong>{email}</strong>
+          Verification email sent to: <font color="#2427eaff"> {email} </font>
         </div>
       )}
 

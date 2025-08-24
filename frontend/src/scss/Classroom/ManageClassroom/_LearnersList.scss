@@ -1,8 +1,12 @@
 @use "../../Fonts" as *;
 
 .student-list-page {
-  // min-height: 100vh;
+  min-height: 30rem;
   font-family: $font-inriasans;
+}
+
+.student-list-container {
+  min-height: 50rem;
 }
 
 .student-actions {
@@ -11,7 +15,6 @@
   align-items: start;
   gap: 16px;
   margin: 20px 0;
-
   // .search-input {
   //     position: relative;
   //     display: grid;
