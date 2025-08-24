@@ -116,8 +116,8 @@ export const useWordManagement = () => {
         console.log("Current data being sent:", currentData);
 
         const response = await vocabularyService.generateMissingFields(null, {
-          term: word.term,
-          definition: word.definition,
+          term: word.term.trim(),
+          definition: word.definition.trim(),
           currentData,
         });
 
@@ -195,8 +195,8 @@ export const useWordManagement = () => {
 
       try {
         const response = await vocabularyService.generateExample(null, {
-          term: word.term,
-          definition: word.definition,
+          term: word.term.trim(),
+          definition: word.definition.trim(),
         });
 
         if (response?.data?.example?.example) {

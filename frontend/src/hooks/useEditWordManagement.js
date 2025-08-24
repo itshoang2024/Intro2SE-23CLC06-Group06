@@ -152,8 +152,8 @@ export const useEditWordManagement = () => {
         } else {
           // If word doesn't have ID (new word), use the general endpoint
           response = await vocabularyService.generateMissingFields(null, {
-            word: word.term,
-            definition: word.definition,
+            term: word.term.trim(),
+            definition: word.definition.trim(),
             currentData: {
               pronunciation: currentData.phonetics,
               synonyms: currentData.synonyms,
@@ -288,8 +288,8 @@ export const useEditWordManagement = () => {
         } else {
           // If word doesn't have ID (new word), use the general endpoint
           response = await vocabularyService.generateExample(null, {
-            term: word.term,
-            definition: word.definition,
+            term: word.term.trim(),
+            definition: word.definition.trim(),
           });
         }
 
