@@ -1,14 +1,17 @@
 const classroomModel = require('../models/classroom.model');
 const logger = require('../utils/logger');
 const { ResponseUtils, ErrorHandler } = require('../utils');
+const userModel = require('../models/user.model');
 
 const requireRole = (...roles) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     if (!req.user) {
       return ResponseUtils.unauthorized(res, 'Authentication required');
     }
 
-    if (!roles.includes(req.user.role)) {
+    user = await userModel.findById(req.user.userId);
+
+    if (!roles.includes(req.user.role) || (user.role === 'teacher' && user.account_status != 'active')) {
       return ResponseUtils.forbidden(res, 'Insufficient permissions');
     }
 

@@ -1,5 +1,6 @@
 const classroomModel = require('../models/classroom.model');
 const userModel = require('../models/user.model');
+const vocabularyModel = require('../models/vocabulary.model');
 const {
   generateUniqueJoinCode,
   computeAssignmentStatus,
@@ -564,6 +565,21 @@ class ClassroomService {
     });
 
     await classroomModel.deleteLearnerAssignmentsByLearnerId(learnerId);
+  }
+
+  async getSubVocabularyListById(subListId, assignmentId, learnerId) {
+    const hasListAccess = await classroomModel.hasLearnerAssignment(assignmentId, learnerId);
+    if (!hasListAccess) {
+      throw new Error('You do not have access to this vocabulary list.');
+    }
+    
+    const vocabList = await vocabularyModel.findListById(subListId);
+
+    if (!vocabList) {
+      throw new Error('Vocabulary list not found.');
+    }
+
+    return vocabList;
   }
 }
 

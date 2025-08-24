@@ -608,6 +608,28 @@ class ClassroomController {
       );
     }
   }
+
+  async getSubVocabularyListById(req, res) {
+    try {
+      const {subListId, assignmentId} = req.params;
+      const learnerId = req.user.userId;
+
+      const result = await classroomService.getSubVocabularyListById(subListId, assignmentId, learnerId);
+
+      return ResponseUtils.success(
+        res,
+        'Sub-vocabulary list retrieved successfully',
+        result.data
+      );
+    } catch (error) {
+      return ErrorHandler.handleError(
+        res,
+        error,
+        'getSubVocabularyListById',
+        'Failed to get sub-vocabulary list'
+      );
+    }
+  }
 }
 
 module.exports = new ClassroomController();

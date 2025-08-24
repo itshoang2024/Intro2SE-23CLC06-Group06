@@ -15,6 +15,15 @@ class VocabularyModel {
 
   async findUserLists(userId, options) {
     const { q, privacy, sortBy, from, to } = options;
+
+    const { data: subVocabListIds, error: subListError } = await supabase
+      .from('assignment_sublists')
+      .select('vocab_list_id');
+
+    if (subListError) throw subListError;
+
+    const excludeIds = subVocabListIds.map((row) => row.vocab_list_id).filter(Boolean);
+
     let query = supabase
       .from('vocab_lists')
       .select(
@@ -22,6 +31,10 @@ class VocabularyModel {
         { count: 'exact' }
       )
       .eq('creator_id', userId);
+    
+    if (excludeIds.length > 0) {
+      query = query.not('id', 'in', `(${excludeIds.join(',')})`);
+    }
 
     if (q) query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%`);
     if (privacy) query = query.eq('privacy_setting', privacy);

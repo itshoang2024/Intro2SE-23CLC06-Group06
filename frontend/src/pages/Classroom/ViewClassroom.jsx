@@ -123,8 +123,10 @@ export default function ManageClassroomLearner() {
                   renderItem={(item, index) => (
                     <VocabularyListCard
                       key={item.assignment_id || index}
+                      listId={item.vocab_list_id}
                       title={item.title}
-                      description={`Exercise method: ${item.exercise_method}`}
+                      description={item.description}
+                      method={item.exercise_method}
                       username={item.creator?.email}
                       avatarUrl={item.creator?.avatar_url}
                       role="Teacher"
@@ -137,7 +139,10 @@ export default function ManageClassroomLearner() {
                         year: "numeric",
                       })}
                       result={item.learner_status || "Pending"}
-                      buttonContent="Overview"
+                      buttonContent={activeTab === "To-review" ? "Review" : "Overview"}
+                      type="classroom"
+                      classroomId={classroomId}
+                      assignmentId={item.assignment_id}
                     />
                   )}
                   initialCount={4}

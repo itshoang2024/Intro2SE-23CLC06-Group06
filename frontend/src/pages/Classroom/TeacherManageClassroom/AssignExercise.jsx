@@ -86,7 +86,7 @@ function AssignExercise() {
     const title = searchTerm;
     const wordsPerReview = parseInt(e.target["words_per_review"].value);
     const formatDate = (dateStr) =>
-      new Date(`${dateStr}T10:00:00Z`).toISOString();
+      new Date(`${dateStr}T00:00:00`).toISOString();
 
     const newErrors = {};
 

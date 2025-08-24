@@ -175,6 +175,13 @@ const classroomService = {
     const res = await api.get(`/classroom/${classroomId}/assignments/overdue`);
     return res.data;
   },
+  
+  //26. Get List to Review(Overview) Assignments (Learner)
+  getListToReviewAssignments: async (classroomId, assignmentId, listId) => {
+    const res = await api.get(`/classroom/${classroomId}/assignment/${assignmentId}/vocab-list/${listId}`);
+    return res.data;
+  },
+
 };
 
 export default classroomService;
