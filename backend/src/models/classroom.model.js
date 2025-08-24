@@ -389,9 +389,14 @@ class ClassroomModel {
             `
       )
       .eq('learner_id', learnerId)
-      .eq('join_status', 'joined');
+      .eq('join_status', 'joined')
+      .neq('classrooms.classroom_status', 'deleted');
 
     if (error) throw error;
+
+    if (!data.classroom) {
+      return;
+    }
 
     return data.map((entry) => {
       const assignments = entry.classrooms.assignments || [];
