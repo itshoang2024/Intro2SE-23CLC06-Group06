@@ -104,6 +104,16 @@ export default function ApproveJoinClassroomRequest() {
       });
       setAutoApprove(res?.data?.isAutoApprovalEnabled ?? false);
       console.log(res.message);
+
+      // Cập nhật localStorage
+      const selectedClassroom = JSON.parse(
+        localStorage.getItem("selectedClassroom")
+      );
+      if (selectedClassroom) {
+        selectedClassroom.is_auto_approval_enabled =
+          res?.data?.isAutoApprovalEnabled ?? false;
+        localStorage.setItem("selectedClassroom", JSON.stringify(selectedClassroom));
+      }
     } catch (error) {
       console.log("Lỗi auto approve", error.message);
     }
