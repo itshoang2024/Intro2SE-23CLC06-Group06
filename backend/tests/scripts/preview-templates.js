@@ -101,6 +101,7 @@ async function generatePreviews(templateName = null) {
       logger.info(`✅ Generated: ${filename}`);
     } catch (error) {
       logger.error(`❌ Error generating ${template}:`, error.message);
+      logger.error(`Full error details:`, error.stack);
     }
   }
 
@@ -147,7 +148,7 @@ async function startPreviewServer(previewDir, files) {
         }
         .actions a {
           margin-left: 15px;
-          color: #4CAF50;
+          color: #352D24;
           text-decoration: none;
         }
         .actions a:hover {
@@ -222,8 +223,10 @@ async function main() {
   logger.info('🎨 VocaBoost Email Template Preview Generator\n');
 
   try {
-    // Wait for email service to initialize
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // Ensure email service is properly initialized
+    logger.info('🔄 Initializing email service...');
+    await emailService.ensureInitialized();
+    logger.info('✅ Email service initialized successfully');
 
     const { previewDir, generatedFiles } = await generatePreviews(templateName);
 
