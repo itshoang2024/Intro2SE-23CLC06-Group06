@@ -9,6 +9,7 @@ $text-color: #352d24;
   &__header {
     margin: 0 0 40px 0;
     background-color: $text-color;
+    padding: 0.01rem;
   }
 
   &__form-wrapper {
@@ -21,6 +22,7 @@ $text-color: #352d24;
   &__title {
     font-family: $font-lalezar;
     font-size: 28px;
+    font-weight: normal;
     margin: 0 0 24px 0;
   }
 
@@ -39,10 +41,10 @@ $text-color: #352d24;
     font-family: $font-inriasans;
   }
 
-  // &__input{
-  //   display: flex;
-  //   gap: 2px;
-  // }
+  &__input{
+    display: flex;
+    gap: 2px;
+  }
 
   &__upload-label {
     font-weight: 600;
@@ -62,6 +64,10 @@ $text-color: #352d24;
     border-radius: 8px;
     padding: 40px 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     transition: 0.2s ease-in-out;
 
@@ -79,13 +85,13 @@ $text-color: #352d24;
 
   &__preview {
     margin-top: 16px;
+    justify-items: center;
 
     img {
       max-width: 50px;
       max-height: 200px;
       border-radius: 6px;
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-      object-fit: contain;
     }
   }
 
@@ -105,6 +111,7 @@ $text-color: #352d24;
 
   &__upload-notes {
     font-size: 11px;
+    margin-top: 1rem;
 
     ul {
       padding-left: 16px;

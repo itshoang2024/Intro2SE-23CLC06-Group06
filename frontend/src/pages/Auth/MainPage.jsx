@@ -21,6 +21,8 @@ import {
   PatternCard3,
   Union,
   Vector,
+  Ready,
+  Ready1,
 } from "../../assets/icons/index";
 import { useEffect } from "react";
 import { useToast } from "../../components/Providers/ToastProvider";
@@ -198,10 +200,14 @@ export default function MainPage() {
       </div>
 
       <div className="ready-to-start">
-        <div className="so-you-ready-to-start">So you ready to start?</div>
-        <Link to={getStartedRoute} className="get-started">
-          Get started
-        </Link>
+        <img src={Ready1} alt="Ready1" className="ready1" />
+        <div className="ready-to-start-group">
+          <div className="so-you-ready-to-start">So are you ready to start?</div>
+          <Link to={getStartedRoute} className="get-started">
+            Get started
+          </Link>
+        </div>
+        <img src={Ready} alt="Ready" className="ready" />
       </div>
       <Footer />
     </div>

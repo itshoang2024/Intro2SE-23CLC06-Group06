@@ -56,21 +56,20 @@ img { max-width: 100%; height: auto; display: block; }
 // ====================================================================
 
 // Focus styles for better keyboard navigation
-*:focus {
-  outline: 2px solid var(--vb-color-brand-primary);
-  outline-offset: 2px;
-}
+// *:focus {
+//   outline: 2px solid var(--vb-color-brand-primary);
+//   outline-offset: 2px;
+// }
 
 // Enhanced focus for interactive elements
-button:focus,
-input:focus,
-textarea:focus,
-select:focus,
-a:focus {
-  outline: 3px solid var(--vb-color-brand-primary);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(53, 45, 36, 0.1);
-}
+// button:focus,
+// textarea:focus,
+// select:focus,
+// a:focus {
+//   outline: 3px solid var(--vb-color-brand-primary);
+//   outline-offset: 2px;
+//   box-shadow: 0 0 0 3px rgba(53, 45, 36, 0.1); 
+// }
 
 // Respect user motion preferences
 @media (prefers-reduced-motion: reduce) {

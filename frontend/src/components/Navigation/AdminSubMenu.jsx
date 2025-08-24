@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useToast } from "../Providers/ToastProvider";
 
 const tabs = [
   { name: "Dashboard", route: "/admin-dashboard" },
@@ -17,7 +18,16 @@ const tabs = [
 export default function TeacherClassroomMenuTab() {
   const navigate = useNavigate();
   const location = useLocation();
+  const toast = useToast();
   const currentPath = location.pathname;
+
+  const handleTabClick = (tab) => {
+    if (tab.route === "/admin-statistics") {
+      toast("Feature is coming soon", "success");
+      return;
+    }
+    navigate(tab.route);
+  };
 
   return (
     <div className="sub-menu-tabs">
@@ -34,7 +44,7 @@ export default function TeacherClassroomMenuTab() {
             <div
               key={idx}
               className={`tab ${isActive ? "active" : ""}`}
-              onClick={() => navigate(tab.route)}
+              onClick={() => handleTabClick(tab)}
             >
               {tab.name}
             </div>

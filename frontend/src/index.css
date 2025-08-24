@@ -487,12 +487,13 @@
   display: flex;
   align-items: center;
   background-color: #f1f1f1;
-  padding: 10px 16px;
+  padding: 10px 20px;
   border-radius: 9999px;
   font-family: "Inria Sans", sans-serif;
   width: 100%;
-  min-width: 200px;
+  min-width: 10rem;
   max-width: 80%;
+  min-height: 3rem;
   gap: 20px;
 }
 
@@ -1278,12 +1279,14 @@
 }
 
 .class-header {
-  padding: 20px;
+  padding-left: 2rem;
+  padding-top: 1rem;
+  padding-right: 2rem;
   border-radius: 20px;
-  background-color: #fffaef;
+  background-color: #fbf4e7;
   font-family: "Inria Sans", sans-serif;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  min-height: 140px;
+  min-height: 15rem;
 }
 
 .dropdown-container {
@@ -1322,15 +1325,14 @@
 }
 
 .class-header h2 {
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: bold;
-  margin: 0;
 }
 
 .class-tags {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 20px;
   font-family: "Inria Sans", sans-serif;
 }
 .class-tags .tag {
@@ -1340,7 +1342,7 @@
   background: #f8eed3;
   padding: 4px 12px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .sub-menu-tabs .tab-list {
@@ -1385,14 +1387,14 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  min-height: 220px;
+  min-height: 250px;
   max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .vocab-card .vocab-title {
   font-family: "Lalezar", sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: normal;
   color: #2b2b2b;
   margin: 0;
@@ -1484,6 +1486,8 @@
   font-size: 13px;
   font-weight: bold;
   color: #222;
+  margin-bottom: 5px;
+  margin-left: 3px;
   max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
@@ -1978,6 +1982,7 @@
 .teacher-verification__header {
   margin: 0 0 40px 0;
   background-color: #352d24;
+  padding: 0.01rem;
 }
 .teacher-verification__form-wrapper {
   max-width: 1000px;
@@ -1988,6 +1993,7 @@
 .teacher-verification__title {
   font-family: "Lalezar", sans-serif;
   font-size: 28px;
+  font-weight: normal;
   margin: 0 0 24px 0;
 }
 .teacher-verification__grid {
@@ -2000,6 +2006,10 @@
   flex-direction: column;
   gap: 10px;
   font-family: "Inria Sans", sans-serif;
+}
+.teacher-verification__input {
+  display: flex;
+  gap: 2px;
 }
 .teacher-verification__upload-label {
   font-weight: 600;
@@ -2017,6 +2027,10 @@
   border-radius: 8px;
   padding: 40px 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   transition: 0.2s ease-in-out;
 }
@@ -2031,13 +2045,13 @@
 }
 .teacher-verification__preview {
   margin-top: 16px;
+  justify-items: center;
 }
 .teacher-verification__preview img {
   max-width: 50px;
   max-height: 200px;
   border-radius: 6px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-  object-fit: contain;
 }
 .teacher-verification__upload-icon {
   font-size: 32px;
@@ -2052,6 +2066,7 @@
 }
 .teacher-verification__upload-notes {
   font-size: 11px;
+  margin-top: 1rem;
 }
 .teacher-verification__upload-notes ul {
   padding-left: 16px;
@@ -2543,28 +2558,35 @@
 }
 
 .boxes {
-  margin-top: 3em;
+  margin-top: 5em;
   display: flex;
   gap: 10%;
   justify-content: center;
 }
-.boxes-fill-in-blank {
+.boxes-fill-in-blank, .boxes-flashcard, .boxes-word-association {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 250px;
+  width: 21rem;
+  height: 20rem;
   gap: 10px;
   background-color: #efefef;
   border-radius: 43px;
   padding: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease; /* thêm animation mượt */
+}
+.boxes-fill-in-blank:hover, .boxes-flashcard:hover, .boxes-word-association:hover {
+  transform: scale(1.05); /* phóng to 105% */
 }
 .boxes-fill-in-blank h1 {
   color: #a43939;
   font-family: "Lalezar", sans-serif;
   margin: 0;
   margin-block-end: 0;
+  font-size: 2.7rem;
+  font-weight: normal;
 }
 .boxes-fill-in-blank .content {
   color: #a43939;
@@ -2572,23 +2594,13 @@
   text-align: center;
   margin-top: 10px;
 }
-.boxes-flashcard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 250px;
-  gap: 10px;
-  background-color: #efefef;
-  border-radius: 43px;
-  padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
 .boxes-flashcard h1 {
   color: #3c5a9a;
   font-family: "Lalezar", sans-serif;
   margin: 0;
   margin-block-end: 0;
+  font-size: 2.7rem;
+  font-weight: normal;
 }
 .boxes-flashcard .content {
   color: #3c5a9a;
@@ -2596,24 +2608,14 @@
   text-align: center;
   margin-top: 10px;
 }
-.boxes-word-association {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 250px;
-  gap: 10px;
-  background-color: #efefef;
-  border-radius: 43px;
-  padding: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
 .boxes-word-association h1 {
   text-align: center;
   color: #4d8850;
   font-family: "Lalezar", sans-serif;
-  font-size: 28.5px;
+  font-size: 2.7rem;
+  font-weight: normal;
   margin: 0;
+  line-height: 3rem;
   margin-block-end: 0;
 }
 .boxes-word-association .content {
@@ -2627,16 +2629,22 @@
 }
 
 .ready-to-start {
-  margin: 3em 0;
+  margin: 15rem 0rem 15rem 0rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 .ready-to-start .so-you-ready-to-start {
   font-family: "Lalezar", sans-serif;
   font-size: 50px;
   text-align: center;
+  margin-bottom: 2rem;
+}
+.ready-to-start .ready-to-start-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .ready-to-start .get-started {
   height: 3em;
@@ -2786,6 +2794,7 @@
   align-items: center;
   justify-content: center;
   font-family: "Lalezar", sans-serif;
+  font-weight: normal;
 }
 .check-your-mail-container .sign-up-successfully {
   margin-top: 3em;
@@ -2813,10 +2822,9 @@
   color: #666;
 }
 .check-your-mail-container .resend-section .resend-link {
-  color: #4182cd;
+  color: #666;
   text-decoration: underline;
   cursor: pointer;
-  font-weight: bold;
   transition: color 0.2s ease;
 }
 .check-your-mail-container .resend-section .resend-link:hover:not(.disabled) {
@@ -4125,6 +4133,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
   font-family: "Lalezar", sans-serif;
+  font-weight: normal;
 }
 .dashboard__list-header h3 {
   font-size: 1.5rem;
@@ -4140,8 +4149,8 @@ h2 {
 .dashboard__list-title {
   background-color: transparent;
   border: none;
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: normal;
   color: #2a1e17;
 }
 .dashboard__more-button-wrapper {
@@ -4241,9 +4250,9 @@ h2 {
   color: white;
   border: none;
   font-weight: bold;
-  padding: 0.7rem 1rem;
+  padding: 0.7rem 0.9rem;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   cursor: pointer;
 }
 .dashboard__see-more {
@@ -5374,6 +5383,7 @@ h2 {
 .create-classroom__header {
   font-family: "Lalezar", sans-serif;
   font-size: 45px;
+  font-weight: normal;
   margin: 0;
 }
 .create-classroom__form {
@@ -5425,12 +5435,13 @@ h2 {
 }
 .create-classroom__form--submit {
   align-self: flex-end;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 1.5rem;
   background-color: #2b2112;
   color: #fff;
   font-size: 1rem;
   border: none;
-  border-radius: 10px;
+  font-weight: bold;
+  border-radius: 999px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -5459,7 +5470,7 @@ h2 {
   border-radius: 30px;
   background-color: #fdf6e9;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: bold;
   transition: all 0.2s ease;
 }
 .create-classroom__privacy-section--button button.active {
@@ -5487,7 +5498,8 @@ h2 {
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   width: 100%;
-  max-width: 420px;
+  max-width: 600px;
+  height: 400px;
   text-align: center;
   border: 1px solid #f1efec;
   display: flex;
@@ -5497,15 +5509,15 @@ h2 {
 }
 .join-classroom__default .join-classroom__card h2.join-classroom__title {
   font-family: "Lalezar", sans-serif;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: normal;
   color: #2c231b;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.2rem;
 }
 .join-classroom__default .join-classroom__card .join-classroom__message {
   font-family: "Inria Sans", sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: bold;
   color: #2a1e17;
   margin-bottom: 1rem;
 }
@@ -5516,11 +5528,12 @@ h2 {
   color: #2c231b;
   background-color: #f2f2f2;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 0.75rem 1rem;
   width: 60%;
   text-align: center;
   margin-bottom: 1.25rem;
+  margin-top: 1rem;
 }
 .join-classroom__default .join-classroom__card .join-classroom__code-input:focus {
   outline: none;
@@ -5529,14 +5542,15 @@ h2 {
 .join-classroom__default .join-classroom__card .join-classroom__button {
   background-color: #2c231b;
   color: white;
-  font-weight: 600;
+  font-weight: bold;
   padding: 0.65rem 2rem;
   border-radius: 9999px;
   border: none;
-  font-size: 0.95rem;
+  font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s;
-  max-width: 50%;
+  width: 8rem;
+  margin-top: 1rem;
 }
 .join-classroom__default .join-classroom__card .join-classroom__button:hover:not(:disabled) {
   background-color: #1f1914;
@@ -6011,13 +6025,17 @@ h2 {
   align-items: center;
 }
 .assignment-page .controls .btn.dark {
-  background-color: #2e2e2e;
   text-decoration: none;
+  background-color: #1a1a1a;
   color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
+  border-radius: 2rem;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
+  border: none;
+  padding: 1rem 2rem 1rem 2rem;
+  margin-bottom: 1rem;
 }
 .assignment-page .controls .sort {
   font-size: 0.9rem;
@@ -6106,7 +6124,12 @@ h2 {
 }
 
 .student-list-page {
+  min-height: 30rem;
   font-family: "Inria Sans", sans-serif;
+}
+
+.student-list-container {
+  min-height: 50rem;
 }
 
 .student-actions {
@@ -6192,16 +6215,19 @@ h2 {
   text-decoration: none;
   background-color: #1a1a1a;
   color: #fff;
-  border-radius: 6px;
-  padding: 10px 16px;
-  font-weight: 500;
+  border-radius: 2rem;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
   border: none;
+  padding: 1rem 2rem 1rem 2rem;
+  margin-bottom: 1rem;
 }
 .btn--light {
   background-color: #f3eee4;
   border: none;
-  border-radius: 6px;
+  border-radius: 2rem;
   padding: 6px 14px;
   font-size: 14px;
   cursor: pointer;
@@ -6213,7 +6239,7 @@ h2 {
 .btn--see-more {
   background-color: #f5f0e3;
   border: none;
-  border-radius: 20px;
+  border-radius: 2rem;
   padding: 8px 16px;
   font-size: 14px;
   cursor: pointer;
@@ -6401,18 +6427,18 @@ h2 {
 
 .my-classroom {
   background: #f8f9fa;
-  min-height: 100vh;
 }
 
 .my-classroom__content {
   display: flex;
-  min-height: calc(100vh - 120px);
+  min-height: 20rem;
 }
 
 .my-classroom__main {
   flex: 1;
   padding: 2rem;
   transition: margin-left 0.3s ease;
+  padding-bottom: 20rem;
 }
 
 .my-classroom-page {
@@ -6464,15 +6490,18 @@ h2 {
 .my-classroom-page .actions {
   display: flex;
   align-items: center;
-  margin: 2rem 0;
+  margin: 2rem 0 3rem 0;
 }
 .my-classroom-page .actions .btn {
   margin-right: 1rem;
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.2rem;
   border: none;
-  border-radius: 10px;
+  border-radius: 5rem;
   cursor: pointer;
+  width: auto;
+  min-width: 5rem;
   font-family: "Inter", sans-serif;
+  font-weight: bold;
   text-decoration: none;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.15);
 }
@@ -6483,23 +6512,29 @@ h2 {
   background-color: #222;
   color: #fff3df;
 }
+.my-classroom-page .actions .btn:hover {
+  opacity: 0.8;
+}
 .my-classroom-page .actions .total {
   color: #888;
 }
 .my-classroom-page .classroom-list .classroom-card {
-  background-color: #f9f3e4;
+  background-color: #f9f4e8;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 2rem 0 2rem 0;
   border-radius: 8px;
   border: 1px solid #eee;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  min-height: 8rem;
+  font-family: "Inter";
 }
 .my-classroom-page .classroom-list .classroom-card .info span {
   font-size: 0.9rem;
   color: #666;
 }
 .my-classroom-page .classroom-list .classroom-card .info h3 {
-  margin: 0.3rem 0 0;
+  margin: 0.5rem 0 0;
+  font-size: 1.3rem;
 }
 .my-classroom-page .see-more {
   text-align: center;
@@ -6529,10 +6564,11 @@ h2 {
 }
 
 .empty-list {
+  margin-top: 3rem;
   font-family: "Inria Sans", sans-serif;
   font-size: 20px;
   background-color: #fffaef;
-  height: 30vh;
+  height: 30rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6772,6 +6808,9 @@ h2 {
   padding: 2rem;
 }
 .flashcard__prev, .flashcard__next {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
   width: 6rem;
   height: 3rem;
@@ -8132,38 +8171,39 @@ body {
   font-size: 0.8rem;
 }
 
-.dashboard {
+.adminDashboard {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fa;
+  background-color: #fffcf7;
   font-family: "Lalezar", sans-serif;
   font-weight: normal;
 }
-.dashboard .main-content {
+.adminDashboard .main-content {
   flex: 1;
   padding: 2rem;
 }
-.dashboard__section {
+.adminDashboard__section {
   max-width: 1200px;
   margin: 0 auto;
 }
-.dashboard__section .dashboard__header {
+.adminDashboard__section .adminDashboard__header {
   margin-bottom: 2rem;
 }
-.dashboard__section .dashboard__header h1 {
+.adminDashboard__section .adminDashboard__header h1 {
   font-size: 2rem;
   font-weight: normal;
+  font-family: "Lalezar", sans-serif;
   color: #2A1E17;
   margin-top: 2rem;
 }
-.dashboard__stats {
+.adminDashboard__stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
-.dashboard__stats .stat-card {
+.adminDashboard__stats .stat-card {
   background: #FDFAEE;
   padding: 2rem;
   border-radius: 12px;
@@ -8173,97 +8213,97 @@ body {
   overflow: hidden;
   text-align: center;
 }
-.dashboard__stats .stat-card:hover {
+.adminDashboard__stats .stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
-.dashboard__stats .stat-card .stat-number {
+.adminDashboard__stats .stat-card .stat-number {
   font-size: 3rem;
   margin-bottom: 0.5rem;
   line-height: 1;
 }
-.dashboard__stats .stat-card .stat-label {
+.adminDashboard__stats .stat-card .stat-label {
   font-size: 1.5rem;
   margin-bottom: 0.25rem;
   color: #34495e;
 }
-.dashboard__stats .stat-card .stat-subtitle {
+.adminDashboard__stats .stat-card .stat-subtitle {
   font-family: "Inria Sans", sans-serif;
   font-weight: bold;
   font-size: 0.9rem;
   color: #7f8c8d;
 }
-.dashboard__stats .stat-card--users {
+.adminDashboard__stats .stat-card--users {
   background: #FFCF4D;
   color: #7E5C00;
 }
-.dashboard__stats .stat-card--users .stat-label, .dashboard__stats .stat-card--users .stat-subtitle {
+.adminDashboard__stats .stat-card--users .stat-label, .adminDashboard__stats .stat-card--users .stat-subtitle {
   color: #7E5C00;
 }
-.dashboard__stats .stat-card--server {
+.adminDashboard__stats .stat-card--server {
   background: #3C71CA;
   color: #F4F9FF;
 }
-.dashboard__stats .stat-card--server .stat-label, .dashboard__stats .stat-card--server .stat-subtitle {
+.adminDashboard__stats .stat-card--server .stat-label, .adminDashboard__stats .stat-card--server .stat-subtitle {
   color: rgba(255, 255, 255, 0.9);
 }
-.dashboard__stats .stat-card--requests {
+.adminDashboard__stats .stat-card--requests {
   background: #FCB3CB;
   color: #7C223F;
 }
-.dashboard__stats .stat-card--requests .stat-label, .dashboard__stats .stat-card--requests .stat-subtitle {
+.adminDashboard__stats .stat-card--requests .stat-label, .adminDashboard__stats .stat-card--requests .stat-subtitle {
   color: #7C223F;
 }
-.dashboard__stats .stat-card--content {
+.adminDashboard__stats .stat-card--content {
   background: #54AD58;
   color: #EEFFEF;
 }
-.dashboard__stats .stat-card--content .stat-label {
+.adminDashboard__stats .stat-card--content .stat-label {
   color: #EEFFEF;
 }
-.dashboard__stats .stat-card--content .stat-subtitle {
+.adminDashboard__stats .stat-card--content .stat-subtitle {
   color: #005605;
 }
-.dashboard__actions {
+.adminDashboard__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: start;
 }
-.dashboard .activity-log-card {
+.adminDashboard .activity-log-card {
   background: #655146;
   color: #FDFAEE;
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-.dashboard .activity-log-card h3 {
+.adminDashboard .activity-log-card h3 {
   margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
   font-weight: normal;
 }
-.dashboard .activity-log-card .activity-chart .chart-bars {
+.adminDashboard .activity-log-card .activity-chart .chart-bars {
   display: flex;
   align-items: end;
   gap: 8px;
   height: 80px;
 }
-.dashboard .activity-log-card .activity-chart .chart-bars .bar {
+.adminDashboard .activity-log-card .activity-chart .chart-bars .bar {
   flex: 1;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 4px 4px 0 0;
   min-height: 20px;
   transition: background-color 0.3s ease;
 }
-.dashboard .activity-log-card .activity-chart .chart-bars .bar:hover {
+.adminDashboard .activity-log-card .activity-chart .chart-bars .bar:hover {
   background: rgba(255, 255, 255, 0.5);
 }
-.dashboard .quick-actions {
+.adminDashboard .quick-actions {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.dashboard .quick-actions .action-card {
+.adminDashboard .quick-actions .action-card {
   background: #fffffd;
   padding: 1.5rem;
   border-radius: 12px;
@@ -8275,12 +8315,12 @@ body {
   transition: all 0.2s ease;
   border: 2px solid transparent;
 }
-.dashboard .quick-actions .action-card:hover {
+.adminDashboard .quick-actions .action-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   border-color: #655146;
 }
-.dashboard .quick-actions .action-card .action-icon {
+.adminDashboard .quick-actions .action-card .action-icon {
   font-size: 2rem;
   width: 60px;
   height: 60px;
@@ -8291,16 +8331,16 @@ body {
   border-radius: 8px;
   flex-shrink: 0;
 }
-.dashboard .quick-actions .action-card .action-content {
+.adminDashboard .quick-actions .action-card .action-content {
   flex: 1;
 }
-.dashboard .quick-actions .action-card .action-content h4 {
+.adminDashboard .quick-actions .action-card .action-content h4 {
   margin: 0 0 0.25rem 0;
   font-size: 1.1rem;
   font-weight: normal;
   color: #2A1E17;
 }
-.dashboard .quick-actions .action-card .action-content p {
+.adminDashboard .quick-actions .action-card .action-content p {
   margin: 0;
   font-family: "Inria Sans", sans-serif;
   font-size: 0.9rem;
@@ -8571,21 +8611,6 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
-}
-
-*:focus {
-  outline: 2px solid var(--vb-color-brand-primary);
-  outline-offset: 2px;
-}
-
-button:focus,
-input:focus,
-textarea:focus,
-select:focus,
-a:focus {
-  outline: 3px solid var(--vb-color-brand-primary);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(53, 45, 36, 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {

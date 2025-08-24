@@ -8,6 +8,7 @@
   justify-content: center;
 
   font-family: $font-lalezar;
+  font-weight: normal;
 
   .sign-up-successfully {
     margin-top: 3em;
@@ -40,10 +41,9 @@
     }
 
     .resend-link {
-      color: #4182cd;
+      color: #666;
       text-decoration: underline;
       cursor: pointer;
-      font-weight: bold;
       transition: color 0.2s ease;
 
       &:hover:not(.disabled) {

@@ -74,7 +74,6 @@ export default function MyClassroomPage() {
   return (
     <div className="my-classroom">
       <Header />
-      <LearnerSubMenu />
       <div className="my-classroom__content">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         

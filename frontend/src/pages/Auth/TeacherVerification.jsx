@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RedAsterisk } from "../../assets/Auth";
 import { UploadPattern } from "../../assets/icons";
 import AccountPageInput from "../../components/Forms/AccountPageInput";
+import CreateListInput from "../../components/Forms/CreateListInput";
 import Logo from "../../components/Layout/Logo";
 import LoadingCursor from "../../components/UI/LoadingCursor";
 import authService from "../../services/Auth/authService";
@@ -168,44 +168,44 @@ export default function TeacherVerification() {
           <div className="teacher-verification__grid">
             {/* Left side form */}
             <div className="teacher-verification__form-left">
-              <AccountPageInput
+              <CreateListInput className="teacher-verification__input"
                 label="Full name"
-                labelIcon={RedAsterisk}
                 name="fullName"
-                type="text"
-                placeholder="Your full name"
+                as="text"
                 value={formData.fullName}
                 onChange={handleInputChange}
-                required
+                placeholder="Enter your full name"
+                required={true}
               />
 
-              <AccountPageInput
+              <CreateListInput
                 label="School"
-                labelIcon={RedAsterisk}
                 name="institution"
-                type="text"
+                as="text"
                 placeholder="University of Science, VNU-HCM"
                 value={formData.institution}
                 onChange={handleInputChange}
-                required
+                required={true}
               />
-              <AccountPageInput
+
+              <CreateListInput
                 label="School Email"
-                labelIcon={RedAsterisk}
                 name="schoolEmail"
-                type="email"
+                as="email"
                 placeholder="example@hcmus.edu.vn"
                 value={formData.schoolEmail}
                 onChange={handleInputChange}
-                required
+                required={true}
               />
-              <AccountPageInput
+
+              <CreateListInput
                 label="Additional notes"
                 name="additionalNotes"
-                type="text"
+                as="text"
                 placeholder="Type here..."
                 value={formData.additionalNotes}
                 onChange={handleInputChange}
+                required={true}
               />
             </div>
 
