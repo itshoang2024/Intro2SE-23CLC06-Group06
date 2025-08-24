@@ -6,7 +6,7 @@ const JWT_EXPIRE = process.env.JWT_EXPIRE;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || JWT_SECRET + '_refresh';
 
 const generateToken = (payload) => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '15m' }); // 15-minute access token
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' }); // 1-day access token
 };
 
 const generateRefreshToken = (payload) => {
