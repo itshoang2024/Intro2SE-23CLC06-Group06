@@ -394,31 +394,29 @@ class ClassroomModel {
 
     if (error) throw error;
 
-    if (!data.classroom) {
-      return;
-    }
+    return data
+      .filter((entry) => entry.classrooms !== null)
+      .map((entry) => {
+        const assignments = entry.classrooms.assignments || [];
+        const now = new Date();
+        const assignedCount = assignments.length;
+        // const assignedCount = assignments.filter((assignment) => {
+        //   const startDate = new Date(assignment.start_date);
+        //   const dueDate = new Date(assignment.due_date);
+        //   return startDate <= now && now <= dueDate;
+        // }).length;
 
-    return data.map((entry) => {
-      const assignments = entry.classrooms.assignments || [];
-      const now = new Date();
-      const assignedCount = assignments.length;
-      // const assignedCount = assignments.filter((assignment) => {
-      //   const startDate = new Date(assignment.start_date);
-      //   const dueDate = new Date(assignment.due_date);
-      //   return startDate <= now && now <= dueDate;
-      // }).length;
-
-      return {
-        id: entry.classrooms.id,
-        teacher_id: entry.classrooms.teacher_id,
-        name: entry.classrooms.name,
-        description: entry.classrooms.description,
-        join_code: entry.classrooms.join_code,
-        learner_count: entry.classrooms.learner_count,
-        status: entry.classrooms.classroom_status,
-        assignment_count: assignedCount,
-      };
-    });
+        return {
+          id: entry.classrooms.id,
+          teacher_id: entry.classrooms.teacher_id,
+          name: entry.classrooms.name,
+          description: entry.classrooms.description,
+          join_code: entry.classrooms.join_code,
+          learner_count: entry.classrooms.learner_count,
+          status: entry.classrooms.classroom_status,
+          assignment_count: assignedCount,
+        };
+      });
   }
 
   async getInvitationsByClassroomId(classroomId) {
